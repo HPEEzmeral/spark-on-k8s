@@ -23,25 +23,29 @@ spec:
   mode: cluster
   image: "gcr.io/mapr-252711/apache-spark-3.1.1:latest"
   imagePullPolicy: Always
+  imagePullSecrets:
+    - imagepull
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: "local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar"
   sparkVersion: "3.1.1"
   restartPolicy:
     type: Never
   volumes:
-    - name: config-vol
-      configMap:
-        name: dummy-cm
+    - name: "test-volume"
+      hostPath:
+        path: "/tmp"
+        type: Directory
   driver:
     cores: 1
     coreLimit: "1200m"
     memory: "512m"
     labels:
       version: 3.1.1
+    # Note: If you run app in tenant namespace - change serviceAccount name to "hpe-<namespace>"
     serviceAccount: spark
     volumeMounts:
-      - name: config-vol
-        mountPath: /opt/spark/mycm
+      - name: "test-volume"
+        mountPath: "/tmp"
   executor:
     cores: 1
     instances: 1
@@ -49,5 +53,5 @@ spec:
     labels:
       version: 3.1.1
     volumeMounts:
-      - name: config-vol
-        mountPath: /opt/spark/mycm
+      - name: "test-volume"
+        mountPath: "/tmp"
