@@ -20,13 +20,14 @@ metadata:
   name: spark-hive-secure
   namespace: sampletenant
 spec:
-  #sparkConf:
+  sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
     #spark.mapr.user.secret: spark-user-secret
     # Note: You do not need to specify a spark.eventLog.dir
     #       it will be auto-generated with the pattern "maprfs:///apps/spark/<namespace>"
     #spark.eventLog.dir: "maprfs:///apps/spark/sampletenant"
+    spark.sql.hive.metastore.jars: "/opt/mapr/spark/spark-2.4.4/jars/*:/opt/mapr/lib/*"
   type: Scala
   sparkVersion: 2.4.4
   mode: cluster
