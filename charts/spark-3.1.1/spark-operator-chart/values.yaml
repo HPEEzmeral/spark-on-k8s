@@ -8,7 +8,7 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: gcr.io/mapr-252711/spark-operator-3.1.1
+  repository: gcr.io/mapr-252711/apache-spark-operator-3.1.1
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
