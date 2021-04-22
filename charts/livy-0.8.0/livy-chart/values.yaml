@@ -4,7 +4,9 @@ image:
   tag: "202103261742"
 
 imagePullSecrets:
-  # - name: imagepull
+   - name: imagepull
+
+createDefaultPullSecret: true
 
 nameOverride: ""
 fullnameOverride: ""

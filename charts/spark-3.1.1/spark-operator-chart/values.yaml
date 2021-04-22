@@ -17,6 +17,8 @@ image:
 # -- Image pull secrets
 imagePullSecrets: []
 
+defaultPullSecret: "imagepull"
+
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
 

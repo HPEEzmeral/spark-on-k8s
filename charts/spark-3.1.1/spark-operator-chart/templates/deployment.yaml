@@ -34,10 +34,8 @@ spec:
         {{- include "spark-operator.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "spark-operator.serviceAccountName" . }}
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- include "imagepullsecrets" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
