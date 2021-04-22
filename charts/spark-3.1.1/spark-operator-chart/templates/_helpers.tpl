@@ -74,3 +74,10 @@ Create the name of the service account to be used by spark apps
 {{- end -}}
 {{- end -}}
 
+{{ define "imagepullsecrets" }}
+  {{ if empty .Values.imagePullSecrets }}
+    {{ printf "- name: %s" .Values.defaultPullSecret | nindent 8 }}
+  {{ else }}
+    {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+  {{ end }}
+{{ end }}
