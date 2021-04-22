@@ -53,5 +53,5 @@ env:
     # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202103261742
   - name: SPARK_CONF_spark_kubernetes_container_image_pullPolicy
     value: Always
-  # - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
-  #   value: imagepull
+  - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
+    value: imagepull
