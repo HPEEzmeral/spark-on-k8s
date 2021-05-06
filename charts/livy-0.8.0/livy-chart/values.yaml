@@ -1,7 +1,7 @@
 image:
   repository: gcr.io/mapr-252711/apache-livy-0.8.0-pre
   pullPolicy: Always
-  tag: "202103261742"
+  tag: "202105061656"
 
 imagePullSecrets:
    - name: imagepull
@@ -31,13 +31,13 @@ service:
   type: NodePort
   port: 8998
 
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
 
 nodeSelector: {}
 
@@ -47,19 +47,19 @@ affinity: {}
 
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image
-    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202103261742
+    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202105061656
     # Other available images:
-    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202103261742
-    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202103261742
+    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202105061656
+    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202105061656
   - name: SPARK_CONF_spark_kubernetes_container_image_pullPolicy
     value: Always
   - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
     value: imagepull
-  # - name: SPARK_CONF_spark_kubernetes_driver_request_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_driver_limit_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_executor_request_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_executor_limit_cores
-  #   value: "1"
+  - name: SPARK_CONF_spark_kubernetes_driver_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_driver_limit_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_limit_cores
+    value: "1"
