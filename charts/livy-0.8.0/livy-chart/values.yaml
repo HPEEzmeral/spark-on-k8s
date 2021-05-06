@@ -31,13 +31,13 @@ service:
   type: NodePort
   port: 8998
 
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
 
 nodeSelector: {}
 
@@ -55,11 +55,11 @@ env:
     value: Always
   - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
     value: imagepull
-  # - name: SPARK_CONF_spark_kubernetes_driver_request_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_driver_limit_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_executor_request_cores
-  #   value: "1"
-  # - name: SPARK_CONF_spark_kubernetes_executor_limit_cores
-  #   value: "1"
+  - name: SPARK_CONF_spark_kubernetes_driver_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_driver_limit_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_limit_cores
+    value: "1"
