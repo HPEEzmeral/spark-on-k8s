@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spark-operator.name" . }}
+  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+  labels:
+    {{- include "spark-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "spark-operator.labels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "spark-operator.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      automountServiceAccountToken: true
+      imagePullSecrets:  {{- toYaml .Values.imagePullSecrets | nindent 6 }}
+      containers:
+      - name: sparkoperator
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: k8s-log-dir
+          mountPath: /opt/mapr/k8s/logs
+        - name: webhook-certs
+          mountPath: /etc/webhook-certs
+        ports:
+          - containerPort: 8080
+        args:
+          - -alsologtostderr
+          - -log_dir=/opt/mapr/k8s/logs/
+          - -v=2
+          - -enable-webhook=true
+          - install-crds=false
+      volumes:
+      - name: k8s-log-dir
+        hostPath:
+          path: /var/log/mapr/spark-operator
+          type: DirectoryOrCreate
+      - name: webhook-certs
+        secret:
+          secretName: spark-webhook-certs
