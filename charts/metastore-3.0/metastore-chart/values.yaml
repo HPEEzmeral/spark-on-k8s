@@ -1,0 +1,67 @@
+# Default values for metastore.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: gcr.io/mapr-252711/apache-metastore
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "202106021420"
+
+imagePullSecrets:
+  - name: imagepull
+
+createDefaultPullSecret: true
+
+serviceAccounts:
+  metastore:
+    create: true
+    annotations: {}
+    name: ""
+  spark:
+    create: true
+    annotations: {}
+    name: ""
+
+rbac:
+  create: true
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 9083
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# -- Set this if running spark jobs in a different namespace than the operator
+sparkJobNamespace: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
