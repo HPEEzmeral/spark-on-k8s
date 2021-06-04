@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.webhook.name }}
+  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+spec:
+  ports:
+  - port: {{ .Values.webhook.port }}
+    targetPort: {{ .Values.webhook.targetPort }}
+    name: webhook
+  selector:
+  {{- include "spark-operator.labels" . | nindent 4 }}
