@@ -9,7 +9,7 @@ ENV HIVE_VERSION=2.3.8
 
 RUN mkdir ${HIVE_HOME}
 
-RUN curl -fSL https://downloads.apache.org/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz | tar zxf - && \
+RUN curl -fSL https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz | tar zxf - && \
     cp -r apache-hive-${HIVE_VERSION}-bin/* ${HIVE_HOME}/ && \
     curl -fSL https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | tar zxf -
 
