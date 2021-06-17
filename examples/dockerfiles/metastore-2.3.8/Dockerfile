@@ -22,5 +22,3 @@ WORKDIR $HIVE_HOME
 
 ENTRYPOINT ["bin/hive"]
 CMD ["--service", "metastore"]
-
-
