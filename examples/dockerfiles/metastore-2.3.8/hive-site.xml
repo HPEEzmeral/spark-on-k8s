@@ -1,36 +1,28 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "metastore.fullname" . }}
-  labels:
-    {{- include "metastore.labels" . | nindent 4 }}
-data:
-  hive-site.xml: |
-    <?xml version="1.0"?>
-    <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
-    <configuration>
-      <property>
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
         <name>datanucleus.autoCreateSchema</name>
         <value>true</value>
-      </property>
-      <property>
+    </property>
+    <property>
         <name>datanucleus.schema.autoCreateTables</name>
         <value>true</value>
-      </property>
-      <property>
+    </property>
+    <property>
         <name>hive.metastore.schema.verification</name>
         <value>false</value>
-      </property>
-      <property>
+    </property>
+    <property>
         <name>hive.metastore.schema.verification.record.version</name>
         <value>false</value>
-      </property>
-      <property>
+    </property>
+    <property>
         <name>javax.jdo.option.ConnectionURL</name>
         <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-      </property>
-      <property>
+    </property>
+    <property>
         <name>javax.jdo.option.ConnectionDriverName</name>
         <value>org.apache.derby.jdbc.EmbeddedDriver</value>
-      </property>
-    </configuration>
+    </property>
+</configuration>
