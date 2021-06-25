@@ -1,4 +1,4 @@
-Helm Charts for Standalone Apache Metastore 3.0
+Helm Charts for Standalone Apache Metastore 2.3.8
 
 To install use :
 

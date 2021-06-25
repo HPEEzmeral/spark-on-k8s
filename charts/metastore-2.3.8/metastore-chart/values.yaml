@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: gcr.io/mapr-252711/apache-hivemetastore-2.3.8
+  repository: gcr.io/mapr-252711/apache-metastore-2.3.8
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202106091242"
+  tag: "202106171054"
 
 imagePullSecrets:
   - name: imagepull

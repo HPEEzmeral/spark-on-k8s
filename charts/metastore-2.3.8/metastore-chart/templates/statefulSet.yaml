@@ -30,10 +30,10 @@ spec:
           command:
             - "/bin/sh"
             - "-c"
-            - "/opt/metastore/bin/start-metastore"
+            - "/opt/hive/bin/hive --service metastore"
           volumeMounts:
             - name: metastore-config
-              mountPath: /opt/metastore/conf
+              mountPath: /opt/hive/conf
       volumes:
         - name: metastore-config
           configMap:
