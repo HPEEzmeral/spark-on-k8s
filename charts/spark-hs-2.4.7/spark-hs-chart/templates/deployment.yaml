@@ -12,7 +12,7 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-  {{- include "spark-hs-operator-chart.selectorLabels" . | nindent 6 }}
+  {{- include "spark-hs-chart.selectorLabels" . | nindent 6 }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -21,20 +21,20 @@ spec:
   template:
     metadata:
       labels:
-    {{ include "spark-hs-operator-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+    {{ include "spark-hs-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          {{-  include "spark-hs-operator-chart.nodeAffinity.preferred" . | nindent 12 }}
+          {{-  include "spark-hs-chart.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
-        {{-  include "spark-hs-operator-chart.nodeAffinity.required" . | nindent 12 }}
+        {{-  include "spark-hs-chart.nodeAffinity.required" . | nindent 12 }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-      {{-  include "spark-hs-operator-chart.podAntiAffinity.preferred" . | nindent 12 }}
+      {{-  include "spark-hs-chart.podAntiAffinity.preferred" . | nindent 12 }}
       tolerations:
-      {{- include "spark-hs-operator-chart.tolerations" . | nindent 8}}
+      {{- include "spark-hs-chart.tolerations" . | nindent 8}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
@@ -58,17 +58,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          {{- include "spark-hs-operator-chart.ports" . | nindent 12 }}
+          {{- include "spark-hs-chart.ports" . | nindent 12 }}
           livenessProbe:
-          {{- include "spark-hs-operator-chart.probe.liveness" . | nindent 12 }}
+          {{- include "spark-hs-chart.probe.liveness" . | nindent 12 }}
           readinessProbe:
-          {{- include "spark-hs-operator-chart.probe.readiness" . | nindent 12 }}
+          {{- include "spark-hs-chart.probe.readiness" . | nindent 12 }}
           lifecycle:
-          {{- include "spark-hs-operator-chart.probe.lifecycle" . | nindent 12 }}
+          {{- include "spark-hs-chart.probe.lifecycle" . | nindent 12 }}
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
-          {{- include "spark-hs-operator-chart.securityContext" . | nindent 12 }}
+          {{- include "spark-hs-chart.securityContext" . | nindent 12 }}
           {{- with .Values.conatinerConfigs.volumeMounts }}
           volumeMounts: {{- toYaml . | nindent 12 }}
           {{- end }}

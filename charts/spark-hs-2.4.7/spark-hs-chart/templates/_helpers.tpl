@@ -1,30 +1,30 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "spark-hs-operator-chart.name" -}}
+{{- define "spark-hs-chart.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "spark-hs-operator-chart.chart" -}}
+{{- define "spark-hs-chart.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "spark-hs-operator-chart.selectorLabels" -}}
+{{- define "spark-hs-chart.selectorLabels" -}}
 hpe.com/component: {{ .Chart.Name }}
 {{- end }}
 
 {{/*
 labels
 usage:
-{{ include "spark-hs-operator-chart.labels" (dict "componentName" "FOO" "context" $) -}}
+{{ include "spark-hs-chart.labels" (dict "componentName" "FOO" "context" $) -}}
 */}}
-{{- define "spark-hs-operator-chart.labels" -}}
+{{- define "spark-hs-chart.labels" -}}
 hpe.com/component: {{ .componentName }}
 hpe.com/tenant: {{ .context.Values.tenantNameSpace }}
 {{- range $label := .context.Values.labels }}
@@ -36,15 +36,15 @@ hpe.com/{{ $label.name }}: {{ $label.value }}
 {{/*
     Node Affinity
 */}}
-{{- define "spark-hs-operator-chart.nodeAffinity" -}}
-preferredDuringSchedulingIgnoredDuringExecution: {{ include "spark-hs-operator-chart.nodeAffinity.preferred" . }}
-requiredDuringSchedulingIgnoredDuringExecution: {{ include "spark-hs-operator-chart.nodeAffinity" . }}
+{{- define "spark-hs-chart.nodeAffinity" -}}
+preferredDuringSchedulingIgnoredDuringExecution: {{ include "spark-hs-chart.nodeAffinity.preferred" . }}
+requiredDuringSchedulingIgnoredDuringExecution: {{ include "spark-hs-chart.nodeAffinity" . }}
 {{- end }}
 
 {{/*
 Return a preferred nodeAffinity definition
 */}}
-{{- define "spark-hs-operator-chart.nodeAffinity.preferred" -}}
+{{- define "spark-hs-chart.nodeAffinity.preferred" -}}
 - preference:
     matchExpressions:
         - key: {{ .Values.nodeAfinityConfigs.storageNode.key  | quote }}
@@ -56,7 +56,7 @@ Return a preferred nodeAffinity definition
 {{/*
 Return a required nodeAffinity definition
 */}}
-{{- define "spark-hs-operator-chart.nodeAffinity.required" -}}
+{{- define "spark-hs-chart.nodeAffinity.required" -}}
 nodeSelectorTerms:
 - matchExpressions:
     - key: {{ .Values.nodeAfinityConfigs.maprNode.key | quote}}
@@ -71,7 +71,7 @@ nodeSelectorTerms:
 {{/*
 Return a preferred podAffinity definition
 */}}
-{{- define "spark-hs-operator-chart.podAntiAffinity.preferred" -}}
+{{- define "spark-hs-chart.podAntiAffinity.preferred" -}}
 - podAffinityTerm:
     labelSelector:
         matchExpressions:
@@ -86,7 +86,7 @@ Return a preferred podAffinity definition
 {{/*
 Return a liveness probe
 */}}
-{{- define "spark-hs-operator-chart.probe.liveness" -}}
+{{- define "spark-hs-chart.probe.liveness" -}}
 exec:
     command:
         - {{ .Values.livenessProbe.path }}
@@ -100,7 +100,7 @@ timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
 {{/*
 Return a readiness probe
 */}}
-{{- define "spark-hs-operator-chart.probe.readiness" -}}
+{{- define "spark-hs-chart.probe.readiness" -}}
 exec:
     command:
         - {{ .Values.readinessProbe.path }}
@@ -114,7 +114,7 @@ timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
 {{/*
 Return a lifecycle
 */}}
-{{- define "spark-hs-operator-chart.probe.lifecycle" -}}
+{{- define "spark-hs-chart.probe.lifecycle" -}}
 preStop:
     exec:
         command:
@@ -125,7 +125,7 @@ preStop:
 {{/*
 Return HttpPortSparkHsUI
 */}}
-{{- define "spark-hs-operator-chart.getHttpPortSparkHsUI" -}}
+{{- define "spark-hs-chart.getHttpPortSparkHsUI" -}}
 {{- $httpPortSparkHsUI := .Values.ports.httpPort -}}
 {{- if(not .Values.tenantIsUnsecure)  -}}
 {{- $httpPortSparkHsUI = .Values.ports.httpsPort -}}
@@ -137,10 +137,10 @@ Return HttpPortSparkHsUI
 {{/*
 Return ports
 */}}
-{{- define "spark-hs-operator-chart.ports" -}}
+{{- define "spark-hs-chart.ports" -}}
 - name: "http"
   protocol: "TCP"
-  containerPort: {{ include "spark-hs-operator-chart.getHttpPortSparkHsUI" . }}
+  containerPort: {{ include "spark-hs-chart.getHttpPortSparkHsUI" . }}
 - name: "ssh"
   protocol: "TCP"
   hostPort: {{ .Values.ports.sshHostPort }}
@@ -151,7 +151,7 @@ Return ports
 {{/*
 Return SecurityContext
 */}}
-{{- define "spark-hs-operator-chart.securityContext" -}}
+{{- define "spark-hs-chart.securityContext" -}}
 capabilities:
     add:
      - SYS_NICE
@@ -163,7 +163,7 @@ runAsUser: {{ .Values.security.maprUid }}
 {{/*
 Return Tolerations
 */}}
-{{- define "spark-hs-operator-chart.tolerations" -}}
+{{- define "spark-hs-chart.tolerations" -}}
 - key: hpe.com/compute-{{ .Values.tenantNameSpace }}
   operator: Exists
 - key: hpe.com/{{ .Chart.Name }}-{{ .Values.tenantNameSpace }}
