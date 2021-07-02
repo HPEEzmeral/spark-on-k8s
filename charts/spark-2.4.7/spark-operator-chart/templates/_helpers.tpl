@@ -47,4 +47,30 @@ app.kubernetes.io/name: {{ include "spark-operator.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 
+{{/*
+spark namespace
+*/}}
+{{- define "spark-operator.sparknamespace" -}}
+{{- if ne .Release.Namespace "default" -}}
+    {{ .Release.Namespace }}
+{{- else -}}
+    {{ include "spark-operator.fullname" . }}-ns
+{{- end -}}
+{{- end }}
+
+
+{{/*
+cluster role
+*/}}
+{{- define "spark-operator.clusterrole" -}}
+{{ include "spark-operator.fullname" . }}-CR
+{{- end }}
+
+{{/*
+cluster role binding
+*/}}
+{{- define "spark-operator.clusterrolebinding" -}}
+{{ include "spark-operator.fullname" . }}-CRB
+{{- end }}
+
 

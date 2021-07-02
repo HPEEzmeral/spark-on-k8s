@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Values.webhook.name }}
-  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+  namespace: {{ include "spark-operator.sparknamespace" . }}
 spec:
   ports:
   - port: {{ .Values.webhook.port }}

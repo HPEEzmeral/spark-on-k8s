@@ -2,4 +2,4 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ .Values.serviceAccount.name }}
-  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+  namespace: {{ include "spark-operator.sparknamespace" . }}
