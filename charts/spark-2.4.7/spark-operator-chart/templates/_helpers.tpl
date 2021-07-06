@@ -63,14 +63,12 @@ spark namespace
 cluster role
 */}}
 {{- define "spark-operator.clusterrole" -}}
-{{ include "spark-operator.fullname" . }}-CR
+{{ include "spark-operator.fullname" . }}-cr
 {{- end }}
 
 {{/*
 cluster role binding
 */}}
 {{- define "spark-operator.clusterrolebinding" -}}
-{{ include "spark-operator.fullname" . }}-CRB
+{{ include "spark-operator.fullname" . }}-crb
 {{- end }}
-
-
