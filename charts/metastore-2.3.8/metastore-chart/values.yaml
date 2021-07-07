@@ -8,7 +8,7 @@ image:
   repository: gcr.io/mapr-252711/apache-metastore-2.3.8
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202106171054"
+  tag: "202107071109"
 
 imagePullSecrets:
   - name: imagepull
