@@ -13,7 +13,8 @@ data:
     livy.server.kubernetes.allowedNamespaces = {{ .Release.Namespace }}
     livy.server.kubernetes.defaultNamespace = {{ .Release.Namespace }}
   livy-client.conf: |
-    #
+    livy.rsc.server.connect.timeout = 600s
+    livy.rsc.client.connect.timeout = 600s
   spark-blacklist.conf: |
     # Disallow overriding the master and the deploy mode.
     spark.master
