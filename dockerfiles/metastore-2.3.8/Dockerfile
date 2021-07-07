@@ -18,5 +18,8 @@ COPY entrypoint.sh /opt/
 
 RUN chmod 777 /opt/entrypoint.sh
 
+EXPOSE 9083
+WORKDIR $HIVE_HOME
+
 #Setup Hive Metastore service ports
 ENTRYPOINT ["sh", "-c", "/entrypoint.sh"]
