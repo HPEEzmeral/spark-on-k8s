@@ -12,6 +12,11 @@ data:
     livy.repl.jars = local:///opt/livy/repl_2.12-jars/commons-codec-1.9.jar,local:///opt/livy/repl_2.12-jars/livy-core_2.12-0.8.0-incubating-SNAPSHOT.jar,local:///opt/livy/repl_2.12-jars/livy-repl_2.12-0.8.0-incubating-SNAPSHOT.jar
     livy.server.kubernetes.allowedNamespaces = {{ .Release.Namespace }}
     livy.server.kubernetes.defaultNamespace = {{ .Release.Namespace }}
+    {{ if eq .Values.sessionrecovery.kind "pvc" }}
+    livy.server.recovery.mode = recovery
+    livy.server.recovery.state-store = filesystem
+    livy.server.recovery.state-store.url = file:///opt/livy/sessionstore
+    {{ end }}
   livy-client.conf: |
     livy.rsc.server.connect.timeout = 600s
     livy.rsc.client.connect.timeout = 600s
