@@ -72,8 +72,14 @@ spec:
           {{- with .Values.conatinerConfigs.volumeMounts }}
           volumeMounts: {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
+          {{- include "spark-hs-chart.pvcVolumeMount" . | nindent 12 }}
+          {{- end }}
       {{- with .Values.volumes }}
       volumes: {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
+      {{- include "spark-hs-chart.pvcVolume" . | nindent 8 }}
+      {{- end }}
       securityContext:
-  {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}

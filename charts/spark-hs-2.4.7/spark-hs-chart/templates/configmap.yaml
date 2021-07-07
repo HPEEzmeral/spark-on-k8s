@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ $componentName }}
   namespace: {{ .Values.tenantNameSpace }}
+  labels:
+    {{ include "spark-hs-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
 data:
   dep-blacklist.txt: ""
   pre-startup.sh: |
@@ -593,7 +595,13 @@ data:
     spark.io.encryption.enabled     true
     spark.io.encryption.keySizeBits 128
 
+
     # END OF THE SECURITY CONFIGURATION BLOCK
+
+
+
+    spark.eventLog.dir {{ include "spark-hs-chart.eventLogPath" . }}
+    spark.history.fs.logDirectory {{ include "spark-hs-chart.eventLogPath" . }}
   spark-defaults.conf.template: |
     # Default system properties included when running spark-submit.
     # This is useful for setting default environmental settings.
@@ -613,16 +621,6 @@ data:
     spark.executor.memory              2g
 
     spark.ui.filters  org.apache.spark.deploy.yarn.YarnProxyRedirectFilter
-  spark-env.cmd.template: |
-    @echo off
-    set HADOOP_HOME=%MAPR_HOME%\hadoop\hadoop-2.7.0
-    set HADOOP_CONF_DIR=%HADOOP_HOME%\etc\hadoop
-    set PATH=%HADOOP_HOME%\bin;%PATH%
-
-    for /f "delims=" %%A in ('%HADOOP_HOME%\bin\hadoop classpath') do set "TMP_DIST_PATH=%%A"
-    set SPARK_DIST_CLASSPATH=%TMP_DIST_PATH:C:=%
-    set SPARK_DIST_CLASSPATH=%SPARK_DIST_CLASSPATH:\=/%
-    set SPARK_DIST_CLASSPATH=%SPARK_DIST_CLASSPATH%;%TMP_DIST_PATH%
   spark-env.sh: |
     #!/usr/bin/env bash
 

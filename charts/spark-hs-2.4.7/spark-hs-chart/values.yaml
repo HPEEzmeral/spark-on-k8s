@@ -2,19 +2,29 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# replicaCount -- Desired number of pods, leaderElection will be enabled
+# if this is greater than 1
 replicaCount: 1
 
 image:
+  # -- Image repository
   repository: gcr.io/mapr-252711/spark-hs-2.4.7
+  # -- Image pull policy
   pullPolicy: Always
+  # -- Overrides the image tag whose default is the chart appVersion.
   tag: "202106220630P141"
 
+# -- Image pull secrets
 imagePullSecrets:
   - name: imagepull
 
+# -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
+
+# -- String to override release name
 fullnameOverride: ""
 
+# -- restart policy
 restartPolicy: "Always"
 
 automountServiceAccountToken: true
@@ -23,16 +33,24 @@ progressDeadlineSeconds: 600
 
 revisionHistoryLimit: 10
 
+#sparkVersion for the applications
+sparkVersion: spark-2.4.7
+
+#HPE tenant namespace info
 tenantNameSpace: sampletenant
 tenantIsUnsecure: false
+
+#HPE tenant namespace service account
 tenantServiceAccount:
   name: "hpe-sampletenant"
 
 podSecurityContext: {}
 
+#service info
 service:
   type: NodePort
 
+#container ports
 ports:
   sshPort: 22
   sshHostPort: 7779
@@ -50,10 +68,12 @@ resources:
      memory: 8Gi
      ephemeral-storage: 30Gi
 
+#prestop script configurations
 lifecycle:
   preStop:
     path: "/opt/mapr/kubernetes/pre-stop.sh"
 
+#liveness probe configurations
 livenessProbe:
   path: "/opt/mapr/kubernetes/isOk.sh"
   initialDelaySeconds: 600
@@ -62,6 +82,7 @@ livenessProbe:
   failureThreshold: 3
   successThreshold: 1
 
+#readiness probe configurations
 readinessProbe:
   path: "/opt/mapr/kubernetes/isReady.sh"
   failureThreshold: 3
@@ -69,6 +90,7 @@ readinessProbe:
   timeoutSeconds: 1
   successThreshold: 1
 
+#componet labels
 labels:
   - name: "cluster"
     value: "dataplatform"
@@ -77,6 +99,7 @@ labels:
   - name: "version"
     value: "6.2.0"
 
+#nodeAffinity configurations
 nodeAfinityConfigs:
   maprNode:
     key: "hpe.com/usenode"
@@ -90,14 +113,17 @@ nodeAfinityConfigs:
     key: "hpe.com/exclusivecluster"
     operator: "In"
 
+#podAffinity configurations
 podAfinityConfigs:
   componentKey: "hpe.com/component"
   topologyKey: "kubernetes.io/hostname"
 
-security:
-  maprUid: 5000
-  maprGid: 5000
+#configurations for event log storage
+eventlogstorage:
+  kind: pvc #supported types are pvc and maprfs
+  pvcname: sparkhs-pvc #example pvc; to be replaced by an existing pvc in the tenant namespace
 
+#conatiner configurations
 conatinerConfigs:
   standardArgs:
     - "/bin/bash"
@@ -318,6 +344,7 @@ conatinerConfigs:
     - mountPath: "/opt/mapr/spark/spark-2.4.7/logs"
       name: logs
 
+#volumes for the pods
 volumes:
   - configMap:
       defaultMode: 420

@@ -1,3 +1,4 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
@@ -156,8 +157,8 @@ capabilities:
     add:
      - SYS_NICE
      - SYS_RESOURCE
-runAsGroup: {{ .Values.security.maprGid }}
-runAsUser: {{ .Values.security.maprUid }}
+runAsGroup: 5000
+runAsUser: 5000
 {{- end }}
 
 {{/*
@@ -169,3 +170,32 @@ Return Tolerations
 - key: hpe.com/{{ .Chart.Name }}-{{ .Values.tenantNameSpace }}
   operator: Exists
 {{- end }}
+
+{{/*
+Return pvcVolume
+*/}}
+{{- define "spark-hs-chart.pvcVolume" -}}
+- name: sparkhs-eventlog-storage
+  persistentVolumeClaim:
+    claimName: {{ .Values.eventlogstorage.pvcname }}
+{{- end }}
+
+{{/*
+  returns pvc volumeMount
+*/}}
+{{- define "spark-hs-chart.pvcVolumeMount" }}
+- mountPath: /opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+  name: sparkhs-eventlog-storage
+{{- end }}
+
+
+{{/*
+  returns eventLogPath
+*/}}
+{{- define "spark-hs-chart.eventLogPath" -}}
+{{- if ( eq .Values.eventlogstorage.kind "pvc") -}}
+file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+{{- else -}}
+maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
+{{- end -}}
+{{- end -}}
