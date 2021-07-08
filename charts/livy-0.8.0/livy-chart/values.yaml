@@ -45,6 +45,13 @@ tolerations: []
 
 affinity: {}
 
+# Configuration of Livy Session Recovery
+sessionrecovery:
+  kind: disabled
+# sessionrecovery:
+#   kind: pvc
+#   pvcname: <pvcname>
+
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image
     value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202105061656

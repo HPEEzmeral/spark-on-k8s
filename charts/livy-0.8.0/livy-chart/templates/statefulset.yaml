@@ -44,10 +44,19 @@ spec:
           volumeMounts:
             - name: configfiles
               mountPath: /opt/configfiles
+            {{- if eq .Values.sessionrecovery.kind "pvc" }}
+            - name: livy-sessionstore
+              mountPath: /opt/livy/sessionstore
+            {{- end }}
       volumes:
         - configMap:
             name: {{ include "livy.fullname" . }}
           name: configfiles
+        {{- if eq .Values.sessionrecovery.kind "pvc" }}
+        - persistentVolumeClaim:
+            claimName: {{ .Values.sessionrecovery.pvcname }}
+          name: livy-sessionstore
+        {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
