@@ -10,11 +10,9 @@ image:
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202105141520"
+  tag: "202105311117M"
 
 
-imagePullSecrets:
-  - name: hpe-imagepull-secrets
 nameOverride: ""
 fullnameOverride: ""
 sparkVersionOverride: ""

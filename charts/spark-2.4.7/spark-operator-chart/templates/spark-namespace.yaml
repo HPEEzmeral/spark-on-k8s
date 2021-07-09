@@ -1,4 +1,6 @@
+{{- if or (not .Release.Namespace) (eq .Release.Namespace "default") -}}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ include "spark-operator.sparknamespace" . }}
+{{- end -}}

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: hpe-imagepull-secrets
+  name: {{ include "spark-operator.imagepullsecret" . }}
   namespace: {{ include "spark-operator.sparknamespace" . }}
 type: kubernetes.io/dockerconfigjson
 data:
