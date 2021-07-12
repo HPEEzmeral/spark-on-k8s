@@ -21,7 +21,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/apache-spark-3.1.1:latest"
+  image: "gcr.io/mapr-252711/apache-spark-3.1.1:202107111721"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
@@ -64,6 +64,6 @@ spec:
     "spark.hadoop.fs.s3a.impl": org.apache.hadoop.fs.s3a.S3AFileSystem
   deps:
     jars:
-      - https://repo1.maven.org/maven2/io/delta/delta-core_2.12/1.0.0/delta-core_2.12-1.0.0.jar
-      - https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar
-      - https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.1026/aws-java-sdk-bundle-1.11.1026.jar
+      - local:///opt/spark/deltalake/jars/delta-core_2.12-1.0.0.jar
+      - local:///opt/spark/deltalake/jars/hadoop-aws-3.2.0.jar
+      - local:///opt/spark/deltalake/jars/aws-java-sdk-bundle-1.11.1026.jar
