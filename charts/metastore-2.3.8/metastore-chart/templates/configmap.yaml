@@ -10,27 +10,24 @@ data:
     <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
     <configuration>
       <property>
-        <name>datanucleus.autoCreateSchema</name>
-        <value>true</value>
+        <name>hive.metastore.uris</name>
+        <value>thrift://metastore-thrift.default.svc.cluster.local:9083</value>
+        <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
       </property>
       <property>
-        <name>datanucleus.schema.autoCreateTables</name>
-        <value>true</value>
+          <name>javax.jdo.option.ConnectionURL</name>
+          <value>jdbc:mysql://mysql-cluster-mysql.default.svc.cluster.local:3306/metastore_db?createDatabaseIfNotExist=true</value>
       </property>
       <property>
-        <name>hive.metastore.schema.verification</name>
-        <value>false</value>
+          <name>javax.jdo.option.ConnectionDriverName</name>
+          <value>com.mysql.cj.jdbc.Driver</value>
       </property>
       <property>
-        <name>hive.metastore.schema.verification.record.version</name>
-        <value>false</value>
+          <name>javax.jdo.option.ConnectionUserName</name>
+          <value>root</value>
       </property>
       <property>
-        <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
-      </property>
-      <property>
-        <name>javax.jdo.option.ConnectionDriverName</name>
-        <value>org.apache.derby.jdbc.EmbeddedDriver</value>
+          <name>javax.jdo.option.ConnectionPassword</name>
+          <value>mapr</value>
       </property>
     </configuration>
