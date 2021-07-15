@@ -40,11 +40,56 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-labels
+returns labels
 */}}
 {{- define "spark-operator.labels" -}}
 app.kubernetes.io/name: {{ include "spark-operator.name" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- end }}
 
+{{/*
+return spark namespace
+*/}}
+{{- define "spark-operator.sparknamespace" -}}
+{{- if ne .Release.Namespace "default" -}}
+    {{ .Release.Namespace }}
+{{- else -}}
+    {{ include "spark-operator.fullname" . }}-ns
+{{- end -}}
+{{- end }}
 
+
+{{/*
+return cluster role name
+*/}}
+{{- define "spark-operator.clusterrole" -}}
+{{ include "spark-operator.fullname" . }}-cr
+{{- end -}}
+
+{{/*
+returns cluster role binding name
+*/}}
+{{- define "spark-operator.clusterrolebinding" -}}
+{{ include "spark-operator.fullname" . }}-crb
+{{- end -}}
+
+{{/*
+returns image pull secret name
+*/}}
+{{- define "spark-operator.imagepullsecret" -}}
+{{ include "spark-operator.name" . }}-imagepull-secret
+{{- end -}}
+
+{{/*
+returns webhook name
+*/}}
+{{- define "spark-operator.webhook" -}}
+{{ include "spark-operator.name" . }}-webhook
+{{- end -}}
+
+{{/*
+returns webhook init name
+*/}}
+{{- define "spark-operator.webhookinit" -}}
+{{ include "spark-operator.webhook" . }}-init
+{{- end -}}

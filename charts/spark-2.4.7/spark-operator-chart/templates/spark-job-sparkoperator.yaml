@@ -1,22 +1,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "spark-operator.name" . }}--init
-  namespace: {{ .Values.sparkNamespace }}
+  name: {{ include "spark-operator.webhookinit" . }}
+  namespace: {{ include "spark-operator.sparknamespace" . }}
   labels:
   {{- include "spark-operator.labels" . | nindent 4 }}
 spec:
   backoffLimit: 3
   template:
     metadata:
+      name: {{ include "spark-operator.webhookinit" . }}
       labels:
         {{- include "spark-operator.labels" . | nindent 8 }}
     spec:
-      imagePullSecrets: {{- toYaml .Values.imagePullSecrets | nindent 6 }}
+      imagePullSecrets:
+        - name: {{ include "spark-operator.imagepullsecret"  . }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       restartPolicy: Never
       containers:
       - name: main
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ["/usr/bin/gencerts.sh", "-p"]
+        command: ["/usr/bin/gencerts.sh", "-n", "{{ include "spark-operator.sparknamespace" . }}", "-s", "{{ include "spark-operator.webhook" . }}", "-p"]

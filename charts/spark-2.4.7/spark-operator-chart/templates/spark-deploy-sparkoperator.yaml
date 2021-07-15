@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "spark-operator.name" . }}
-  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+  namespace: {{ include "spark-operator.sparknamespace" . }}
   labels:
     {{- include "spark-operator.labels" . | nindent 4 }}
 spec:
@@ -19,7 +19,8 @@ spec:
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: true
-      imagePullSecrets:  {{- toYaml .Values.imagePullSecrets | nindent 6 }}
+      imagePullSecrets:
+        - name: {{ include "spark-operator.imagepullsecret" . }}
       containers:
       - name: sparkoperator
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}

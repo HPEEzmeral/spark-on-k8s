@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: hpe-imagepull-secrets
-  namespace: {{ .Values.sparkNamespace | default .Release.Namespace }}
+  name: {{ include "spark-operator.imagepullsecret" . }}
+  namespace: {{ include "spark-operator.sparknamespace" . }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Files.Get "files/example-imagepullsecret" | b64enc }}
