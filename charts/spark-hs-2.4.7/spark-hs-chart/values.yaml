@@ -1,0 +1,392 @@
+# Default values for spark-hs chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# replicaCount -- Desired number of pods, leaderElection will be enabled
+# if this is greater than 1
+replicaCount: 1
+
+image:
+  # -- Image repository
+  repository: gcr.io/mapr-252711/spark-hs-2.4.7
+  # -- Image pull policy
+  pullPolicy: Always
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: "202106220630P141"
+
+# -- Image pull secrets
+imagePullSecrets:
+  - name: imagepull
+
+# -- String to partially override `spark-operator.fullname` template (will maintain the release name)
+nameOverride: ""
+
+# -- String to override release name
+fullnameOverride: ""
+
+# -- restart policy
+restartPolicy: "Always"
+
+automountServiceAccountToken: true
+
+progressDeadlineSeconds: 600
+
+revisionHistoryLimit: 10
+
+#sparkVersion for the applications
+sparkVersion: spark-2.4.7
+
+#HPE tenant namespace info
+tenantNameSpace: sampletenant
+tenantIsUnsecure: false
+
+#HPE tenant namespace service account
+tenantServiceAccount:
+  name: "hpe-sampletenant"
+
+podSecurityContext: {}
+
+#service info
+service:
+  type: NodePort
+
+#container ports
+ports:
+  sshPort: 22
+  sshHostPort: 7779
+  httpPort: 18080
+  httpsPort: 18480
+
+# resources -- Pod resource requests and limits
+resources:
+   limits:
+     cpu: 8000m
+     memory: 8Gi
+     ephemeral-storage: 30Gi
+   requests:
+     cpu: 2000m
+     memory: 8Gi
+     ephemeral-storage: 30Gi
+
+#prestop script configurations
+lifecycle:
+  preStop:
+    path: "/opt/mapr/kubernetes/pre-stop.sh"
+
+#liveness probe configurations
+livenessProbe:
+  path: "/opt/mapr/kubernetes/isOk.sh"
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
+  successThreshold: 1
+
+#readiness probe configurations
+readinessProbe:
+  path: "/opt/mapr/kubernetes/isReady.sh"
+  failureThreshold: 3
+  periodSeconds: 10
+  timeoutSeconds: 1
+  successThreshold: 1
+
+#componet labels
+labels:
+  - name: "cluster"
+    value: "dataplatform"
+  - name: "namespacetype"
+    value: "Tenant"
+  - name: "version"
+    value: "6.2.0"
+
+#nodeAffinity configurations
+nodeAfinityConfigs:
+  maprNode:
+    key: "hpe.com/usenode"
+    operator: "Exists"
+
+  storageNode:
+    key: "hpe.com/compute"
+    operator: "Exists"
+
+  exclusiveCluster:
+    key: "hpe.com/exclusivecluster"
+    operator: "In"
+
+#podAffinity configurations
+podAfinityConfigs:
+  componentKey: "hpe.com/component"
+  topologyKey: "kubernetes.io/hostname"
+
+#configurations for event log storage
+eventlogstorage:
+  kind: pvc #supported types are pvc and maprfs
+  pvcname: sparkhs-pvc #example pvc; to be replaced by an existing pvc in the tenant namespace
+
+#conatiner configurations
+conatinerConfigs:
+  standardArgs:
+    - "/bin/bash"
+    - "-c"
+    - "/opt/mapr/kubernetes/start.sh"
+
+  standardCommand:
+    - "/tini"
+    - "--"
+
+  env:
+    - name: KUBERNETES_CONTAINER
+      value: 'true'
+    - name: LOG_LEVEL
+      value: INFO
+    - name: SSH_PORT
+      value: '7779'
+    - name: "CLUSTER_CREATE_TIME"
+      value: "20210615024100"
+    - name: SECURE_CLUSTER
+      valueFrom:
+        configMapKeyRef:
+          key: SECURE_CLUSTER
+          name: cluster-cm
+    - name: USE_SSSD
+      valueFrom:
+        configMapKeyRef:
+          key: USE_SSSD
+          name: cluster-cm
+    - name: USE_SSH
+      valueFrom:
+        configMapKeyRef:
+          key: USE_SSH
+          name: cluster-cm
+    - name: MAPR_CLUSTER
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_CLUSTER
+          name: cluster-cm
+    - name: CLUSTER_NAMESPACE
+      valueFrom:
+        configMapKeyRef:
+          key: CLUSTER_NAMESPACE
+          name: cluster-cm
+    - name: MAPR_VERSION
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_VERSION
+          name: cluster-cm
+    - name: DNS_DOMAIN
+      valueFrom:
+        configMapKeyRef:
+          key: DNS_DOMAIN
+          name: cluster-cm
+    - name: LOG_HOSTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: LOG_HOSTPATH
+          name: cluster-cm
+    - name: LOG_MOUNTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: LOG_MOUNTPATH
+          name: cluster-cm
+    - name: LOG_SYMLINK
+      valueFrom:
+        configMapKeyRef:
+          key: LOG_SYMLINK
+          name: cluster-cm
+    - name: CORES_HOSTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: CORES_HOSTPATH
+          name: cluster-cm
+    - name: CORES_MOUNTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: CORES_MOUNTPATH
+          name: cluster-cm
+    - name: CORES_SYMLINK
+      valueFrom:
+        configMapKeyRef:
+          key: CORES_SYMLINK
+          name: cluster-cm
+    - name: PODINFO_HOSTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: PODINFO_HOSTPATH
+          name: cluster-cm
+    - name: PODINFO_MOUNTPATH
+      valueFrom:
+        configMapKeyRef:
+          key: PODINFO_MOUNTPATH
+          name: cluster-cm
+    - name: PODINFO_SYMLINK
+      valueFrom:
+        configMapKeyRef:
+          key: PODINFO_SYMLINK
+          name: cluster-cm
+    - name: MAPR_ZK_HOSTS
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_ZK_HOSTS
+          name: cluster-cm
+    - name: MAPR_CLDB_HOSTS
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_CLDB_HOSTS
+          name: cluster-cm
+    - name: MAPR_TSDB_HOSTS
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_TSDB_HOSTS
+          name: cluster-cm
+    - name: MAPR_ES_HOSTS
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_ES_HOSTS
+          name: cluster-cm
+    - name: MAPR_HIVEM_HOSTS
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_HIVEM_HOSTS
+          name: cluster-cm
+    - name: MAPR_TZ
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_TZ
+          name: cluster-cm
+    - name: MAPR_HOME
+      valueFrom:
+        configMapKeyRef:
+          key: MAPR_HOME
+          name: cluster-cm
+    - name: MAPR_CPU
+      valueFrom:
+        resourceFieldRef:
+          containerName: sparkhs
+          divisor: '0'
+          resource: requests.cpu
+    - name: MAPR_MEMORY
+      valueFrom:
+        resourceFieldRef:
+          containerName: sparkhs
+          divisor: 1Mi
+          resource: requests.memory
+    - name: MAPR_CPU_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: sparkhs
+          divisor: '0'
+          resource: limits.cpu
+    - name: MAPR_MEMORY_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: sparkhs
+          divisor: '0'
+          resource: limits.memory
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: NODE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: HOST_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.hostIP
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    - name: POD_SERVICE_ACCOUNT
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.serviceAccountName
+    - name: K8S_UID
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.uid
+
+  volumeMounts:
+    - mountPath: "/opt/mapr/logs"
+      name: logs
+    - mountPath: "/opt/mapr/mapr-cli-audit-log"
+      name: logs
+    - mountPath: "/opt/cores"
+      name: cores
+    - mountPath: "/opt/mapr/kubernetes/cluster-cm"
+      name: cluster-cm
+    - mountPath: "/opt/mapr/kubernetes/replace-cm"
+      name: replace-cm
+    - mountPath: "/opt/mapr/kubernetes/status-cm"
+      name: status-cm
+    - mountPath: "/opt/mapr/kubernetes/ldap-cm"
+      name: ldap-cm
+    - mountPath: "/opt/mapr/kubernetes/sssd-secrets"
+      name: sssd-secrets
+    - mountPath: "/opt/mapr/kubernetes/ssh-secrets"
+      name: ssh-secrets
+    - mountPath: "/opt/mapr/kubernetes/client-secrets"
+      name: client-secrets
+    - mountPath: "/opt/mapr/kubernetes/server-secrets"
+      name: server-secrets
+    - mountPath: "/opt/mapr/spark/spark-2.4.7/logs"
+      name: logs
+
+#volumes for the pods
+volumes:
+  - configMap:
+      defaultMode: 420
+      name: cluster-cm
+    name: cluster-cm
+  - configMap:
+      defaultMode: 420
+      name: sparkhs-cm
+    name: replace-cm
+  - configMap:
+      defaultMode: 420
+      name: status-cm
+    name: status-cm
+  - hostPath:
+      path: "/var/log/mapr/sparkhs"
+      type: DirectoryOrCreate
+    name: logs
+  - hostPath:
+      path: "/var/log/mapr/cores"
+      type: DirectoryOrCreate
+    name: cores
+  - hostPath:
+      path: "/var/log/mapr/podinfo"
+      type: DirectoryOrCreate
+    name: podinfo
+  - configMap:
+      defaultMode: 420
+      name: ldapclient-cm
+    name: ldap-cm
+  - name: sssd-secrets
+    secret:
+      defaultMode: 420
+      secretName: sssd
+  - name: ssh-secrets
+    secret:
+      defaultMode: 420
+      secretName: ssh
+  - name: client-secrets
+    secret:
+      defaultMode: 420
+      secretName: client
+  - name: server-secrets
+    secret:
+      defaultMode: 420
+      secretName: server
