@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spark-hs-chart.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
+    helm.sh/chart: {{ include "spark-hs-chart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+      {{ toYaml .Values.podAnnotations | indent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "spark-hs-chart.serviceAccountName" . }}
+      imagePullSecrets:
+        {{- include "spark-hs-chart.imagepullSecrets" . | indent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HADOOP_CONF_DIR
+              value: {{ .Values.hdfs.HADOOP_CONF_DIR }}
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
+            - name: SPARK_USER
+              value: "185"
+          ports:
+            - name: historyport
+              containerPort: 18080
+              protocol: TCP
+          resources:
+          {{ toYaml .Values.resources | indent 10 }}
+          args:
+            - "/bin/sh"
+            - "-c"
+            - >
+              if [ "$enablePVC" == "true" ]; then
+                export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+                -Dspark.history.fs.logDirectory=file:/data/$eventsDir";
+              else
+                export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+                -Dspark.history.fs.logDirectory=$logDirectory";
+              fi;
+              /opt/spark/bin/spark-class org.apache.spark.deploy.history.HistoryServer;
+          envFrom:
+            - configMapRef:
+                name: {{ include "spark-hs-chart.fullname" . }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: historyport
+          readinessProbe:
+            httpGet:
+              path: /
+              port: historyport
+          {{- if .Values.pvc.enablePVC }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          {{- else }}
+          volumeMounts:
+            - name: core-site
+              mountPath: /etc/hadoop/core-site.xml
+              subPath: core-site.xml
+            - name: hdfs-site
+              mountPath: /etc/hadoop/hdfs-site.xml
+              subPath: hdfs-site.xml
+          {{- end }}
+      {{- if .Values.pvc.enablePVC }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.existingClaimName }}
+      {{- else }}
+      volumes:
+        - name: hdfs-site
+          configMap:
+            name: {{ .Values.hdfs.hdfsSiteConfigMap }}
+        - name: core-site
+          configMap:
+            name: {{ .Values.hdfs.coreSiteConfigMap }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
