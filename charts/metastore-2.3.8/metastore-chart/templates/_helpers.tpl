@@ -50,6 +50,12 @@ app.kubernetes.io/name: {{ include "metastore.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{/*
+Create default name for imagepull secret
+*/}}
+{{- define "metastore.defaultImagepullName" -}}
+{{ include "metastore.name" . }}-imagepull
+{{- end -}}
 
 {{/*
 Create the name of the service account to use
@@ -69,3 +75,6 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccounts.spark.name }}
 {{- end }}
 {{- end }}
+
+
+
