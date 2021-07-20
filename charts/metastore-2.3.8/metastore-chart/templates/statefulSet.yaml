@@ -27,10 +27,8 @@ spec:
             - name: thrift
               containerPort: 9083
               protocol: TCP
-          command:
-            - "/bin/sh"
-            - "-c"
-            - "/opt/hive/bin/hive --service metastore"
+          command: ["/bin/sh","-c"]
+          args: ["/opt/entrypoint.sh"]
           volumeMounts:
             - name: metastore-config
               mountPath: /opt/hive/conf
