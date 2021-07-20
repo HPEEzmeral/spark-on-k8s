@@ -44,6 +44,11 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 9083
+  name: "metastore-int-svc"
+
+externalService:
+  type: NodePort
+  name: "metastore-ext-svc"
 
 resources:
   limits:
