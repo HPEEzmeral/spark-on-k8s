@@ -75,6 +75,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccounts.spark.name }}
 {{- end }}
 {{- end }}
-
-
-
