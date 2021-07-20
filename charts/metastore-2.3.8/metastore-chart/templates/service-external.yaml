@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.externalService.name }}
+  labels:
+  {{- include "metastore.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.externalService.type }}
+  ports:
+    - name: {{ .Values.externalService.name }}
+      port: {{ .Values.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.service.port }}
+  selector:
+  {{- include "metastore.selectorLabels" . | nindent 4 }}
