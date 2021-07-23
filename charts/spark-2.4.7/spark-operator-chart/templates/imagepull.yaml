@@ -1,8 +1,10 @@
+{{ if ( and ( .Values.createDefaultPullSecret)  ( not ( lookup "v1" "Secret" (include "spark-operator.sparknamespace" .) .Values.defaultPullSecret )) )  }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "spark-operator.imagepullsecret" . }}
+  name: {{ .Values.defaultPullSecret }}
   namespace: {{ include "spark-operator.sparknamespace" . }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Files.Get "files/example-imagepullsecret" | b64enc }}
+{{ end }}
