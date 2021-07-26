@@ -8,6 +8,8 @@ imagePullSecrets:
 
 createDefaultPullSecret: true
 
+defaultPullSecret: imagepull
+
 nameOverride: ""
 fullnameOverride: ""
 

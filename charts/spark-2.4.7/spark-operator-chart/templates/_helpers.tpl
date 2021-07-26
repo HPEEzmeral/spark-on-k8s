@@ -74,13 +74,6 @@ returns cluster role binding name
 {{- end -}}
 
 {{/*
-returns image pull secret name
-*/}}
-{{- define "spark-operator.imagepullsecret" -}}
-{{ include "spark-operator.name" . }}-imagepull-secret
-{{- end -}}
-
-{{/*
 returns webhook name
 */}}
 {{- define "spark-operator.webhook" -}}

@@ -9,6 +9,9 @@ image:
   tag: "202107131409"
   pullPolicy: IfNotPresent
 
+createDefaultPullSecret: true
+defaultPullSecret: imagepull
+
 nameOverride: ""
 fullnameOverride: ""
 service:

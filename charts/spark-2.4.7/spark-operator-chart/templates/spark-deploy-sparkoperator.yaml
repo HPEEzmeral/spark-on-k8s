@@ -20,7 +20,7 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: true
       imagePullSecrets:
-        - name: {{ include "spark-operator.imagepullsecret" . }}
+        - name: {{ .Values.defaultPullSecret }}
       containers:
       - name: sparkoperator
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}

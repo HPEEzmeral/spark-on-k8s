@@ -1,4 +1,4 @@
-{{ if empty .Values.imagePullSecrets }}
+{{ if ( and ( empty .Values.imagePullSecrets )  ( not ( lookup "v1" "Secret" .Release.Namespace .Values.defaultPullSecret )) )  }}
 apiVersion: v1
 kind: Secret
 metadata:

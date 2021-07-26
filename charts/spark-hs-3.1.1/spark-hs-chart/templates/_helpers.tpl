@@ -43,18 +43,11 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
-Create default name for imagepull secret
-*/}}
-{{- define "spark-hs-chart.defaultImagepullName" -}}
-{{ include "spark-hs-chart.name" . }}-imagepull
-{{- end -}}
-
-{{/*
 Create imagepullsecrets
 */}}
 {{ define "spark-hs-chart.imagepullSecrets" }}
   {{ if empty .Values.imagePullSecrets }}
-    {{ printf "- name: %s" (include "spark-hs-chart.defaultImagepullName" .) | nindent 8 }}
+    {{ printf "- name: %s" ( .Values.defaultPullSecret ) | nindent 8 }}
   {{ else }}
     {{- toYaml .Values.imagePullSecrets | nindent 8 }}
   {{ end }}

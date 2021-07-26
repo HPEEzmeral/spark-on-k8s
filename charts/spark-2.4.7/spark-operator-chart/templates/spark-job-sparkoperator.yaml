@@ -14,11 +14,11 @@ spec:
         {{- include "spark-operator.labels" . | nindent 8 }}
     spec:
       imagePullSecrets:
-        - name: {{ include "spark-operator.imagepullsecret"  . }}
+        - name: {{ .Values.defaultPullSecret }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       restartPolicy: Never
       containers:
-      - name: main
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        command: ["/usr/bin/gencerts.sh", "-n", "{{ include "spark-operator.sparknamespace" . }}", "-s", "{{ include "spark-operator.webhook" . }}", "-p"]
+        - name: main
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/usr/bin/gencerts.sh", "-n", "{{ include "spark-operator.sparknamespace" . }}", "-s", "{{ include "spark-operator.webhook" . }}", "-p"]
