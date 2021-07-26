@@ -25,7 +25,7 @@ spec:
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
-  mainClass: org.apache.delta.example.DeltaLakeExample
+  mainClass: org.apache.delta.example.sql.DeltaLakeTableExample
   mainApplicationFile: "local://path/to/sparkjob/spark-deltalake-example_2.12-0.1.jar"
   sparkVersion: "3.1.1"
   restartPolicy:
@@ -56,11 +56,11 @@ spec:
       - name: "test-volume"
         mountPath: "/tmp"
   arguments:
-    - s3a:///test/tmp/test1
+    - s3a://test/tmp/test1
   sparkConf:
-    "spark.hadoop.fs.s3a.endpoint": # minio endpoint
-    "spark.hadoop.fs.s3a.access.key": # minio access key
-    "spark.hadoop.fs.s3a.secret.key": # minio secret key
+    "spark.hadoop.fs.s3a.endpoint": #minio endpoint
+    "spark.hadoop.fs.s3a.access.key": #minio access key
+    "spark.hadoop.fs.s3a.secret.key": #minio secret key
     "spark.hadoop.fs.s3a.impl": org.apache.hadoop.fs.s3a.S3AFileSystem
   deps:
     jars:
