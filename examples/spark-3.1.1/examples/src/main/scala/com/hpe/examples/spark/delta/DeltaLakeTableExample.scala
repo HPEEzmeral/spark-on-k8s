@@ -1,4 +1,4 @@
-package org.apache.delta.example.sql
+package com.hpe.examples.spark.delta
 
 import org.apache.spark.sql.SparkSession
 
