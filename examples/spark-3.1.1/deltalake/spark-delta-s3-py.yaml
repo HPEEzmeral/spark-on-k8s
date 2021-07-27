@@ -30,11 +30,6 @@ spec:
   sparkVersion: "3.1.1"
   restartPolicy:
     type: Never
-  volumes:
-    - name: "test-volume"
-      hostPath:
-        path: "/tmp"
-        type: Directory
   driver:
     cores: 1
     coreLimit: "1200m"
@@ -43,18 +38,12 @@ spec:
       version: 3.1.1
     # Note: If you run app in tenant namespace - change serviceAccount name to "hpe-<namespace>"
     serviceAccount: spark
-    volumeMounts:
-      - name: "test-volume"
-        mountPath: "/tmp"
   executor:
     cores: 1
     instances: 1
     memory: "512m"
     labels:
       version: 3.1.1
-    volumeMounts:
-      - name: "test-volume"
-        mountPath: "/tmp"
   arguments:
     - s3a://test/tmp/test1
   sparkConf:
@@ -67,3 +56,4 @@ spec:
   deps:
     jars:
       - local:///tmp/delta-core_2.12-1.0.0.jar
+      -
