@@ -56,4 +56,3 @@ spec:
   deps:
     jars:
       - local:///tmp/delta-core_2.12-1.0.0.jar
-      -
