@@ -1,11 +1,10 @@
-package org.apache.delta.example.sql;
+package com.hpe.examples.spark.delta;
 
 import org.apache.spark.api.java.function.MapFunction;
-import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 
-public class DeltaLakeFailExample {
+public class DeltaLakeIntermediateFailExample {
 
     public static void main(String[] args) {
 
@@ -50,21 +49,6 @@ public class DeltaLakeFailExample {
                 .format("delta")
                 .load(args[0])
                 .show(100);
-
-        //Job-4
-        try {
-            spark.range(50, 150).map((MapFunction<Long, Integer>) num ->
-                    {
-                        if (num > 50) {
-                            throw new RuntimeException("Atomicity failed");
-                        }
-                        return Math.toIntExact(num);
-                    }, Encoders.INT()
-            ).write().format("delta").mode("overwrite").option("overwriteSchema", "true").save(filePath);
-        } catch (Exception e) {
-            System.out.println("failed while OverWriteData");
-            throw new RuntimeException("Oops! Atomicity failed");
-        }
 
         spark.stop();
     }

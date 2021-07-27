@@ -1,4 +1,4 @@
-package org.apache.delta.example.streaming
+package com.hpe.examples.spark.delta.streaming
 
 import org.apache.spark.sql.SparkSession
 
