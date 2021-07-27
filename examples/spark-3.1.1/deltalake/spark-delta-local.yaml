@@ -25,7 +25,7 @@ spec:
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
-  mainClass: org.apache.delta.example.sql.DeltaLakeTableExample
+  mainClass: com.hpe.examples.spark.delta.DeltaLakeTableExample
   mainApplicationFile: "local://path/to/sparkjob/spark-deltalake-example_2.12-0.1.jar"
   sparkVersion: "3.1.1"
   restartPolicy:
