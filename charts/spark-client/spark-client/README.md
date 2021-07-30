@@ -5,7 +5,7 @@
 #### Install command
 `helm install spark-client ./spark-client-chart -n spark-ns`
 
-This will create spark operator components in already created `spark-operator-ns`. to create a new namespace during installation use the flag `-- create-namespace`  with the install command
+This will create spark client deployment in already created `spark-ns`. to create a new namespace during installation use the flag `--create-namespace`  with the installation command
 
 ## Uninstalling the Chart
 
