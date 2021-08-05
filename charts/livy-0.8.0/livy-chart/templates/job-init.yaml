@@ -20,5 +20,12 @@ spec:
       - name: init
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
         command: ["/opt/livy/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "livy.fullname" . }}-http", "-e", "{{ include "livy.fullname" . }}-certs", "-p"]
 {{ end }}
