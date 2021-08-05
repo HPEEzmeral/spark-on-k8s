@@ -22,8 +22,8 @@
     <scala.version>2.12.12</scala.version>
     <spark.scala.version>2.12</spark.scala.version>
 
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
   <dependencies>
