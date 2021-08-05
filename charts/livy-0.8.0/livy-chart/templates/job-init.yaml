@@ -27,5 +27,5 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
-        command: ["/opt/livy/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "livy.fullname" . }}-http", "-e", "{{ include "livy.fullname" . }}-certs", "-p"]
+        command: ["/opt/livy/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "livy.fullname" . }}-http", "-e", "{{ include "livy.fullname" . }}-certs", "-p", "-o", "{{ include "livy.fullname" . }}"]
 {{ end }}
