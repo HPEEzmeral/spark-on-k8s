@@ -41,8 +41,13 @@ tenantNameSpace: sampletenant
 tenantIsUnsecure: false
 
 #HPE tenant namespace service account
-tenantServiceAccount:
-  name: "hpe-sampletenant"
+serviceAccount:
+  create: true
+  name: ""
+  annotations: { }
+
+rbac:
+  create: true
 
 podSecurityContext: {}
 
@@ -120,7 +125,7 @@ podAfinityConfigs:
 
 #configurations for event log storage
 eventlogstorage:
-  kind: pvc #supported types are pvc and maprfs
+  kind: maprfs #supported types are pvc and maprfs
   pvcname: sparkhs-pvc #example pvc; to be replaced by an existing pvc in the tenant namespace
 
 #conatiner configurations

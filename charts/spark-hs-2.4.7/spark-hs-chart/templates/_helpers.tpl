@@ -188,7 +188,6 @@ Return pvcVolume
   name: sparkhs-eventlog-storage
 {{- end }}
 
-
 {{/*
   returns eventLogPath
 */}}
@@ -199,3 +198,14 @@ file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storag
 maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+return service account name
+*/}}
+{{- define "spark-hs-chart.serviceAccountName" -}}
+{{- if empty .Values.serviceAccount.name -}}
+    {{ include "spark-hs-chart.name" . }}-sa
+{{- else -}}
+    {{ .Values.serviceAccount.name }}
+{{- end -}}
+{{- end }}
