@@ -16,6 +16,12 @@ rules:
     - services
   verbs:
     - "*"
+- apiGroups:
+    - "apps"
+  resources:
+    - statefulsets
+  verbs:
+    - "*"
 {{- end }}
 
 ---
