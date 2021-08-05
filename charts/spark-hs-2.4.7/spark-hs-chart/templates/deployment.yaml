@@ -39,7 +39,7 @@ spec:
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ .Values.tenantServiceAccount.name }}
+      serviceAccountName: {{ include "spark-hs-chart.serviceAccountName" . }}
       restartPolicy: {{ .Values.restartPolicy }}
       priorityClassName: "hpe-tenant-service"
       initContainers: []
