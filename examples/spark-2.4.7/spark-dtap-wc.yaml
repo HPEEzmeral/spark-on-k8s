@@ -21,7 +21,7 @@ metadata:
   namespace: sampletenant
 spec:
   sparkConf:
-    # Note: If you are executing the application as a K8 user that MapR can verify,
+    # Note: If you are executing the application as a K8S user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
     #spark.mapr.user.secret: spark-user-secret
     # Note: You do not need to specify a spark.eventLog.dir
