@@ -43,7 +43,7 @@ tenantIsUnsecure: false
 #HPE tenant namespace service account
 serviceAccount:
   create: true
-  name: ""
+  name: sparkhs-tenant-sa
   annotations: { }
 
 rbac:
@@ -86,6 +86,11 @@ livenessProbe:
   timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
+
+#owner Reference
+ownerReference:
+  overRide: false
+  ownerReferences: {}
 
 #readiness probe configurations
 readinessProbe:
