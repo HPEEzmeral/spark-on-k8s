@@ -12,8 +12,10 @@ Source code for these examples can be found in 'apps' folder.
 
    
 2. Create PVCs with the name - `spark-hive-claim`
-   and place the file kv1.txt in -
+   and place the file kv1.txt in
    `/opt/spark/work-dir/spark-warehouse/`
+   kv1.txt is located in the resource folder
+   - `src/main/resources/kv1.txt`
 
 ### Create the hivesite config map using the following command
 

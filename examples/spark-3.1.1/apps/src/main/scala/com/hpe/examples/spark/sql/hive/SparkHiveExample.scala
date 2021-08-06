@@ -8,8 +8,6 @@ object SparkHiveExample {
   // $example on:spark_hive$
   case class Record(key: Int, value: String)
   // $example off:spark_hive$
-  // warehouseLocation points to the default location for managed databases and tables
-  val warehouseLocation = "/opt/spark/work-dir/spark-warehouse"
 
   def main(args: Array[String]) {
     // When working with Hive, one must instantiate `SparkSession` with Hive support, including
@@ -26,7 +24,6 @@ object SparkHiveExample {
       .builder()
       .appName("SparkHiveExample")
       .enableHiveSupport()
-      .config("spark.sql.warehouse.dir", warehouseLocation)
       .getOrCreate()
 
     import spark.implicits._
