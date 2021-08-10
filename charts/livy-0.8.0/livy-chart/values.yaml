@@ -24,6 +24,10 @@ serviceAccounts:
     annotations: {}
     name: ""
 
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
 rbac:
   create: true
 

@@ -83,6 +83,10 @@ rbac:
   # if rbac is false this service account is used
   serviceAccountName: default
 
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
 orchestrator:
   image: quay.io/presslabs/mysql-operator-orchestrator:latest
 

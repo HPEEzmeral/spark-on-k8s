@@ -4,6 +4,11 @@ kind: Secret
 metadata:
   name: {{ .Values.defaultPullSecret }}
   namespace: {{ .Release.Namespace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Files.Get "files/example-imagepullsecret" | b64enc }}
@@ -16,6 +21,11 @@ kind: Secret
 metadata:
   name: {{ .Values.defaultPullSecret }}
   namespace: {{ .Values.sparkJobNamespace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Files.Get "files/example-imagepullsecret" | b64enc }}

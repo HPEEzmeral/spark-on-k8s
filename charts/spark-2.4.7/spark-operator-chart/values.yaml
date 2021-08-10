@@ -29,6 +29,10 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: "hpe-sparkoperator"
 
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
 webhook:
   # -- name for webhook service
   name: spark-webhook

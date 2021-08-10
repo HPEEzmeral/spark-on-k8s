@@ -4,4 +4,9 @@ kind: ServiceAccount
 metadata:
   name: {{ .Values.serviceAccount.name }}
   namespace: {{ include "spark-operator.sparknamespace" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
 {{- end }}

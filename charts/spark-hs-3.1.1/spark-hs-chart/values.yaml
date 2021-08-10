@@ -29,6 +29,10 @@ serviceAccount:
   create: true
   name: history-server-sa
 
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
 environment:
 # Note: do not configure Spark history events directory using SPARK_HISTORY_OPTS. It will be
 # configured by this chart based on the values in "pvc" or "hdfs" attribute.

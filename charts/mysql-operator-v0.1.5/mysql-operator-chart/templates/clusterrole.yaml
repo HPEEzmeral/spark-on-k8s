@@ -3,6 +3,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: '{{ template "mysql-operator.fullname" . }}'
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels:
     app: '{{ template "mysql-operator.name" . }}'
     chart: '{{ template "mysql-operator.chart" . }}'
