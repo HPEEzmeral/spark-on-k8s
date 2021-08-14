@@ -1,0 +1,25 @@
+{{ $componentName := printf "%s-cm" .Chart.Name }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $componentName }}
+  labels:
+  {{ include "spark-ts-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+data:
+  post-startup.sh: |
+  #!/usr/bin/env bash
+  pre-startup.sh: |
+    #!/usr/bin/env bash
+  spark-defaults.conf.extras: |-
+    spark.kubernetes.driver.request.cores {{ .Values.thriftServerResources.driver.requestCores }}
+    spark.kubernetes.driver.limit.cores  {{ .Values.thriftServerResources.driver.limitCores }}
+    spark.kubernetes.executor.request.cores {{ .Values.thriftServerResources.executor.requestCores }}
+    spark.kubernetes.executor.limit.cores {{ .Values.thriftServerResources.executor.limitCores }}
+
+    spark.kubernetes.authenticate.serviceAccountName {{ include "spark-ts-chart.serviceAccountName" . }}
+    spark.kubernetes.container.image {{ .Values.image.baseRepository }}/{{ .Values.sparkVersion }}:{{ .Values.image.tag }}
+    spark.kubernetes.container.image.pullSecrets {{ .Values.imagePullSecrets }}
+    spark.kubernetes.container.image.pullPolicy {{ join "," .Values.image.pullPolicy }}
+    spark.kubernetes.namespace {{ .Release.Namespace }}
+    spark.authenticate false
+    spark.authenticate.enableSaslEncryption false

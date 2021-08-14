@@ -1,0 +1,20 @@
+{{ $componentName := printf "%s-svc" .Chart.Name }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $componentName }}
+  labels:
+    {{ include "spark-ts-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
+      targetPort: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
+      protocol: TCP
+      name: http
+    - port: {{ .Values.ports.sparkTsPort }}
+      targetPort: {{ .Values.ports.sparkTsPort }}
+      protocol: TCP
+      name: spark-thrift
+  selector:
+    {{- include "spark-ts-chart.selectorLabels" . | nindent 4 }}
