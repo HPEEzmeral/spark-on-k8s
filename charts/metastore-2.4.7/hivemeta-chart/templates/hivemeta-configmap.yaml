@@ -1,0 +1,892 @@
+{{ $componentName := printf "%s-cm" .Chart.Name }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $componentName }}
+  namespace: {{ .Values.tenantNameSpace }}
+  labels:
+  {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+data:
+  llap-daemon-log4j2.properties.template: |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+
+    # This is the log4j2 properties file used by llap-daemons. There's several loggers defined, which
+    # can be selected while configuring LLAP.
+    # Based on the one selected - UI links etc need to be manipulated in the system.
+    # Note: Some names and logic is common to this file and llap LogHelpers. Make sure to change that
+    # as well, if changing this file.
+
+    status = INFO
+    name = LlapDaemonLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.llap.daemon.log.level = INFO
+    property.llap.daemon.root.logger = console
+    property.llap.daemon.log.dir = .
+    property.llap.daemon.log.file = llapdaemon.log
+    property.llap.daemon.historylog.file = llapdaemon_history.log
+    property.llap.daemon.log.maxfilesize = 256MB
+    property.llap.daemon.log.maxbackupindex = 240
+
+    # list of all appenders
+    appenders = console, RFA, HISTORYAPPENDER, query-routing
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{ISO8601} %5p [%t (%X{fragmentId})] %c{2}: %m%n
+
+    # rolling file appender
+    appender.RFA.type = RollingRandomAccessFile
+    appender.RFA.name = RFA
+    appender.RFA.fileName = ${sys:llap.daemon.log.dir}/${sys:llap.daemon.log.file}
+    appender.RFA.filePattern = ${sys:llap.daemon.log.dir}/${sys:llap.daemon.log.file}_%d{yyyy-MM-dd-HH}_%i.done
+    appender.RFA.layout.type = PatternLayout
+    appender.RFA.layout.pattern = %d{ISO8601} %-5p [%t (%X{fragmentId})] %c: %m%n
+    appender.RFA.policies.type = Policies
+    appender.RFA.policies.time.type = TimeBasedTriggeringPolicy
+    appender.RFA.policies.time.interval = 1
+    appender.RFA.policies.time.modulate = true
+    appender.RFA.policies.size.type = SizeBasedTriggeringPolicy
+    appender.RFA.policies.size.size = ${sys:llap.daemon.log.maxfilesize}
+    appender.RFA.strategy.type = DefaultRolloverStrategy
+    appender.RFA.strategy.max = ${sys:llap.daemon.log.maxbackupindex}
+
+    # history file appender
+    appender.HISTORYAPPENDER.type = RollingRandomAccessFile
+    appender.HISTORYAPPENDER.name = HISTORYAPPENDER
+    appender.HISTORYAPPENDER.fileName = ${sys:llap.daemon.log.dir}/${sys:llap.daemon.historylog.file}
+    appender.HISTORYAPPENDER.filePattern = ${sys:llap.daemon.log.dir}/${sys:llap.daemon.historylog.file}_%d{yyyy-MM-dd}_%i.done
+    appender.HISTORYAPPENDER.layout.type = PatternLayout
+    appender.HISTORYAPPENDER.layout.pattern = %m%n
+    appender.HISTORYAPPENDER.policies.type = Policies
+    appender.HISTORYAPPENDER.policies.size.type = SizeBasedTriggeringPolicy
+    appender.HISTORYAPPENDER.policies.size.size = ${sys:llap.daemon.log.maxfilesize}
+    appender.HISTORYAPPENDER.policies.time.type = TimeBasedTriggeringPolicy
+    appender.HISTORYAPPENDER.policies.time.interval = 1
+    appender.HISTORYAPPENDER.policies.time.modulate = true
+    appender.HISTORYAPPENDER.strategy.type = DefaultRolloverStrategy
+    appender.HISTORYAPPENDER.strategy.max = ${sys:llap.daemon.log.maxbackupindex}
+
+    # queryId based routing file appender
+    appender.query-routing.type = Routing
+    appender.query-routing.name = query-routing
+    appender.query-routing.routes.type = Routes
+    appender.query-routing.routes.pattern = $${ctx:queryId}
+    #Purge polciy for query-based Routing Appender
+    appender.query-routing.purgePolicy.type = LlapRoutingAppenderPurgePolicy
+    # Note: Do not change this name without changing the corresponding entry in LlapConstants
+    appender.query-routing.purgePolicy.name = llapLogPurgerQueryRouting
+    # default route
+    appender.query-routing.routes.route-default.type = Route
+    appender.query-routing.routes.route-default.key = $${ctx:queryId}
+    appender.query-routing.routes.route-default.ref = RFA
+    # queryId based route
+    appender.query-routing.routes.route-mdc.type = Route
+    appender.query-routing.routes.route-mdc.file-mdc.type = LlapWrappedAppender
+    appender.query-routing.routes.route-mdc.file-mdc.name = IrrelevantName-query-routing
+    appender.query-routing.routes.route-mdc.file-mdc.app.type = RandomAccessFile
+    appender.query-routing.routes.route-mdc.file-mdc.app.name = file-mdc
+    appender.query-routing.routes.route-mdc.file-mdc.app.fileName = ${sys:llap.daemon.log.dir}/${ctx:queryId}-${ctx:dagId}.log
+    appender.query-routing.routes.route-mdc.file-mdc.app.layout.type = PatternLayout
+    appender.query-routing.routes.route-mdc.file-mdc.app.layout.pattern = %d{ISO8601} %5p [%t (%X{fragmentId})] %c{2}: %m%n
+
+    # list of all loggers
+    loggers = PerfLogger, EncodedReader, NIOServerCnxn, ClientCnxnSocketNIO, DataNucleus, Datastore, JPOX, HistoryLogger, LlapIoImpl, LlapIoOrc, LlapIoCache, LlapIoLocking, TezSM, TezSS, TezHC
+
+
+    # shut up the Tez logs that log debug-level stuff on INFO
+
+    logger.TezSM.name = org.apache.tez.runtime.library.common.shuffle.impl.ShuffleManager.fetch
+    logger.TezSM.level = WARN
+    logger.TezSS.name = org.apache.tez.runtime.library.common.shuffle.orderedgrouped.ShuffleScheduler.fetch
+    logger.TezSS.level = WARN
+    logger.TezHC.name = org.apache.tez.http.HttpConnection.url
+    logger.TezHC.level = WARN
+
+    logger.PerfLogger.name = org.apache.hadoop.hive.ql.log.PerfLogger
+    logger.PerfLogger.level = DEBUG
+
+    logger.EncodedReader.name = org.apache.hadoop.hive.ql.io.orc.encoded.EncodedReaderImpl
+    logger.EncodedReader.level = INFO
+
+    logger.LlapIoImpl.name = LlapIoImpl
+    logger.LlapIoImpl.level = INFO
+
+    logger.LlapIoOrc.name = LlapIoOrc
+    logger.LlapIoOrc.level = WARN
+
+    logger.LlapIoCache.name = LlapIoCache
+    logger.LlapIoCache.level = WARN
+
+    logger.LlapIoLocking.name = LlapIoLocking
+    logger.LlapIoLocking.level = WARN
+
+    logger.NIOServerCnxn.name = org.apache.zookeeper.server.NIOServerCnxn
+    logger.NIOServerCnxn.level = WARN
+
+    logger.ClientCnxnSocketNIO.name = org.apache.zookeeper.ClientCnxnSocketNIO
+    logger.ClientCnxnSocketNIO.level = WARN
+
+    logger.DataNucleus.name = DataNucleus
+    logger.DataNucleus.level = ERROR
+
+    logger.Datastore.name = Datastore
+    logger.Datastore.level = ERROR
+
+    logger.JPOX.name = JPOX
+    logger.JPOX.level = ERROR
+
+    logger.HistoryLogger.name = org.apache.hadoop.hive.llap.daemon.HistoryLogger
+    logger.HistoryLogger.level = INFO
+    logger.HistoryLogger.additivity = false
+    logger.HistoryLogger.appenderRefs = HistoryAppender
+    logger.HistoryLogger.appenderRef.HistoryAppender.ref = HISTORYAPPENDER
+
+    # root logger
+    rootLogger.level = ${sys:llap.daemon.log.level}
+    rootLogger.appenderRefs = root
+    rootLogger.appenderRef.root.ref = ${sys:llap.daemon.root.logger}
+
+  hive-log4j2.properties.template:  |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    status = INFO
+    name = HiveLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.hive.log.level = INFO
+    # Replace DRFA with routing appender to append <process-id>@<host-name> to the filename if you want separate log files for different CLI sessiong
+    property.hive.root.logger = DRFA
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/${sys:user.name}
+    property.hive.log.file = hive.log
+    property.hive.perflogger.log.level = INFO
+
+    # list of all appenders. Replace DRFA with routing to enable log files separating
+    appenders = console, DRFA
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+
+    # daily rolling file appender
+    appender.DRFA.type = RollingRandomAccessFile
+    appender.DRFA.name = DRFA
+    appender.DRFA.fileName = ${sys:hive.log.dir}/${sys:hive.log.file}
+    appender.DRFA.filePattern = ${sys:hive.log.dir}/${sys:hive.log.file}.%d{yyyy-MM-dd}
+    appender.DRFA.layout.type = PatternLayout
+    appender.DRFA.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+    appender.DRFA.policies.type = Policies
+    appender.DRFA.policies.time.type = TimeBasedTriggeringPolicy
+    appender.DRFA.policies.time.interval = 1
+    appender.DRFA.policies.time.modulate = true
+    appender.DRFA.strategy.type = DefaultRolloverStrategy
+    appender.DRFA.strategy.max = 30
+
+    # PID based rolling file appender
+    property.filename = ${sys:hive.log.dir}/${sys:hive.log.file}
+
+    appender.routing.type = Routing
+    appender.routing.name = routing
+    appender.routing.routes.type = Routes
+    appender.routing.routes.pattern = $${ctx:pid}
+    appender.routing.routes.route1.type = Route
+    appender.routing.routes.route1.rolling.type = RollingFile
+    appender.routing.routes.route1.rolling.name = Routing-${ctx:pid}
+    appender.routing.routes.route1.rolling.fileName = ${filename}.${ctx:pid}
+    appender.routing.routes.route1.rolling.filePattern = ${sys:hive.log.dir}/${sys:hive.log.file}.${ctx:pid}.%d{yyyy-MM-dd}
+    appender.routing.routes.route1.rolling.layout.type = PatternLayout
+    appender.routing.routes.route1.rolling.layout.pattern = %d{ISO8601} %5p [%t] %pid %c{2}: %m%n
+    appender.routing.routes.route1.rolling.policies.type = Policies
+    appender.routing.routes.route1.rolling.policies.time.type = TimeBasedTriggeringPolicy
+    appender.routing.routes.route1.rolling.policies.time.interval = 1
+
+    appender.routing.routes.route2.type = Route
+    # This route is chosen if ThreadContext has no value for key pid
+    appender.routing.routes.route2.key=$${ctx:pid}
+    appender.routing.routes.route2.rolling.type = RollingFile
+    appender.routing.routes.route2.rolling.name = Routing-default
+    appender.routing.routes.route2.rolling.fileName = ${filename}-default
+    appender.routing.routes.route2.rolling.filePattern = ${sys:hive.log.dir}/${sys:hive.log.file}-default.%d{yyyy-MM-dd}
+    appender.routing.routes.route2.rolling.layout.type = PatternLayout
+    appender.routing.routes.route2.rolling.layout.pattern = %d{ISO8601} %5p [%t] %pid %c{2}: %m%n
+    appender.routing.routes.route2.rolling.policies.type = Policies
+    appender.routing.routes.route2.rolling.policies.time.type = TimeBasedTriggeringPolicy
+    appender.routing.routes.route2.rolling.policies.time.interval = 1
+
+    # list of all loggers
+    loggers = NIOServerCnxn, ClientCnxnSocketNIO, DataNucleus, Datastore, JPOX, PerfLogger
+
+    logger.NIOServerCnxn.name = org.apache.zookeeper.server.NIOServerCnxn
+    logger.NIOServerCnxn.level = WARN
+
+    logger.ClientCnxnSocketNIO.name = org.apache.zookeeper.ClientCnxnSocketNIO
+    logger.ClientCnxnSocketNIO.level = WARN
+
+    logger.DataNucleus.name = DataNucleus
+    logger.DataNucleus.level = ERROR
+
+    logger.Datastore.name = Datastore
+    logger.Datastore.level = ERROR
+
+    logger.JPOX.name = JPOX
+    logger.JPOX.level = ERROR
+
+    logger.PerfLogger.name = org.apache.hadoop.hive.ql.log.PerfLogger
+    logger.PerfLogger.level = ${sys:hive.perflogger.log.level}
+
+    # root logger
+    rootLogger.level = ${sys:hive.log.level}
+    rootLogger.appenderRefs = root
+    rootLogger.appenderRef.root.ref = ${sys:hive.root.logger}
+
+  hive-site.xml:  |
+    <?xml version="1.0"?>
+    <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+    <configuration>
+    <property>
+    <name>hive.metastore.uris</name>
+    <value>thrift://localhost:9083</value>
+    </property>
+    <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:derby:;databaseName=/opt/mapr/hive/hive-2.3/metastore_db;create=true</value>
+    <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    </configuration>
+
+  hplsql-site.xml:  |
+    <configuration>
+    <property>
+    <name>hplsql.conn.default</name>
+    <value>hive2conn</value>
+    <description>The default connection profile</description>
+    </property>
+    <property>
+    <name>hplsql.conn.hiveconn</name>
+    <value>org.apache.hive.jdbc.HiveDriver;jdbc:hive2://</value>
+    <description>HiveServer2 JDBC connection (embedded mode)</description>
+    </property>
+    <property>
+    <name>hplsql.conn.init.hiveconn</name>
+    <value>
+    set hive.execution.engine=mr;
+    use default;
+    </value>
+    <description>Statements for execute after connection to the database</description>
+    </property>
+    <property>
+    <name>hplsql.conn.convert.hiveconn</name>
+    <value>true</value>
+    <description>Convert SQL statements before execution</description>
+    </property>
+    <property>
+    <name>hplsql.conn.hive1conn</name>
+    <value>org.apache.hadoop.hive.jdbc.HiveDriver;jdbc:hive://</value>
+    <description>Hive embedded JDBC (not requiring HiveServer)</description>
+    </property>
+    <property>
+    <name>hplsql.conn.hive2conn</name>
+    <value>org.apache.hive.jdbc.HiveDriver;jdbc:hive2://localhost:10000;hive;hive</value>
+    <description>HiveServer2 JDBC connection</description>
+    </property>
+    <property>
+    <name>hplsql.conn.init.hive2conn</name>
+    <value>
+    set hive.execution.engine=mr;
+    use default;
+    </value>
+    <description>Statements for execute after connection to the database</description>
+    </property>
+    <property>
+    <name>hplsql.conn.convert.hive2conn</name>
+    <value>true</value>
+    <description>Convert SQL statements before execution</description>
+    </property>
+    <property>
+    <name>hplsql.conn.db2conn</name>
+    <value>com.ibm.db2.jcc.DB2Driver;jdbc:db2://localhost:50001/dbname;user;password</value>
+    <description>IBM DB2 connection</description>
+    </property>
+    <property>
+    <name>hplsql.conn.tdconn</name>
+    <value>com.teradata.jdbc.TeraDriver;jdbc:teradata://localhost/database=dbname,logmech=ldap;user;password</value>
+    <description>Teradata connection</description>
+    </property>
+    <property>
+    <name>hplsql.conn.mysqlconn</name>
+    <value>com.mysql.jdbc.Driver;jdbc:mysql://localhost/test;user;password</value>
+    <description>MySQL connection</description>
+    </property>
+    <property>
+    <name>hplsql.dual.table</name>
+    <value></value>
+    <description>Single row, single column table for internal operations</description>
+    </property>
+    <property>
+    <name>hplsql.insert.values</name>
+    <value>native</value>
+    <description>How to execute INSERT VALUES statement: native (default) and select</description>
+    </property>
+    <property>
+    <name>hplsql.onerror</name>
+    <value>exception</value>
+    <description>Error handling behavior: exception (default), seterror and stop</description>
+    </property>
+    <property>
+    <name>hplsql.temp.tables</name>
+    <value>native</value>
+    <description>Temporary tables: native (default) and managed</description>
+    </property>
+    <property>
+    <name>hplsql.temp.tables.schema</name>
+    <value></value>
+    <description>Schema for managed temporary tables</description>
+    </property>
+    <property>
+    <name>hplsql.temp.tables.location</name>
+    <value>/tmp/plhql</value>
+    <description>LOcation for managed temporary tables in HDFS</description>
+    </property>
+    </configuration>
+
+  beeline-log4j2.properties.template: |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    status = INFO
+    name = BeelineLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.hive.log.level = WARN
+    property.hive.root.logger = console
+
+    # list of all appenders
+    appenders = console
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{yy/MM/dd HH:mm:ss} [%t]: %p %c{2}: %m%n
+
+    # list of all loggers
+    loggers = HiveConnection
+
+    # HiveConnection logs useful info for dynamic service discovery
+    logger.HiveConnection.name = org.apache.hive.jdbc.HiveConnection
+    logger.HiveConnection.level = INFO
+
+    # root logger
+    rootLogger.level = ${sys:hive.log.level}
+    rootLogger.appenderRefs = root
+    rootLogger.appenderRef.root.ref = ${sys:hive.root.logger}
+
+  encrypttool-log4j2.properties:  |
+    status = INFO
+    name = PropertiesConfig
+
+    # list of properties
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/
+    property.encrypttool.log.file = encrypttool.log
+
+    filters = threshold
+    filter.threshold.type = ThresholdFilter
+    filter.threshold.level = debug
+
+    # list of appenders
+    appenders = file
+
+    # simple file appender
+    appender.file.type = File
+    appender.file.name = LOGFILE
+    appender.file.fileName=${sys:hive.log.dir}/${sys:encrypttool.log.file}
+    appender.file.layout.type = PatternLayout
+    appender.file.layout.pattern = %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+    rootLogger.level = info
+    rootLogger.appenderRefs = file
+    rootLogger.appenderRef.file.ref = LOGFILE
+
+  llap-cli-log4j2.properties.template:  |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    status = WARN
+    name = LlapCliLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.hive.log.level = INFO
+    property.hive.root.logger = console
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/${sys:user.name}
+    property.hive.log.file = llap-cli.log
+
+    # list of all appenders
+    appenders = console, DRFA
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %p %c{2}: %m%n
+
+    # daily rolling file appender
+    appender.DRFA.type = RollingRandomAccessFile
+    appender.DRFA.name = DRFA
+    appender.DRFA.fileName = ${sys:hive.log.dir}/${sys:hive.log.file}
+    appender.DRFA.filePattern = ${sys:hive.log.dir}/${sys:hive.log.file}.%d{yyyy-MM-dd}
+    appender.DRFA.layout.type = PatternLayout
+    appender.DRFA.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+    appender.DRFA.policies.type = Policies
+    appender.DRFA.policies.time.type = TimeBasedTriggeringPolicy
+    appender.DRFA.policies.time.interval = 1
+    appender.DRFA.policies.time.modulate = true
+    appender.DRFA.strategy.type = DefaultRolloverStrategy
+    appender.DRFA.strategy.max = 30
+
+    # list of all loggers
+    loggers = ZooKeeper, DataNucleus, Datastore, JPOX, HadoopConf
+
+    logger.ZooKeeper.name = org.apache.zookeeper
+    logger.ZooKeeper.level = WARN
+
+    logger.DataNucleus.name = DataNucleus
+    logger.DataNucleus.level = ERROR
+
+    logger.Datastore.name = Datastore
+    logger.Datastore.level = ERROR
+
+    logger.JPOX.name = JPOX
+    logger.JPOX.level = ERROR
+
+    logger.HadoopConf.name = org.apache.hadoop.conf.Configuration
+    logger.HadoopConf.level = ERROR
+
+    # root logger
+    rootLogger.level = ${sys:hive.log.level}
+    rootLogger.appenderRefs = root, DRFA
+    rootLogger.appenderRef.root.ref = ${sys:hive.root.logger}
+    rootLogger.appenderRef.DRFA.ref = DRFA
+
+  conftool-log4j2.properties: |
+    status = INFO
+    name = PropertiesConfig
+
+    # list of properties
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/
+    property.conftool.log.file = conftool.log
+
+    filters = threshold
+    filter.threshold.type = ThresholdFilter
+    filter.threshold.level = debug
+
+    # list of appenders
+    appenders = file
+
+    # simple file appender
+    appender.file.type = File
+    appender.file.name = LOGFILE
+    appender.file.fileName=${sys:hive.log.dir}/${sys:conftool.log.file}
+    appender.file.layout.type = PatternLayout
+    appender.file.layout.pattern = %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+    rootLogger.level = info
+    rootLogger.appenderRefs = file
+    rootLogger.appenderRef.file.ref = LOGFILE
+
+  hive-log4j.properties:  |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    status = INFO
+    name = HiveLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.hive.log.level = INFO
+    # Replace DRFA with routing appender to append <process-id>@<host-name> to the filename if you want separate log files for different CLI session
+    property.hive.root.logger = DRFA
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/${sys:user.name}
+    property.hive.log.file = "hive.log"
+    property.hive.perflogger.log.level = INFO
+
+    # list of all appenders. Replace DRFA with routing to enable log files separating
+    appenders = console, DRFA
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+
+    # daily rolling file appender
+    appender.DRFA.type = RollingRandomAccessFile
+    appender.DRFA.name = DRFA
+    appender.DRFA.fileName = ${sys:hive.log.dir}/${sys:hive.log.file}
+    appender.DRFA.filePattern = ${sys:hive.log.dir}/${sys:hive.log.file}.%d{yyyy-MM-dd}
+    appender.DRFA.layout.type = PatternLayout
+    appender.DRFA.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+    appender.DRFA.policies.type = Policies
+    appender.DRFA.policies.time.type = TimeBasedTriggeringPolicy
+    appender.DRFA.policies.time.interval = 1
+    appender.DRFA.policies.time.modulate = true
+    appender.DRFA.strategy.type = DefaultRolloverStrategy
+    appender.DRFA.strategy.max = 30
+
+    # list of all loggers
+    loggers = NIOServerCnxn, ClientCnxnSocketNIO, DataNucleus, Datastore, JPOX, PerfLogger
+
+    logger.NIOServerCnxn.name = org.apache.zookeeper.server.NIOServerCnxn
+    logger.NIOServerCnxn.level = WARN
+
+    logger.ClientCnxnSocketNIO.name = org.apache.zookeeper.ClientCnxnSocketNIO
+    logger.ClientCnxnSocketNIO.level = WARN
+
+    logger.DataNucleus.name = DataNucleus
+    logger.DataNucleus.level = ERROR
+
+    logger.Datastore.name = Datastore
+    logger.Datastore.level = ERROR
+
+    logger.JPOX.name = JPOX
+    logger.JPOX.level = ERROR
+
+    logger.PerfLogger.name = org.apache.hadoop.hive.ql.log.PerfLogger
+    logger.PerfLogger.level = ${sys:hive.perflogger.log.level}
+
+    # root logger
+    rootLogger.level = ${sys:hive.log.level}
+    rootLogger.appenderRefs = root
+    rootLogger.appenderRef.root.ref = ${sys:hive.root.logger}
+
+  parquet-logging.properties: |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    # Properties file which configures the operation of the JDK
+    # logging facility.
+
+    # The system will look for this config file, first using
+    # a System property specified at startup:
+    #
+    # >java -Djava.util.logging.config.file=myLoggingConfigFilePath
+    #
+    # If this property is not specified, then the config file is
+    # retrieved from its default location at:
+    #
+    # JDK_HOME/jre/lib/logging.properties
+
+    # Global logging properties.
+    # ------------------------------------------
+    # The set of handlers to be loaded upon startup.
+    # Comma-separated list of class names.
+    # (? LogManager docs say no comma here, but JDK example has comma.)
+    # handlers=java.util.logging.ConsoleHandler
+    org.apache.parquet.handlers= java.util.logging.FileHandler
+
+    # Default global logging level.
+    # Loggers and Handlers may override this level
+    .level=INFO
+
+    # Handlers
+    # -----------------------------------------
+
+    # --- ConsoleHandler ---
+    # Override of global logging level
+    java.util.logging.ConsoleHandler.level=INFO
+    java.util.logging.ConsoleHandler.formatter=java.util.logging.SimpleFormatter
+    java.util.logging.SimpleFormatter.format=[%1$tc] %4$s: %2$s - %5$s %6$s%n
+
+    # --- FileHandler ---
+    # Override of global logging level
+    java.util.logging.FileHandler.level=ALL
+
+    # Naming style for the output file:
+    # (The output file is placed in the system temporary directory.
+    # %u is used to provide unique identifier for the file.
+    # For more information refer
+    # https://docs.oracle.com/javase/7/docs/api/java/util/logging/FileHandler.html)
+    java.util.logging.FileHandler.pattern=%h/parquet-%u.log
+
+    # Limiting size of output file in bytes:
+    java.util.logging.FileHandler.limit=50000000
+
+    # Number of output files to cycle through, by appending an
+    # integer to the base file name:
+    java.util.logging.FileHandler.count=1
+
+    # Style of output (Simple or XML):
+    java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+
+  post-startup.sh:  |
+    #!/usr/bin/env bash
+
+  pre-startup.sh: |
+    #!/usr/bin/env bash
+
+  hive-env.sh.template: |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    # Set Hive and Hadoop environment variables here. These variables can be used
+    # to control the execution of Hive. It should be used by admins to configure
+    # the Hive installation (so that users do not have to set environment variables
+    # or set command line parameters to get correct behavior).
+    #
+    # The hive service being invoked (CLI etc.) is available via the environment
+    # variable SERVICE
+
+
+    # Hive Client memory usage can be an issue if a large number of clients
+    # are running at the same time. The flags below have been useful in
+    # reducing memory usage:
+    #
+    # if [ "$SERVICE" = "cli" ]; then
+    #   if [ -z "$DEBUG" ]; then
+    #     export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xms10m -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:+UseParNewGC -XX:-UseGCOverheadLimit"
+    #   else
+    #     export HADOOP_OPTS="$HADOOP_OPTS -XX:NewRatio=12 -Xms10m -XX:MaxHeapFreeRatio=40 -XX:MinHeapFreeRatio=15 -XX:-UseGCOverheadLimit"
+    #   fi
+    # fi
+
+    # The heap size of the jvm stared by hive shell script can be controlled via:
+    #
+    # export HADOOP_HEAPSIZE=1024
+    #
+    # Larger heap size may be required when running queries over large number of files or partitions.
+    # By default hive shell scripts use a heap size of 256 (MB).  Larger heap size would also be
+    # appropriate for hive server.
+
+
+    # Set HADOOP_HOME to point to a specific hadoop install directory
+    # HADOOP_HOME=${bin}/../../hadoop
+
+    # Hive Configuration Directory can be controlled by:
+    # export HIVE_CONF_DIR=
+
+    # Folder containing extra libraries required for hive compilation/execution can be controlled by:
+    # export HIVE_AUX_JARS_PATH=
+
+    # Split hives logs from one file hive.log to two separate files USER-metastore-NODE.log and
+    # USER-hiveserver2-NODE.log. This help to avoid the case when some logs could be missed due to competitive access to the log file.
+    # By default logs splits into multiple files.
+    # export SPLIT_HIVE_LOGS_INTO_FILES=false
+
+  hive-exec-log4j2.properties.template: |
+    # Licensed to the Apache Software Foundation (ASF) under one
+    # or more contributor license agreements.  See the NOTICE file
+    # distributed with this work for additional information
+    # regarding copyright ownership.  The ASF licenses this file
+    # to you under the Apache License, Version 2.0 (the
+    # "License"); you may not use this file except in compliance
+    # with the License.  You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    status = INFO
+    name = HiveExecLog4j2
+    packages = org.apache.hadoop.hive.ql.log
+
+    # list of properties
+    property.hive.log.level = INFO
+    property.hive.root.logger = FA
+    property.hive.query.id = hadoop
+    property.hive.log.dir = /opt/mapr/hive/hive-2.3/logs/${sys:user.name}
+    property.hive.log.file = ${sys:hive.query.id}.log
+
+    # list of all appenders
+    appenders = console, FA
+
+    # console appender
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.target = SYSTEM_ERR
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+
+    # simple file appender
+    appender.FA.type = RandomAccessFile
+    appender.FA.name = FA
+    appender.FA.fileName = ${sys:hive.log.dir}/${sys:hive.log.file}
+    appender.FA.layout.type = PatternLayout
+    appender.FA.layout.pattern = %d{ISO8601} %5p [%t] %c{2}: %m%n
+
+    # list of all loggers
+    loggers = NIOServerCnxn, ClientCnxnSocketNIO, DataNucleus, Datastore, JPOX
+
+    logger.NIOServerCnxn.name = org.apache.zookeeper.server.NIOServerCnxn
+    logger.NIOServerCnxn.level = WARN
+
+    logger.ClientCnxnSocketNIO.name = org.apache.zookeeper.ClientCnxnSocketNIO
+    logger.ClientCnxnSocketNIO.level = WARN
+
+    logger.DataNucleus.name = DataNucleus
+    logger.DataNucleus.level = ERROR
+
+    logger.Datastore.name = Datastore
+    logger.Datastore.level = ERROR
+
+    logger.JPOX.name = JPOX
+    logger.JPOX.level = ERROR
+
+    # root logger
+    rootLogger.level = ${sys:hive.log.level}
+    rootLogger.appenderRefs = root
+    rootLogger.appenderRef.root.ref = ${sys:hive.root.logger}
+
+  ivysettings.xml:  |
+    <!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    -->
+
+    <!--This file is used by grapes to download dependencies from a maven repository.
+    This is just a template and can be edited to add more repositories.
+    -->
+
+    <ivysettings>
+    <!--name of the defaultResolver should always be 'downloadGrapes'. -->
+    <settings defaultResolver="downloadGrapes"/>
+    <!-- Only set maven.local.repository if not already set -->
+    <property name="maven.local.repository" value="${user.home}/.m2/repository" override="false" />
+    <property name="m2-pattern"
+    value="file:${maven.local.repository}/[organisation]/[module]/[revision]/[module]-[revision](-[classifier]).[ext]"
+    override="false"/>
+    <resolvers>
+    <!-- more resolvers can be added here -->
+    <chain name="downloadGrapes">
+    <!-- This resolver uses ibiblio to find artifacts, compatible with maven2 repository -->
+    <ibiblio name="central" m2compatible="true"/>
+    <url name="local-maven2" m2compatible="true">
+    <artifact pattern="${m2-pattern}"/>
+    </url>
+    <!-- File resolver to add jars from the local system. -->
+    <filesystem name="test" checkmodified="true">
+    <artifact pattern="${test.tmp.dir}/[module]-[revision](-[classifier]).jar"/>
+    </filesystem>
+
+    </chain>
+    </resolvers>
+    </ivysettings>
