@@ -17,6 +17,10 @@ data:
     livy.server.recovery.state-store = filesystem
     livy.server.recovery.state-store.url = file:///opt/livy/sessionstore
     {{ end }}
+    {{ if .Values.security.https }}
+    livy.keystore = /opt/livy/certs/ssl_keystore
+    livy.keystore.password = password123
+    {{ end }}
   livy-client.conf: |
     livy.rsc.server.connect.timeout = 600s
     livy.rsc.client.connect.timeout = 600s

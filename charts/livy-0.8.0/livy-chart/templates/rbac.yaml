@@ -12,7 +12,14 @@ rules:
   resources:
     - configmaps
     - pods
+    - secrets
     - services
+  verbs:
+    - "*"
+- apiGroups:
+    - "apps"
+  resources:
+    - statefulsets
   verbs:
     - "*"
 {{- end }}

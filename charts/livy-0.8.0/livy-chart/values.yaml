@@ -1,7 +1,7 @@
 image:
   repository: gcr.io/mapr-252711/apache-livy-0.8.0-pre
   pullPolicy: Always
-  tag: "202105061656"
+  tag: "202108051913"
 
 imagePullSecrets:
    - name: imagepull
@@ -54,12 +54,15 @@ sessionrecovery:
 #   kind: pvc
 #   pvcname: <pvcname>
 
+security:
+  https: true
+
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image
-    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202105061656
+    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202108051913
     # Other available images:
-    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202105061656
-    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202105061656
+    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202108051913
+    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202108051913
   - name: SPARK_CONF_spark_kubernetes_container_image_pullPolicy
     value: Always
   - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets

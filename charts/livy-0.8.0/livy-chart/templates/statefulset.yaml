@@ -21,7 +21,7 @@ spec:
       serviceAccountName: {{ include "livy.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -31,10 +31,16 @@ spec:
             httpGet:
               path: /version
               port: http
+              {{- if .Values.security.https }}
+              scheme: HTTPS
+              {{- end }}
           readinessProbe:
             httpGet:
               path: /version
               port: http
+              {{- if .Values.security.https }}
+              scheme: HTTPS
+              {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.env }}
@@ -48,6 +54,10 @@ spec:
             - name: livy-sessionstore
               mountPath: /opt/livy/sessionstore
             {{- end }}
+            {{- if .Values.security.https }}
+            - name: livy-certs
+              mountPath: /opt/livy/certs
+            {{- end }}
       volumes:
         - configMap:
             name: {{ include "livy.fullname" . }}
@@ -56,6 +66,11 @@ spec:
         - persistentVolumeClaim:
             claimName: {{ .Values.sessionrecovery.pvcname }}
           name: livy-sessionstore
+        {{- end }}
+        {{- if .Values.security.https }}
+        - secret:
+            secretName: {{ include "livy.fullname" . }}-certs
+          name: livy-certs
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
