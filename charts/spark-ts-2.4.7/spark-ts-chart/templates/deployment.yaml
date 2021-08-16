@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-      {{ include "spark-ts-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+      {{- include "spark-ts-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:

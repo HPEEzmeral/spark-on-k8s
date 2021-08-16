@@ -193,13 +193,12 @@ Return Tolerations
 return service account name
 */}}
 {{- define "spark-ts-chart.serviceAccountName" -}}
-{{- if empty .Values.serviceAccount.name -}}
-    {{ include "spark-ts-chart.name" . }}-sa
-{{- else -}}
+{{- if ( and ( not .Values.serviceAccount.create )  ( not ( empty .Values.serviceAccount.name)) )  -}}
     {{ .Values.serviceAccount.name }}
+{{- else -}}
+    hpe-{{ .Release.Namespace }}
 {{- end -}}
 {{- end }}
-
 
 {{/*
 return env for containers
