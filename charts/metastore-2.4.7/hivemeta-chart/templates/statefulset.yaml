@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-  {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+  {{- include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:

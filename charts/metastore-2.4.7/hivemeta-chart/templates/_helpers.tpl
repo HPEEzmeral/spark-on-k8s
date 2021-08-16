@@ -34,11 +34,11 @@ hpe.com/component: {{ .Chart.Name }}
 Create the name of the service account to use
 */}}
 {{- define "hivemeta-chart.serviceAccountName" -}}
-{{-  if empty .Values.serviceAccount.name }}
-    hpe-{{ .Release.Namespace }}
-{{- else -}}
+{{- if ( and ( not .Values.serviceAccount.create )  ( not ( empty .Values.serviceAccount.name)) )  -}}
     {{ .Values.serviceAccount.name }}
-{{- end }}
+{{- else -}}
+    hpe-{{ .Release.Namespace }}
+{{- end -}}
 {{- end }}
 
 

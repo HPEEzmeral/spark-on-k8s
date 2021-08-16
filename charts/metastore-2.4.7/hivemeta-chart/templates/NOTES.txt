@@ -6,3 +6,4 @@
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ printf "%s-svc" .Chart.Name }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
 {{- end }}
+2. Components created by this helm chart will be using the Service Account {{ include "hivemeta-chart.serviceAccountName" . }}
