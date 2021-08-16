@@ -1,5 +1,5 @@
 {{ $componentName := printf "%s-ext-svc" .Chart.Name }}
-{{- if (lookup "v1" "ServiceAccount" .Values.tenantNameSpace $componentName) }}
+{{- if (lookup "v1" "ServiceAccount" .Release.Namespace $componentName) }}
 apiVersion: v1
 kind: Service
 metadata:

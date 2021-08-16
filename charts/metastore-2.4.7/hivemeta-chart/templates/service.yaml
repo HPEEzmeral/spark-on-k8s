@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $componentName }}
-  namespace: {{ .Values.tenantNameSpace }}
+  namespace: {{ .Release.Namespace }}
   labels:
   {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
 spec:

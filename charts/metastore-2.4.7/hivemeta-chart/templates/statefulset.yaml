@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ $componentName }}
-  namespace: {{ .Values.tenantNameSpace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   updateStrategy:
     type: RollingUpdate
@@ -46,9 +46,8 @@ spec:
           {{- with .Values.containerConfigs.standardCommand }}
           command: {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.containerConfigs.env }}
-          env: {{- toYaml . | nindent 12 }}
-          {{- end }}
+          env:
+          {{- include "hivemeta-chart.env" . | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

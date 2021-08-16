@@ -36,7 +36,6 @@ automountServiceAccountToken: true
 sparkVersion: spark-2.4.7
 
 #HPE tenant namespace info
-tenantNameSpace: sampletenant
 tenantIsUnsecure: false
 
 #HPE tenant namespace service account
@@ -149,8 +148,6 @@ containerConfigs:
       value: INFO
     - name: SSH_PORT
       value: '7778'
-    - name: "CLUSTER_CREATE_TIME"
-      value: "20210804205950"
     - name: SECURE_CLUSTER
       valueFrom:
         configMapKeyRef:

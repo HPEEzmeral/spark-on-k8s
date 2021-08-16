@@ -17,7 +17,7 @@ Common labels
 */}}
 {{- define "hivemeta-chart.labels" -}}
 hpe.com/component: {{ .componentName }}
-hpe.com/tenant: {{ .context.Values.tenantNameSpace }}
+hpe.com/tenant: {{ .context.Release.Namespace }}
 {{- range $label := .context.Values.labels }}
 hpe.com/{{ $label.name }}: {{ $label.value }}
 {{- end }}
@@ -35,7 +35,7 @@ Create the name of the service account to use
 */}}
 {{- define "hivemeta-chart.serviceAccountName" -}}
 {{-  if empty .Values.serviceAccount.name }}
-    hpe-{{ .Values.tenantNameSpace }}
+    hpe-{{ .Release.Namespace }}
 {{- else -}}
     {{ .Values.serviceAccount.name }}
 {{- end }}
@@ -58,9 +58,9 @@ runAsUser: 5000
 Return Tolerations
 */}}
 {{- define "hivemeta-chart.tolerations" -}}
-- key: hpe.com/compute-{{ .Values.tenantNameSpace }}
+- key: hpe.com/compute-{{ .Release.Namespace }}
   operator: Exists
-- key: hpe.com/{{ .Chart.Name }}-{{ .Values.tenantNameSpace }}
+- key: hpe.com/{{ .Chart.Name }}-{{ .Release.Namespace }}
   operator: Exists
 {{- end }}
 
@@ -123,7 +123,7 @@ nodeSelectorTerms:
       operator: "In"
       values:
         - "none"
-        - {{ .Values.tenantNameSpace | quote }}
+        - {{ .Release.Namespace | quote }}
 {{- end -}}
 
 {{/*
@@ -163,4 +163,11 @@ Return ports
   containerPort: {{ .Values.ports.sshPort }}
 {{- end }}
 
-
+{/*
+return env for containers
+*/}}
+{{- define "hivemeta-chart.env" -}}
+{{- tpl (.Values.containerConfigs.env | toYaml) . }}
+- name: CLUSTER_CREATE_TIME
+  value: {{ now | date "20060102150405" | quote }}
+{{- end }}
