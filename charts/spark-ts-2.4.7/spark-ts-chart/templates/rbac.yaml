@@ -1,0 +1,36 @@
+{{ $roleName := printf "%s-role" .Chart.Name }}
+---
+{{- if and .Values.rbac.create .Values.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $roleName }}
+  labels: {{ include "spark-ts-chart.labels" (dict "componentName" $roleName "context" $) | nindent 4 }}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+    - pods
+    - services
+  verbs:
+    - "*"
+{{- end }}
+
+{{ $roleBindingName := printf "%s-role-binding" .Chart.Name }}
+---
+{{- if and .Values.rbac.create .Values.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $roleBindingName }}
+  labels:
+  {{ include "spark-ts-chart.labels" (dict "componentName" $roleBindingName "context" $) | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ $roleName }}
+subjects:
+- name:  {{ include "spark-ts-chart.serviceAccountName" . }}
+  kind: ServiceAccount
+{{- end }}

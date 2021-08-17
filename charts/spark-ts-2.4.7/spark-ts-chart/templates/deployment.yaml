@@ -1,0 +1,77 @@
+{{ $componentName := .Chart.Name }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  name: {{ $componentName }}
+spec:
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+    {{- include "spark-ts-chart.selectorLabels" . | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+      {{- include "spark-ts-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+    spec:
+      subdomain: {{ $componentName }}-svc
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "spark-ts-chart.nodeAffinity.preferred" . | nindent 12 }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "spark-ts-chart.nodeAffinity.required" . | nindent 12 }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "spark-ts-chart.podAntiAffinity.preferred" . | nindent 12 }}
+      tolerations:
+      {{- include "spark-ts-chart.tolerations" . | nindent 8}}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "spark-ts-chart.serviceAccountName" . }}
+      restartPolicy: {{ .Values.restartPolicy }}
+      priorityClassName: "hpe-tenant-service"
+      initContainers: []
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken  }}
+      containers:
+        - name: {{ $componentName }}
+          {{- with .Values.conatinerConfigs.standardArgs }}
+          args: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.conatinerConfigs.standardCommand }}
+          command: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+          {{- include "spark-ts-chart.env" . | nindent 12 }}
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          {{- include "spark-ts-chart.ports" . | nindent 12 }}
+          livenessProbe:
+          {{- include "spark-ts-chart.probe.liveness" . | nindent 12 }}
+          readinessProbe:
+          {{- include "spark-ts-chart.probe.readiness" . | nindent 12 }}
+          lifecycle:
+          {{- include "spark-ts-chart.probe.lifecycle" . | nindent 12 }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+          {{- include "spark-ts-chart.securityContext" . | nindent 12 }}
+          {{- with .Values.conatinerConfigs.volumeMounts }}
+          volumeMounts: {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
