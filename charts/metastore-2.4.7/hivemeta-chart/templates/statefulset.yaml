@@ -1,0 +1,70 @@
+{{ $componentName := .Chart.Name }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $componentName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  replicas: {{ .Values.replicaCount }}
+  serviceName:  {{ $componentName }}-svc
+  selector:
+    matchLabels:
+  {{- include "hivemeta-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+  {{- include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+    spec:
+      subdomain: {{ $componentName }}-svc
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "hivemeta-chart.nodeAffinity.preferred" . | nindent 12 }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "hivemeta-chart.nodeAffinity.required" . | nindent 12 }}
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+  {{-  include "hivemeta-chart.podAntiAffinity.preferred" . | nindent 12 }}
+      tolerations:
+  {{- include "hivemeta-chart.tolerations" . | nindent 8}}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+  {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hivemeta-chart.serviceAccountName" . | nindent 8}}
+      restartPolicy: {{ .Values.restartPolicy }}
+      priorityClassName: "hpe-tenant-service"
+      initContainers: []
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken  }}
+      containers:
+        - name: {{ $componentName }}
+          {{- with .Values.containerConfigs.standardArgs }}
+          args: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.containerConfigs.standardCommand }}
+          command: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+          {{- include "hivemeta-chart.env" . | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          {{- include "hivemeta-chart.ports" . | nindent 12 }}
+          livenessProbe:
+          {{- include "hivemeta-chart.probe.liveness" . | nindent 12 }}
+          readinessProbe:
+          {{- include "hivemeta-chart.probe.readiness" . | nindent 12 }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+          {{- include "hivemeta-chart.securityContext" . | nindent 12 }}
+          {{- with .Values.containerConfigs.volumeMounts }}
+          volumeMounts: {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}

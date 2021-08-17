@@ -1,0 +1,18 @@
+{{ $componentName := printf "%s-ext-svc" .Chart.Name }}
+{{- if (lookup "v1" "ServiceAccount" .Release.Namespace $componentName) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $componentName }}
+  labels:
+  {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+spec:
+  type: {{ .Values.externalService.type }}
+  ports:
+    - name: {{ $componentName }}
+      port: {{.Values.service.port }}
+      protocol: TCP
+      targetPort: {{ .Values.service.port }}
+  selector:
+  {{- include "hivemeta-chart.selectorLabels" . | nindent 4 }}
+  {{- end }}
