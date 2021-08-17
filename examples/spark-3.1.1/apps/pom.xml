@@ -20,6 +20,7 @@
 
     <spark.version>3.1.1</spark.version>
     <scala.version>2.12.12</scala.version>
+    <hadoop.version>2.7.0</hadoop.version>
     <spark.scala.version>2.12</spark.scala.version>
 
     <maven.compiler.source>11</maven.compiler.source>
@@ -37,6 +38,12 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_${spark.scala.version}</artifactId>
       <version>${spark.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
