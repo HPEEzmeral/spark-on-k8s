@@ -5,6 +5,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ $roleName }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels: {{ include "spark-hs-chart.labels" (dict "componentName" $roleName "context" $) | nindent 4 }}
 rules:
 - apiGroups:
@@ -24,6 +29,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ $roleBindingName }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels:
   {{ include "spark-hs-chart.labels" (dict "componentName" $roleBindingName "context" $) | nindent 4 }}
 roleRef:

@@ -27,6 +27,11 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+#owner References
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
 podAnnotations: {}
 
 podSecurityContext: {}

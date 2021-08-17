@@ -4,6 +4,11 @@ kind: Service
 metadata:
   name: {{ $componentName }}
   namespace: {{ .Values.tenantNameSpace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels:
     {{ include "spark-hs-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
 spec:

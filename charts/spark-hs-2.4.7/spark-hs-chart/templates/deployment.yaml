@@ -6,6 +6,11 @@ metadata:
     deployment.kubernetes.io/revision: "1"
   name: {{ $componentName }}
   namespace: {{ .Values.tenantNameSpace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
 spec:
   progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
   replicas: {{ .Values.replicaCount }}
