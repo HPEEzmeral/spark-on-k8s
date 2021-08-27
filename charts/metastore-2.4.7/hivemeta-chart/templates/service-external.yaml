@@ -4,8 +4,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $componentName }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels:
-  {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+    {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 4 }}
 spec:
   type: {{ .Values.externalService.type }}
   ports:
@@ -14,5 +19,5 @@ spec:
       protocol: TCP
       targetPort: {{ .Values.service.port }}
   selector:
-  {{- include "hivemeta-chart.selectorLabels" . | nindent 4 }}
+  {{- include "common.selectorLabels" (dict "componentName" $componentName ) | nindent 4 }}
   {{- end }}

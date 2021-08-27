@@ -4,8 +4,13 @@ kind: Service
 metadata:
   name: {{ $componentName }}
   namespace: {{ .Release.Namespace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
   labels:
-  {{ include "hivemeta-chart.labels" (dict "componentName" $componentName "context" $) | nindent 4 }}
+    {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,4 +18,4 @@ spec:
       protocol: TCP
       name: thrift
   selector:
-    {{- include "hivemeta-chart.selectorLabels" . | nindent 4 }}
+    {{- include "common.selectorLabels" (dict "componentName" $componentName ) | nindent 4 }}
