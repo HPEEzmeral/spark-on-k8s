@@ -1,11 +1,9 @@
 {{ $componentName := .Chart.Name }}
+{{ $configmapName := printf "%s-cm" .Chart.Name  }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
   name: {{ $componentName }}
-  namespace: {{ .Values.tenantNameSpace }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
@@ -17,7 +15,7 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-  {{- include "spark-hs-chart.selectorLabels" . | nindent 6 }}
+    {{- include "common.selectorLabels" (dict "componentName" $componentName ) | nindent 6 }}
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -26,20 +24,20 @@ spec:
   template:
     metadata:
       labels:
-    {{ include "spark-hs-chart.labels" (dict "componentName" $componentName "context" $) | nindent 8 }}
+      {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          {{-  include "spark-hs-chart.nodeAffinity.preferred" . | nindent 12 }}
+          {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
-        {{-  include "spark-hs-chart.nodeAffinity.required" . | nindent 12 }}
+        {{-  include "common.nodeAffinity.required" . | nindent 12 }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-      {{-  include "spark-hs-chart.podAntiAffinity.preferred" . | nindent 12 }}
+          {{-  include "common.podAntiAffinity.preferred" (dict "componentName" $componentName ) | nindent 12 }}
       tolerations:
-      {{- include "spark-hs-chart.tolerations" . | nindent 8}}
+      {{- include "common.tolerations" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
@@ -51,38 +49,33 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken  }}
       containers:
         - name: {{ $componentName }}
-          {{- with .Values.conatinerConfigs.standardArgs }}
-          args: {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.conatinerConfigs.standardCommand }}
-          command: {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.conatinerConfigs.env }}
-          env: {{- toYaml . | nindent 12 }}
-          {{- end }}
+          args:
+          {{- include "common.args" . | nindent 12 }}
+          command:
+          {{- include "common.commands" . | nindent 12 }}
+          env:
+          {{- include "spark-hs-chart.env" . | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           {{- include "spark-hs-chart.ports" . | nindent 12 }}
           livenessProbe:
-          {{- include "spark-hs-chart.probe.liveness" . | nindent 12 }}
+          {{- include "common.probe.liveness" . | nindent 12 }}
           readinessProbe:
-          {{- include "spark-hs-chart.probe.readiness" . | nindent 12 }}
+          {{- include "common.probe.readiness" . | nindent 12 }}
           lifecycle:
-          {{- include "spark-hs-chart.probe.lifecycle" . | nindent 12 }}
+          {{- include "common.probe.lifecycle" . | nindent 12 }}
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
-          {{- include "spark-hs-chart.securityContext" . | nindent 12 }}
-          {{- with .Values.conatinerConfigs.volumeMounts }}
-          volumeMounts: {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{- include "common.securityContext" . | nindent 12 }}
+          volumeMounts:
+          {{- include "spark-hs-chart.volumeMounts" . | nindent 12 }}
           {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
           {{- include "spark-hs-chart.pvcVolumeMount" . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
-      volumes: {{- toYaml . | nindent 8 }}
-      {{- end }}
+      volumes:
+      {{- include "common.volumes" (dict "configmapName" $configmapName "componentName" $componentName) | nindent 8 }}
       {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
       {{- include "spark-hs-chart.pvcVolume" . | nindent 8 }}
       {{- end }}

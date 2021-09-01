@@ -5,7 +5,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ $roleName }}
-  labels: {{- include "hivemeta-chart.labels" (dict "componentName" $roleName "context" $) | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+  {{- include "common.labels" (dict "componentName" $roleName "namespace" .Release.Namespace ) | nindent 4 }}
 rules:
   - apiGroups:
       - ""
@@ -17,14 +23,20 @@ rules:
       - "*"
   {{- end }}
 
-  {{ $roleBindingName := printf "%s-role-binding" .Chart.Name }}
+{{ $roleBindingName := printf "%s-role-binding" .Chart.Name }}
 ---
-  {{- if and .Values.rbac.create .Values.serviceAccount.create -}}
+{{- if and .Values.rbac.create .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ $roleBindingName }}
-  labels: {{- include "hivemeta-chart.labels" (dict "componentName" $roleBindingName "context" $) | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+  {{- include "common.labels" (dict "componentName" $roleBindingName "namespace" .Release.Namespace ) | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

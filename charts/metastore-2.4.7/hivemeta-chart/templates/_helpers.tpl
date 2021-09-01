@@ -154,7 +154,7 @@ Return QueryPort
 Return ports
 */}}
 {{- define "hivemeta-chart.ports" -}}
-- name: "http"
+- name: "query"
   protocol: "TCP"
   containerPort: {{ include "hivemeta-chart.getQeryPort" . }}
 - name: "ssh"
@@ -167,7 +167,26 @@ Return ports
 return env for containers
 */}}
 {{- define "hivemeta-chart.env" -}}
-{{- tpl (.Values.containerConfigs.env | toYaml) . }}
-- name: CLUSTER_CREATE_TIME
-  value: {{ now | date "20060102150405" | quote }}
+{{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
+- name: SSH_PORT
+  value: {{ .Values.ports.sshHostPort | quote }}
+- name: HIVE_USE_DB
+  valueFrom:
+    configMapKeyRef:
+      key: HIVE_USE_DB
+      name: cluster-cm
+- name: HIVE_DB_LOCATION
+  valueFrom:
+    configMapKeyRef:
+      key: HIVE_DB_LOCATION
+      name: cluster-cm
+{{- end }}
+
+{/*
+return volume mounts for containers
+*/}}
+{{- define "hivemeta-chart.volumeMounts" -}}
+{{ include "common.volumeMounts" . }}
+- name: logs
+  mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/logs"
 {{- end }}

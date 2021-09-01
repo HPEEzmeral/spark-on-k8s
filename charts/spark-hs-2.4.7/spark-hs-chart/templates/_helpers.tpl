@@ -111,18 +111,6 @@ successThreshold: {{ .Values.readinessProbe.successThreshold }}
 timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
 {{- end }}
 
-
-{{/*
-Return a lifecycle
-*/}}
-{{- define "spark-hs-chart.probe.lifecycle" -}}
-preStop:
-    exec:
-        command:
-            - "sh"
-            - {{ .Values.lifecycle.preStop.path }}
-{{- end }}
-
 {{/*
 Return HttpPortSparkHsUI
 */}}
@@ -203,9 +191,27 @@ maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
 return service account name
 */}}
 {{- define "spark-hs-chart.serviceAccountName" -}}
-{{- if empty .Values.serviceAccount.name -}}
-    {{ include "spark-hs-chart.name" . }}-sa
-{{- else -}}
+{{- if ( and ( not .Values.serviceAccount.create )  ( not ( empty .Values.serviceAccount.name)) )  -}}
     {{ .Values.serviceAccount.name }}
+{{- else -}}
+    hpe-{{ .Release.Namespace }}
 {{- end -}}
+{{- end }}
+
+{{/*
+return env for containers
+*/}}
+{{- define "spark-hs-chart.env" -}}
+{{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
+- name: SSH_PORT
+  value: {{ .Values.ports.sshHostPort | quote }}
+{{- end }}
+
+{/*
+return volume mounts for containers
+*/}}
+{{- define "spark-hs-chart.volumeMounts" -}}
+{{ include "common.volumeMounts" . }}
+- name: logs
+  mountPath: "/opt/mapr/spark/spark-{{ .Values.sparkVersion }}/logs"
 {{- end }}

@@ -10,7 +10,8 @@ metadata:
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
-  labels: {{ include "spark-hs-chart.labels" (dict "componentName" $roleName "context" $) | nindent 4 }}
+  labels:
+  {{- include "common.labels" (dict "componentName" $roleName "namespace" .Release.Namespace ) | nindent 4 }}
 rules:
 - apiGroups:
     - ""
@@ -24,7 +25,7 @@ rules:
 
 {{ $roleBindingName := printf "%s-role-binding" .Chart.Name }}
 ---
-{{- if .Values.rbac.create -}}
+{{- if and .Values.rbac.create .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -35,7 +36,7 @@ metadata:
   {{- end }}
   {{- end }}
   labels:
-  {{ include "spark-hs-chart.labels" (dict "componentName" $roleBindingName "context" $) | nindent 4 }}
+  {{- include "common.labels" (dict "componentName" $roleBindingName "namespace" .Release.Namespace ) | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
