@@ -52,3 +52,21 @@ Create imagepullsecrets
     {{- toYaml .Values.imagePullSecrets | nindent 8 }}
   {{ end }}
 {{ end }}
+
+{{/*
+Returns a PVC name
+*/}}
+{{- define "spark-hs-chart.pvcName" -}}
+{{- if .Values.pvc.existingClaimName -}}
+    {{ .Values.pvc.existingClaimName }}
+{{- else -}}
+    {{ printf "%s-pvc" ( include "spark-hs-chart.fullname" . ) }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Returns a PV name
+*/}}
+{{- define "spark-hs-chart.pvName" -}}
+    {{ printf "%s-pv" ( include "spark-hs-chart.fullname" . ) }}
+{{- end }}
