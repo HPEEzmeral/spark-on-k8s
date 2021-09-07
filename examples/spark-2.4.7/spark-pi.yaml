@@ -21,6 +21,9 @@ metadata:
   namespace: sampletenant
 spec:
   #sparkConf:
+    # Note: Name of K8 user that MapR can verify,
+    #       alternative to specifying user in --as
+    #       parameter
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
     #spark.mapr.user.secret: spark-user-secret
