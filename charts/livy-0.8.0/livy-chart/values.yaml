@@ -1,7 +1,7 @@
 image:
   repository: gcr.io/mapr-252711/apache-livy-0.8.0-pre
   pullPolicy: Always
-  tag: "202108051913"
+  tag: "202109091944"
 
 imagePullSecrets:
    - name: imagepull
@@ -63,10 +63,10 @@ security:
 
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image
-    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202108051913
+    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202109091944
     # Other available images:
-    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202108051913
-    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202108051913
+    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202109091944
+    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202109091944
   - name: SPARK_CONF_spark_kubernetes_container_image_pullPolicy
     value: Always
   - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
