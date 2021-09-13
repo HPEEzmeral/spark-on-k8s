@@ -64,6 +64,58 @@ spec:
           env:
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
+          {{- if .Values.ldap.enable }}
+            - name: TENANT_GROUP
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: tenantGroups
+            - name: TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: type
+            - name: BIND_DN
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_dn
+            - name: SECURITY_PROTOCOL
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: security_protocol
+            - name: BIND_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_pwd
+            - name: BIND_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_type
+            - name: GROUP_ATTR
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: group_ATTR
+            - name: USER_ATTR
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: user_attr
+            - name: AUTH_SERVICE_LOCATIONS
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: auth_service_locations
+            - name: BASE_DN
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: base_dn
+          {{- end}}
           volumeMounts:
             - name: configfiles
               mountPath: /opt/configfiles
@@ -74,6 +126,11 @@ spec:
             {{- if .Values.security.https }}
             - name: livy-certs
               mountPath: /opt/livy/certs
+            {{- end }}
+            {{- if .Values.ldap.enable }}
+            - name: hpecp-ext-auth-secret
+              mountPath: /opt/livy/creds
+              readOnly: true
             {{- end }}
       volumes:
         - configMap:
@@ -88,6 +145,11 @@ spec:
         - secret:
             secretName: {{ include "livy.fullname" . }}-certs
           name: livy-certs
+        {{- end }}
+        {{- if .Values.ldap.enable }}
+        - name: hpecp-ext-auth-secret
+          secret:
+            - secretName: hpecp-ext-auth-secret
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -105,3 +167,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
