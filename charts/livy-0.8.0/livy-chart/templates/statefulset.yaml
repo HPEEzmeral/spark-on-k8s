@@ -33,19 +33,31 @@ spec:
               containerPort: 8998
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /version
-              port: http
-              {{- if .Values.security.https }}
-              scheme: HTTPS
-              {{- end }}
+            exec:
+              command:
+                - sh
+                - "-c"
+                - |
+                  {{- if .Values.security.https }}
+                  url="https://localhost:8998/metrics/ping"
+                  {{- else }}
+                  url="http://localhost:8998/metrics/ping"
+                  {{- end }}
+                  http_code=$(curl -k -s -o /dev/null -w '%{http_code}' "$url")
+                  test "$http_code" -eq 200 || test "$http_code" -eq 401
           readinessProbe:
-            httpGet:
-              path: /version
-              port: http
-              {{- if .Values.security.https }}
-              scheme: HTTPS
-              {{- end }}
+            exec:
+              command:
+                - sh
+                - "-c"
+                - |
+                  {{- if .Values.security.https }}
+                  url="https://localhost:8998/metrics/ping"
+                  {{- else }}
+                  url="http://localhost:8998/metrics/ping"
+                  {{- end }}
+                  http_code=$(curl -k -s -o /dev/null -w '%{http_code}' "$url")
+                  test "$http_code" -eq 200 || test "$http_code" -eq 401
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.env }}
