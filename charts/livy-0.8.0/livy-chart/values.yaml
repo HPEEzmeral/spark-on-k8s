@@ -60,9 +60,8 @@ sessionrecovery:
 
 security:
   https: true
-  # Add ability to connect to LDAP
-ldap:
-  enable: false
+  enable_ldap: false
+
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image
     value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202109152017

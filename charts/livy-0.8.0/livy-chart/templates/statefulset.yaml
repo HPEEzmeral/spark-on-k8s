@@ -60,11 +60,11 @@ spec:
                   test "$http_code" -eq 200 || test "$http_code" -eq 401
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.env }}
           env:
+          {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
-          {{- if .Values.ldap.enable }}
+          {{- if .Values.security.enable_ldap }}
             - name: TENANT_GROUP
               valueFrom:
                 secretKeyRef:
@@ -127,7 +127,7 @@ spec:
             - name: livy-certs
               mountPath: /opt/livy/certs
             {{- end }}
-            {{- if .Values.ldap.enable }}
+            {{- if .Values.security.enable_ldap }}
             - name: hpecp-ext-auth-secret
               mountPath: /opt/livy/creds
               readOnly: true
@@ -146,7 +146,7 @@ spec:
             secretName: {{ include "livy.fullname" . }}-certs
           name: livy-certs
         {{- end }}
-        {{- if .Values.ldap.enable }}
+        {{- if .Values.security.enable_ldap }}
         - name: hpecp-ext-auth-secret
           secret:
             - secretName: hpecp-ext-auth-secret
@@ -167,4 +167,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
