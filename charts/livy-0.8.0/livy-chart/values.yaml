@@ -60,7 +60,7 @@ sessionrecovery:
 
 security:
   https: true
-  enable_ldap: false
+  ecp_ldap_auth: false
 
 env:
   - name: SPARK_CONF_spark_kubernetes_container_image

@@ -64,7 +64,7 @@ spec:
           {{- if .Values.env }}
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
-          {{- if .Values.security.enable_ldap }}
+          {{- if .Values.security.ecp_ldap_auth }}
             - name: AUTH_TYPE
               valueFrom:
                 secretKeyRef:
@@ -127,7 +127,7 @@ spec:
             - name: livy-certs
               mountPath: /opt/livy/certs
             {{- end }}
-            {{- if .Values.security.enable_ldap }}
+            {{- if .Values.security.ecp_ldap_auth }}
             - name: hpecp-ext-auth-secret
               mountPath: /opt/livy/creds
               readOnly: true
@@ -146,7 +146,7 @@ spec:
             secretName: {{ include "livy.fullname" . }}-certs
           name: livy-certs
         {{- end }}
-        {{- if .Values.security.enable_ldap }}
+        {{- if .Values.security.ecp_ldap_auth }}
         - name: hpecp-ext-auth-secret
           secret:
             secretName: hpecp-ext-auth-secret
