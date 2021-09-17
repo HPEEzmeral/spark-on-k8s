@@ -65,56 +65,56 @@ spec:
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
           {{- if .Values.security.enable_ldap }}
-            - name: TENANT_GROUP
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: tenantGroups
-            - name: TYPE
+            - name: AUTH_TYPE
               valueFrom:
                 secretKeyRef:
                   name: hpecp-ext-auth-secret
                   key: type
-            - name: BIND_DN
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: bind_dn
-            - name: SECURITY_PROTOCOL
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: security_protocol
-            - name: BIND_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: bind_pwd
-            - name: BIND_TYPE
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: bind_type
-            - name: GROUP_ATTR
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: group_ATTR
-            - name: USER_ATTR
-              valueFrom:
-                secretKeyRef:
-                  name: hpecp-ext-auth-secret
-                  key: user_attr
             - name: AUTH_SERVICE_LOCATIONS
               valueFrom:
                 secretKeyRef:
                   name: hpecp-ext-auth-secret
                   key: auth_service_locations
-            - name: BASE_DN
+            - name: AUTH_SECURITY_PROTOCOL
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: security_protocol
+            - name: AUTH_BASE_DN
               valueFrom:
                 secretKeyRef:
                   name: hpecp-ext-auth-secret
                   key: base_dn
+            - name: AUTH_BIND_DN
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_dn
+            - name: AUTH_BIND_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_pwd
+            - name: AUTH_BIND_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: bind_type
+            - name: AUTH_USER_ATTR
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: user_attr
+            - name: AUTH_TENANT_GROUP
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: tenantGroups
+            - name: AUTH_GROUP_ATTR
+              valueFrom:
+                secretKeyRef:
+                  name: hpecp-ext-auth-secret
+                  key: group_attr
           {{- end}}
           volumeMounts:
             - name: configfiles
@@ -149,7 +149,7 @@ spec:
         {{- if .Values.security.enable_ldap }}
         - name: hpecp-ext-auth-secret
           secret:
-            - secretName: hpecp-ext-auth-secret
+            secretName: hpecp-ext-auth-secret
         {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
