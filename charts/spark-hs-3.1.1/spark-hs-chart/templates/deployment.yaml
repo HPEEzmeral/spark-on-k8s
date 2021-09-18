@@ -47,18 +47,12 @@ spec:
               protocol: TCP
           resources:
           {{ toYaml .Values.resources | indent 10 }}
+          {{- if .Values.pvc.enablePVC }}
           args:
-            - "/bin/sh"
-            - "-c"
-            - >
-              if [ "$enablePVC" == "true" ]; then
-                export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
-                -Dspark.history.fs.logDirectory=file:/data/$eventsDir";
-              else
-                export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
-                -Dspark.history.fs.logDirectory=$logDirectory";
-              fi;
-              /opt/spark/bin/spark-class org.apache.spark.deploy.history.HistoryServer;
+            - "--pvc"
+            - "--events-dir"
+            - "{{ .Values.pvc.eventsDir }}"
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "spark-hs-chart.fullname" . }}
@@ -72,8 +66,8 @@ spec:
               port: historyport
           {{- if .Values.pvc.enablePVC }}
           volumeMounts:
-            - name: data
-              mountPath: /data
+            - name: sparkhs-eventlog-storage
+              mountPath: {{ .Values.pvc.eventsDir }}
           {{- else }}
           volumeMounts:
             - name: core-site
@@ -85,9 +79,9 @@ spec:
           {{- end }}
       {{- if .Values.pvc.enablePVC }}
       volumes:
-        - name: data
+        - name: sparkhs-eventlog-storage
           persistentVolumeClaim:
-            claimName: {{ .Values.pvc.existingClaimName }}
+            claimName: {{ include "spark-hs-chart.pvcName" .  }}
       {{- else }}
       volumes:
         - name: hdfs-site

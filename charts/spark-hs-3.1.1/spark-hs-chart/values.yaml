@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: gcr.io/mapr-252711/apache-spark-hs-3.1.1
-  tag: "202107131409"
+  tag: "202108282015"
   pullPolicy: IfNotPresent
 
 createDefaultPullSecret: true
@@ -16,7 +16,7 @@ nameOverride: ""
 fullnameOverride: ""
 service:
   type: NodePort
-  # nodePort: 32000
+  nodePort: 32000
   port:
     number: 18080
     name: http-historyport
@@ -34,8 +34,8 @@ ownerReference:
   ownerReferences: {}
 
 environment:
-# Note: do not configure Spark history events directory using SPARK_HISTORY_OPTS. It will be
-# configured by this chart based on the values in "pvc" or "hdfs" attribute.
+## Note: do not configure Spark history events directory using SPARK_HISTORY_OPTS. It will be
+## configured by this chart based on the values in "pvc" or "hdfs" attribute.
 # SPARK_HISTORY_OPTS: ...
 # SPARK_DAEMON_MEMORY: 1g
 # SPARK_DAEMON_JAVA_OPTS: ...
@@ -45,12 +45,11 @@ environment:
 podAnnotations: {}
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   #
-  # To let the application start up quickly give it a big limit
   # limits:
   #  cpu: 1000m
   #  memory: 1Gi
@@ -59,12 +58,21 @@ resources: {}
 #  memory: 512Mi
 
 pvc:
-  # to use a file system path for Spark events dir, set 'enablePVC' to true and mention the
-  # name of an already created persistent volume claim in existingClaimName.
-  # The volume will be mounted on /data in the pod
+  ## to use a file system path for Spark events dir, set 'enablePVC' to true and mention the
+  ## name of an already created persistent volume claim in existingClaimName.
+  ## please note: pvc will be mounted at the path provided by eventsDir
   enablePVC: true
-  existingClaimName: spark-data-pvc #example PVC. update the PVC
-  eventsDir: "/"
+  eventsDir: "/mnt/hs-logs"
+  ## add an existing PVC if you do not want to create an existing PVC
+  existingClaimName: ""
+  ## If defined, storageClass: <storageClass> chart will use the storage class provided
+  ## If set to "-", storageClass: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClass spec is set. Default storageClass will be used.
+  storageClass: "-"
+  storageSize: 5Gi
+  ## Add specs related to PV volume plugin to create a PV for the PVC. If volumePluginSpec is
+  ## not set any available PV would be used for the PVC
+#  volumePluginSpec: {}
 
 hdfs:
   hdfsSiteConfigMap: hdfs-site
