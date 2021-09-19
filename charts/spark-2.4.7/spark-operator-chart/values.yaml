@@ -15,19 +15,27 @@ image:
 
 nameOverride: ""
 fullnameOverride: ""
+
+rbac:
+  # -- Create and use `rbac` resources
+  create: true
+
 sparkVersionOverride: ""
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: "hpe-sparkoperator"
+serviceAccounts:
+  spark:
+    # -- Create a service account for spark apps
+    create: true
+    # -- Optional name for the spark service account
+    name: "spark"
+  sparkoperator:
+    # -- Create a service account for the operator
+    create: true
+    # -- Optional name for the operator service account
+    name: "hpe-spark-operator"
 
 ownerReference:
   overRide: false
@@ -99,3 +107,7 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+batchScheduler:
+  # -- Enable batch scheduler for spark jobs scheduling. If enabled, users can specify batch scheduler name in spark application
+  enable: false
