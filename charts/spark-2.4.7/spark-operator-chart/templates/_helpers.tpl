@@ -86,3 +86,26 @@ returns webhook init name
 {{- define "spark-operator.webhookinit" -}}
 {{ include "spark-operator.webhook" . }}-init
 {{- end -}}
+
+{{/*
+Create the name of the service account to be used by the operator
+*/}}
+{{- define "spark-operator.serviceAccountName" -}}
+{{- if .Values.serviceAccounts.sparkoperator.create -}}
+{{ default (include "spark-operator.fullname" .) .Values.serviceAccounts.sparkoperator.name }}
+{{- else -}}
+{{ default "default" .Values.serviceAccounts.sparkoperator.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to be used by spark apps
+*/}}
+{{- define "spark.serviceAccountName" -}}
+{{- if .Values.serviceAccounts.spark.create -}}
+{{- $sparkServiceaccount := printf "%s-%s" .Release.Name "spark" -}}
+    {{ default $sparkServiceaccount .Values.serviceAccounts.spark.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.spark.name }}
+{{- end -}}
+{{- end -}}
