@@ -1,6 +1,6 @@
 # Helm Chart for Livy-0.5.0
 
-[Livy](https://livy.incubator.apache.org/) provides a REST API for Apache Spark.
+[Livy](https://livy.incubator.apache.org/) provides a REST API for Spark.
 
 ## Installing the Chart
 
@@ -15,7 +15,7 @@ Please note that if you are using PVC, the pvc should exist in the same namespac
 
 To set the tenant namespace use the flag `--set tenantNameSpace=sampletenant` during installation
 
-Integrations for Spatrk History server and metastore can be customized in the Values.yaml file.
+Integrations for Spark History server and metastore can be customized in the Values.yaml file.
 
 ## Uninstalling the Chart
 
