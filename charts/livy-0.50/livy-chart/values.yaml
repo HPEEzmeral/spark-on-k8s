@@ -95,15 +95,15 @@ ownerReference:
 
 sessionRecovery:
   ##supported sessionRecovery Kind: disabled, pvc, zookeeper
-  kind: disabled
+  kind: zookeeper
   ## use this option to add pvcName for the kind pvc
   pvcName: ""
 
-deImage: spark-2.4.7:202106291513C
+deImage: spark-2.4.7:202106220630P141
 
 hiveSiteSource: hivesite-cm
 
 sparkHistoryServer:
-  integrate: true
+  integrate: false
   pvcName: ""
-  eventsDir: "file:///opt/mapr/spark/sparkhs-eventlog-storage"
+  eventsDir: "maprfs:///apps/spark/sampletenant"
