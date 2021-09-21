@@ -18,18 +18,17 @@ data:
   livy.conf: |
     # Environment variables here would be replaced by its values
     livy.repl.enable-hive-context = true
-
-    {{- if eq .Values.sessionRecovery.kind "zookeper"  }}
+    {{- if eq .Values.sessionRecovery.kind "zookeeper"  }}
     livy.server.recovery.mode = recovery
     livy.server.recovery.state-store = zookeeper
     livy.server.recovery.state-store.url = ${MAPR_ZK_QUORUM}
     livy.server.recovery.zk-state-store.key-prefix = livy/tenant-${POD_NAMESPACE}
     {{- else if eq .Values.sessionRecovery.kind "pvc" }}
-    livyConfigs["livy.server.recovery.mode"] = "recovery"
-    livyConfigs["livy.server.recovery.state-store"] = "filesystem"
-    livyConfigs["livy.server.recovery.state-store.url"] = "file://opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store"
+    livy.server.recovery.mode = recovery
+    livy.server.recovery.state-store = filesystem
+    livy.server.recovery.state-store.url = file://opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store
     {{- else }}
-    livy.server.recovery.mode = "off"
+    livy.server.recovery.mode = off
     {{- end }}
 
   post-startup.sh: |
