@@ -68,7 +68,7 @@ pvc:
   ## If defined, storageClass: <storageClass> chart will use the storage class provided
   ## If set to "-", storageClass: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClass spec is set. Default storageClass will be used.
-  storageClass: "-"
+#  storageClass: "-"
   storageSize: 5Gi
   ## Add specs related to PV volume plugin to create a PV for the PVC. If volumePluginSpec is
   ## not set any available PV would be used for the PVC

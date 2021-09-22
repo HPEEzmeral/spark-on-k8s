@@ -45,8 +45,10 @@ spec:
             - name: historyport
               containerPort: 18080
               protocol: TCP
+          {{- with .Values.resources }}
           resources:
-          {{ toYaml .Values.resources | indent 10 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.pvc.enablePVC }}
           args:
             - "--pvc"
