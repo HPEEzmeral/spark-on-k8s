@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sparkcli-sampletenant-service
+  namespace: sampletenant
+spec:
+  type: NodePort
+  selector:
+    hpe.com/component: sparkcli
+    hpe.com/spark-client-tenant: sampletenant
+  ports:
+    - protocol: TCP
+      port: 7777
+      targetPort: 7777
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sparkcli-sampletenant
+  namespace: sampletenant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      hpe.com/component: sparkcli
+      hpe.com/spark-client-tenant: sampletenant
+  template:
+    metadata:
+      labels:
+        hpe.com/component: sparkcli
+        hpe.com/spark-client-tenant: sampletenant
+    spec:
+      volumes:
+        - name: cluster-cm
+          configMap:
+            name: cluster-cm
+            defaultMode: 420
+        - name: ldap-cm
+          configMap:
+            name: ldapclient-cm
+            defaultMode: 420
+        - name: sssd-secrets
+          secret:
+            secretName: sssd
+            defaultMode: 420
+        - name: ssh-secrets
+          secret:
+            secretName: ssh
+            defaultMode: 420
+        - name: client-secrets
+          secret:
+            secretName: client
+            defaultMode: 420
+      containers:
+        - name: sparkcli
+          image: gcr.io/mapr-252711/spark-client-3.1.2:202109242011C
+          command:
+            - /tini
+            - '--'
+          args:
+            - /bin/bash
+            - '-c'
+            - /opt/mapr/kubernetes/start.sh
+          envFrom:
+            - configMapRef:
+                name: cluster-cm
+            - secretRef:
+                name: user
+          env:
+            - name: SSH_PORT
+              value: '7777'
+          resources:
+            requests:
+              cpu: '2'
+              ephemeral-storage: 20Gi
+              memory: 2Gi
+          volumeMounts:
+            - name: cluster-cm
+              mountPath: /opt/mapr/kubernetes/cluster-cm
+            - name: ldap-cm
+              mountPath: /opt/mapr/kubernetes/ldap-cm
+            - name: sssd-secrets
+              mountPath: /opt/mapr/kubernetes/sssd-secrets
+            - name: ssh-secrets
+              mountPath: /opt/mapr/kubernetes/ssh-secrets
+            - name: client-secrets
+              mountPath: /opt/mapr/kubernetes/client-secrets
+      restartPolicy: Always
+      serviceAccountName: hpe-sampletenant
+      automountServiceAccountToken: true
+      imagePullSecrets:
+        - name: imagepull
