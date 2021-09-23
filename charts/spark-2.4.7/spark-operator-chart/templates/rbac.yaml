@@ -79,7 +79,7 @@ rules:
   - update
   - delete
 - apiGroups:
-  - sparkoperator.k8s.io
+  - sparkoperator.hpe.com
   resources:
   - sparkapplications
   - sparkapplications/status
@@ -123,4 +123,3 @@ roleRef:
   kind: ClusterRole
   name: {{ include "spark-operator.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
-
