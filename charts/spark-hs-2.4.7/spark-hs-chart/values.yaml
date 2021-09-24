@@ -92,3 +92,6 @@ ownerReference:
 eventlogstorage:
   kind: maprfs #supported types are pvc and maprfs
   pvcname: "" #example pvc; to be replaced by an existing pvc in the tenant namespace
+
+# activate daemonize mode for hs
+daemonize: true
