@@ -46,6 +46,9 @@ Params:
   secret:
     defaultMode: 420
     secretName: ssh
+{{- end }}
+
+{{- define "common.security.volumes" -}}
 - name: client-secrets
   secret:
     defaultMode: 420

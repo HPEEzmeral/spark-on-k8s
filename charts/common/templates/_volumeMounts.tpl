@@ -20,6 +20,9 @@ Returns standard volume mounts
   name: sssd-secrets
 - mountPath: "/opt/mapr/kubernetes/ssh-secrets"
   name: ssh-secrets
+{{- end }}
+
+{{- define "common.security.volumeMounts" -}}
 - mountPath: "/opt/mapr/kubernetes/client-secrets"
   name: client-secrets
 - mountPath: "/opt/mapr/kubernetes/server-secrets"
