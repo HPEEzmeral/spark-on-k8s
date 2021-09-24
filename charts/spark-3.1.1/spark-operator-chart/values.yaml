@@ -39,7 +39,7 @@ serviceAccounts:
     # -- Create a service account for the operator
     create: true
     # -- Optional name for the operator service account
-    name: ""
+    name: "spark-operator"
 
 #owner References
 ownerReference:
