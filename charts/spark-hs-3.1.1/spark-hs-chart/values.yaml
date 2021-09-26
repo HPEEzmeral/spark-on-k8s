@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: gcr.io/mapr-252711/apache-spark-hs-3.1.1
-  tag: "202108282015"
+  tag: "202109241401"
   pullPolicy: IfNotPresent
 
 createDefaultPullSecret: true
@@ -61,7 +61,7 @@ pvc:
   ## to use a file system path for Spark events dir, set 'enablePVC' to true and mention the
   ## name of an already created persistent volume claim in existingClaimName.
   ## please note: pvc will be mounted at the path provided by eventsDir
-  enablePVC: true
+  enablePVC: false
   eventsDir: "/mnt/hs-logs"
   ## add an existing PVC if you do not want to create an existing PVC
   existingClaimName: ""
@@ -73,6 +73,8 @@ pvc:
   ## Add specs related to PV volume plugin to create a PV for the PVC. If volumePluginSpec is
   ## not set any available PV would be used for the PVC
 #  volumePluginSpec: {}
+
+eventsDir: "s3a://test/tmp/"
 
 hdfs:
   hdfsSiteConfigMap: hdfs-site

@@ -17,7 +17,7 @@ apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
   name: spark-pi
-  namespace: default
+  namespace: spark-operator
 spec:
   type: Scala
   mode: cluster
@@ -30,6 +30,13 @@ spec:
   sparkVersion: "3.1.1"
   restartPolicy:
     type: Never
+  sparkConf:
+    "spark.eventLog.enabled": "true"
+    "spark.eventLog.dir": "s3a://test/tmp/"
+    "spark.hadoop.fs.s3a.endpoint": http://16.0.14.114:9000  #minio endpoint
+    "spark.hadoop.fs.s3a.access.key": AKIAIOSFODNN7EXAMPLE #minio access key
+    "spark.hadoop.fs.s3a.secret.key": wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY #minio secret key
+    "spark.hadoop.fs.s3a.impl": org.apache.hadoop.fs.s3a.S3AFileSystem
   volumes:
     - name: "test-volume"
       hostPath:
