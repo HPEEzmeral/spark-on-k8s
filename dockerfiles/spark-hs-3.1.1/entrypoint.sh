@@ -83,7 +83,7 @@ if [[ "$enablePVC" == "true" ]]; then
     -Dspark.history.fs.logDirectory=file:/mnt/$eventsDir";
 else
     export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
-    -Dspark.history.fs.logDirectory=s3a/test/tmp";
+    -Dspark.history.fs.logDirectory=$eventsDir";
 fi;
 
 exec /bin/bash -s -- /opt/spark/bin/spark-class org.apache.spark.deploy.history.HistoryServer

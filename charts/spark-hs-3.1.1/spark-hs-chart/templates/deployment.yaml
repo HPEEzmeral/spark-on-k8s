@@ -52,6 +52,11 @@ spec:
             - "--pvc"
             - "--events-dir"
             - "{{ .Values.pvc.eventsDir }}"
+          {{- else }}
+          args:
+            - "--s3"
+            - "--events-dir"
+            - "{{ .Values.pvc.eventsDir }}"
           {{- end }}
           envFrom:
             - configMapRef:

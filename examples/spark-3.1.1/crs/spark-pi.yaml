@@ -21,7 +21,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/apache-spark-3.1.1:202107111721"
+  image: "gcr.io/mapr-252711/apache-spark-3.1.1:latest"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
@@ -32,7 +32,7 @@ spec:
     type: Never
   sparkConf:
     "spark.eventLog.enabled": "true"
-    "spark.eventLog.dir": "s3a://test/tmp/"
+    "spark.eventLog.dir": "s3a://test/tmp"
     "spark.hadoop.fs.s3a.endpoint": http://16.0.14.114:9000  #minio endpoint
     "spark.hadoop.fs.s3a.access.key": AKIAIOSFODNN7EXAMPLE #minio access key
     "spark.hadoop.fs.s3a.secret.key": wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY #minio secret key

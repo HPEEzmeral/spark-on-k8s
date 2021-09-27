@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: gcr.io/mapr-252711/apache-spark-hs-3.1.1
-  tag: "202109241401"
+  tag: "latest4"
   pullPolicy: IfNotPresent
 
 createDefaultPullSecret: true
@@ -74,14 +74,18 @@ pvc:
   ## not set any available PV would be used for the PVC
 #  volumePluginSpec: {}
 
-eventsDir: "s3a://test/tmp/"
-
 hdfs:
   hdfsSiteConfigMap: hdfs-site
   coreSiteConfigMap: core-site
   logDirectory: hdfs://hdfs/history/
   HADOOP_CONF_DIR: /etc/hadoop
 
+s3:
+  eventsDir: "s3a://test/tmp/"
+  enableS3: true
+  s3Endpoint: http://16.0.14.114:9000
+  s3AccessKey: AKIAIOSFODNN7EXAMPLE
+  s3SecretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 imagePullSecrets: []
 
 nodeSelector: {}

@@ -13,6 +13,10 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
 data:
   enablePVC: {{ .Values.pvc.enablePVC | quote }}
+  enableS3: {{ .Values.s3.enableS3 | quote }}
+  s3Endpoint: {{ .Values.s3.s3Endpoint | quote }}
+  s3AccessKey: {{ .Values.s3.s3AccessKey | quote }}
+  s3SecretKey: {{ .Values.s3.s3SecretKey | quote }}
   {{- range $key, $val := .Values.environment }}
   {{ $key }}: {{ $val | quote }}
   {{- end }}
