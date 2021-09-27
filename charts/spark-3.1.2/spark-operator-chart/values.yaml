@@ -1,0 +1,113 @@
+# Default values for spark-operator-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  # -- Image repository
+  repository: gcr.io/mapr-252711/spark-operator-3.1.2
+  # -- Image pull policy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+
+nameOverride: ""
+fullnameOverride: ""
+
+rbac:
+  # -- Create and use `rbac` resources
+  create: true
+
+sparkVersionOverride: ""
+
+createDefaultPullSecret: true
+defaultPullSecret: imagepull
+
+serviceAccounts:
+  spark:
+    # -- Create a service account for spark apps
+    create: true
+    # -- Optional name for the spark service account
+    name: "spark"
+  sparkoperator:
+    # -- Create a service account for the operator
+    create: true
+    # -- Optional name for the operator service account
+    name: "hpe-spark-operator"
+
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
+webhook:
+  # -- name for webhook service
+  name: spark-webhook
+  # -- Webhook service port
+  port: 443
+  # -- Webhook service target port
+  targetPort: 8080
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        backend:
+          serviceName: chart-example.local
+          servicePort: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+batchScheduler:
+  # -- Enable batch scheduler for spark jobs scheduling. If enabled, users can specify batch scheduler name in spark application
+  enable: false
