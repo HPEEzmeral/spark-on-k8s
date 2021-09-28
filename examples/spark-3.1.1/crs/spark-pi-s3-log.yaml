@@ -30,6 +30,13 @@ spec:
   sparkVersion: "3.1.1"
   restartPolicy:
     type: Never
+  sparkConf:
+    "spark.eventLog.enabled": "true"
+    "spark.eventLog.dir": "s3a://test/tmp"
+    "spark.hadoop.fs.s3a.endpoint": #minio endpoint
+    "spark.hadoop.fs.s3a.access.key": #minio access key
+    "spark.hadoop.fs.s3a.secret.key": #minio secret key
+    "spark.hadoop.fs.s3a.impl": org.apache.hadoop.fs.s3a.S3AFileSystem
   volumes:
     - name: "test-volume"
       hostPath:

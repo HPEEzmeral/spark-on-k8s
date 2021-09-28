@@ -52,11 +52,11 @@ spec:
             - "--pvc"
             - "--events-dir"
             - "{{ .Values.pvc.eventsDir }}"
-          {{- else }}
+          {{- else if .Values.s3.enableS3 }}
           args:
             - "--s3"
             - "--events-dir"
-            - "{{ .Values.pvc.eventsDir }}"
+            - "{{ .Values.s3.eventsDir }}"
           {{- end }}
           envFrom:
             - configMapRef:
@@ -73,6 +73,15 @@ spec:
           volumeMounts:
             - name: sparkhs-eventlog-storage
               mountPath: {{ .Values.pvc.eventsDir }}
+          {{- else if .Values.s3.enableS3 }}
+          {{- else }}
+          volumeMounts:
+            - name: core-site
+              mountPath: /etc/hadoop/core-site.xml
+              subPath: core-site.xml
+            - name: hdfs-site
+              mountPath: /etc/hadoop/hdfs-site.xml
+              subPath: hdfs-site.xml
           {{- end }}
       {{- if .Values.pvc.enablePVC }}
       volumes:

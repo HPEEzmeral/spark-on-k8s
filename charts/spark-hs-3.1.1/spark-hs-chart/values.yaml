@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: gcr.io/mapr-252711/apache-spark-hs-3.1.1
-  tag: "latest4"
+  tag: "202108282015"
   pullPolicy: IfNotPresent
 
 createDefaultPullSecret: true
@@ -44,24 +44,25 @@ environment:
 
 podAnnotations: {}
 
-resources: {}
+
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   #
-  # limits:
-  #  cpu: 1000m
-  #  memory: 1Gi
-  # requests:
-  #  cpu: 100m
-#  memory: 512Mi
+#resources:
+#  limits:
+#    cpu: 1000m
+#    memory: 1Gi
+#  requests:
+#    cpu: 100m
+#    memory: 512Mi
 
 pvc:
   ## to use a file system path for Spark events dir, set 'enablePVC' to true and mention the
   ## name of an already created persistent volume claim in existingClaimName.
   ## please note: pvc will be mounted at the path provided by eventsDir
-  enablePVC: false
+  enablePVC: true
   eventsDir: "/mnt/hs-logs"
   ## add an existing PVC if you do not want to create an existing PVC
   existingClaimName: ""
@@ -81,11 +82,11 @@ hdfs:
   HADOOP_CONF_DIR: /etc/hadoop
 
 s3:
-  eventsDir: "s3a://test/tmp/"
-  enableS3: true
-  s3Endpoint: http://16.0.14.114:9000
-  s3AccessKey: AKIAIOSFODNN7EXAMPLE
-  s3SecretKey: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  enableS3: false
+  eventsDir: ""
+  s3Endpoint: ""
+  s3AccessKey: ""
+  s3SecretKey: ""
 imagePullSecrets: []
 
 nodeSelector: {}
