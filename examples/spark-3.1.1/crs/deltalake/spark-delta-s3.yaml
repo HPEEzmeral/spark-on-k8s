@@ -21,7 +21,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/apache-spark-3.1.1:202107111721"
+  image: "gcr.io/mapr-252711/apache-spark-3.1.1:v3.1.1"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
@@ -36,7 +36,9 @@ spec:
     memory: "512m"
     labels:
       version: 3.1.1
-    # Note: If you run app in tenant namespace - change serviceAccount name to "hpe-<namespace>"
+    # Note: ServiceAccount is set to the default ServiceAccount as per the
+    #       spark-3.1.1 helm chart. Please update the Service Account name if you had
+    #       used a different ServiceAccount during the helm chart installation
     serviceAccount: spark
   executor:
     cores: 1

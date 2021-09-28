@@ -32,7 +32,7 @@ spec:
   deps:
     jars:
       - local:///opt/bdfs/bluedata-dtap.jar
-  image: gcr.io/mapr-252711/apache-spark-3.1.1:202107111721
+  image: gcr.io/mapr-252711/apache-spark-3.1.1:v3.1.1
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.JavaWordCount
   mainApplicationFile: "local:///opt/spark/examples/jars/spark-examples_2.12-3.1.1.jar"
@@ -49,7 +49,9 @@ spec:
     labels:
       version: 3.1.1
       hpecp.hpe.com/dtap: hadoop2 # enabling dtap side-car container for driver pod
-    # Note: If you run app in tenant namespace - change serviceAccount name to "hpe-<namespace>"
+    # Note: ServiceAccount is set to the default ServiceAccount as per the
+    #       spark-3.1.1 helm chart. Please update the Service Account name if you had
+    #       used a different ServiceAccount during the helm chart installation
     serviceAccount: spark
   executor:
     cores: 1

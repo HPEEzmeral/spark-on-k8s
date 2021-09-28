@@ -30,7 +30,7 @@ spec:
   type: Scala
   sparkVersion: 2.4.7
   mode: cluster
-  image: gcr.io/mapr-252711/spark-2.4.7:202106220630P141
+  image: gcr.io/mapr-252711/spark-2.4.7:v2.4.7
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: "local:///opt/mapr/spark/spark-2.4.7/examples/jars/spark-examples_2.12-2.4.7.4-mapr-701.jar"
@@ -53,9 +53,10 @@ spec:
     memory: "512m"
     labels:
       version: 2.4.7
-    # Note: You do not need to specify a serviceAccount
-    #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
-    #serviceAccount: hpe-sampletenant
+    # Note: ServiceAccount is set to the default ServiceAccount as per the
+    #       spark-2.4.7 helm chart. Please update the Service Account name if you had
+    #       used a different ServiceAccount during the helm chart installation
+    serviceAccount: spark-sa
   executor:
     affinity:
       nodeAffinity:

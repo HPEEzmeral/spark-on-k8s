@@ -30,7 +30,7 @@ serviceAccounts:
     # -- Create a service account for spark apps
     create: true
     # -- Optional name for the spark service account
-    name: "spark"
+    name: "spark-sa"
   sparkoperator:
     # -- Create a service account for the operator
     create: true

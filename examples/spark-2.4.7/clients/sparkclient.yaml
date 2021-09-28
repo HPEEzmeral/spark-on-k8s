@@ -53,7 +53,7 @@ spec:
             defaultMode: 420
       containers:
         - name: sparkcli
-          image: gcr.io/mapr-252711/spark-client-2.4.7:202106220630P141
+          image: gcr.io/mapr-252711/spark-client-2.4.7:v2.4.7
           command:
             - /tini
             - '--'
@@ -86,7 +86,10 @@ spec:
             - name: client-secrets
               mountPath: /opt/mapr/kubernetes/client-secrets
       restartPolicy: Always
-      serviceAccountName: hpe-sampletenant
+      # Note: ServiceAccount is set to the default ServiceAccount as per the
+      #       spark-2.4.7 helm chart. Please update the Service Account name if you had
+      #       used a different ServiceAccount during the helm chart installation
+      serviceAccountName: spark-sa
       automountServiceAccountToken: true
       imagePullSecrets:
         - name: imagepull
