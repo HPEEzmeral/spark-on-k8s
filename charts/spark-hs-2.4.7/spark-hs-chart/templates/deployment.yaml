@@ -55,14 +55,24 @@ spec:
           {{- include "common.commands" . | nindent 12 }}
           env:
           {{- include "spark-hs-chart.env" . | nindent 12 }}
+          {{- if not .Values.daemonize }}
+            - name: SPARK_NO_DAEMONIZE
+              value: {{ .Values.daemonize }}
+          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           {{- include "spark-hs-chart.ports" . | nindent 12 }}
           livenessProbe:
-          {{- include "common.probe.liveness" . | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           readinessProbe:
-          {{- include "common.probe.readiness" . | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           lifecycle:
           {{- include "common.probe.lifecycle" . | nindent 12 }}
           resources:
