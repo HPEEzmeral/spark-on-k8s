@@ -86,12 +86,12 @@ Create the name of the service account to be used by spark apps
 Returns the name of cluster role
 */}}
 {{- define "spark-operator.ClusterRoleName" -}}
-    {{ include "spark-operator.name" . }}-{{ now | date "20060102150405" }}-CR
+    {{ include "spark-operator.name" . }}-{{ .Release.Namespace }}-CR
 {{- end -}}
 
 {{/*
 Returns the name of cluster role binding
 */}}
 {{- define  "spark-operator.ClusterRoleBindingName" -}}
-    {{ include "spark-operator.name" . }}-{{ now | date "20060102150405" }}-CRB
+    {{ include "spark-operator.name" . }}-{{ .Release.Namespace }}-CRB
 {{- end -}}
