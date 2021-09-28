@@ -16,7 +16,7 @@ nameOverride: ""
 fullnameOverride: ""
 service:
   type: NodePort
-  nodePort: 32000
+#  nodePort: 32000
   port:
     number: 18080
     name: http-historyport
