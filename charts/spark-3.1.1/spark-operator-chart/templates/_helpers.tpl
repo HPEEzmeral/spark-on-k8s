@@ -81,3 +81,17 @@ Create the name of the service account to be used by spark apps
     {{- toYaml .Values.imagePullSecrets | nindent 8 }}
   {{ end }}
 {{ end }}
+
+{{/*
+Returns the name of cluster role
+*/}}
+{{- define "spark-operator.ClusterRoleName" -}}
+    {{ include "spark-operator.name" . }}-{{ .Release.Namespace }}-CR
+{{- end -}}
+
+{{/*
+Returns the name of cluster role binding
+*/}}
+{{- define  "spark-operator.ClusterRoleBindingName" -}}
+    {{ include "spark-operator.name" . }}-{{ .Release.Namespace }}-CRB
+{{- end -}}
