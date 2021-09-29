@@ -20,8 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
       {{- if .Values.podAnnotations }}
       annotations:
       {{ toYaml .Values.podAnnotations | indent 8 }}
