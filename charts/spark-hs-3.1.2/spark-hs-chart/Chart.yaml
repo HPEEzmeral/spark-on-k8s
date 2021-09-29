@@ -1,0 +1,10 @@
+apiVersion: v2
+name: sparkhs
+description: A Helm chart for Spark History Server
+type: application
+version: 0.2.0
+appVersion: "3.1.2"
+dependencies:
+  - name: common
+    repository: "file://../../common/"
+    version: 0.1.0
