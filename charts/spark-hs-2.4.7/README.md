@@ -18,9 +18,32 @@ To set the tenant namespace use the flag `--set tenantNameSpace=sampletenant` du
 ### Viewing the UI
 After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
 
+## Examples
 
-## Uninstalling the Chart
+Install spark history server deployment named 'spark-test-hs' in 'sampletenant' tenant, assuming that tenant type is 'internal' or 'external':
+```shell script
+helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
+--namespace sampletenant \
+--set tenantNameSpace=sampletenant \
+--set tenantIsUnsecure=false \
+--set eventlogstorage.kind=maprfs
+```
 
-`helm delete spark-hs -n sampletenant`
+Install spark history server deployment named 'spark-test-hs' in 'sampletenant' tenant, assuming that tenant type is 'none'.
+Put attention that 'maprfs' eventlog storage kind is not applicable for 'none' tenants. Instead, 'pvc' should be used.
+This example assumes that 'spark-hs-pvc' PVC has been created or will be created later. Spark-HS server pod will not start
+if 'spark-hs-pvc' doesn't exist. The PVC should have access mode 'ReadWriteMany'.
+```shell script
+helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
+--namespace sampletenant \
+--set tenantNameSpace=sampletenant \
+--set tenantIsUnsecure=true \
+--set eventlogstorage.kind=pvc \
+--set eventlogstorage.pvcname=spark-hs-pvc
+```
 
+Uninstall spark history server deployment named "spark-test-hs" from 'sampletenant' tenant
+```shell script
+helm uninstall spark-test-hs --namespace sampletenant
+```
 Please note that this won't delete the PVC in case you are using a PVC. PVC will have to be manually deleted.

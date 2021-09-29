@@ -18,4 +18,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "common.selectorLabels" (dict "componentName" $componentName ) | nindent 4 }}
+    {{- include "common.selectorLabels" (dict "componentName" .Chart.Name ) | nindent 4 }}
