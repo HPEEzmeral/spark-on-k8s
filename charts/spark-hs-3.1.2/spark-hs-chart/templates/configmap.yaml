@@ -568,17 +568,14 @@ data:
 
     spark.yarn.historyServer.address spark-hs-container-d46d4fd9d-zvnlf.spark-hs-container-svc.internaltenant.svc.cluster.local:18480
     spark.history.ui.port {{ .Values.ports.httpPort }}
+    {{- if .Values.tenantIsUnsecure }}
     # SECURITY BLOCK
     # ALL SECURITY PROPERTIES MUST BE PLACED IN THIS BLOCK
 
     # ssl
     spark.ssl.historyServer.port {{ .Values.ports.httpsPort }}
-    {{- if .Values.tenantIsUnsecure }}
     spark.ssl.enabled false
-    {{ else }}
     spark.ssl.enabled true
-    {{- end }}
-    spark.ssl.ui.enabled false
     spark.ssl.fs.enabled true
     spark.ssl.trustStore /opt/mapr/conf/ssl_truststore
     spark.ssl.keyStore /opt/mapr/conf/ssl_keystore
@@ -603,9 +600,8 @@ data:
     spark.io.encryption.enabled     true
     spark.io.encryption.keySizeBits 128
 
-
     # END OF THE SECURITY CONFIGURATION BLOCK
-
+    {{- end }}
 
 
     spark.eventLog.dir {{ include "spark-hs-chart.eventLogPath" . }}
