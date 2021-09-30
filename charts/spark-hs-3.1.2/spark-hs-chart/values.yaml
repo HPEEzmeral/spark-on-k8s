@@ -68,6 +68,7 @@ service:
 #container ports
 ports:
   sshPort: 22
+  sshHostPort: 7779
   httpPort: 18080
   httpsPort: 18480
 
