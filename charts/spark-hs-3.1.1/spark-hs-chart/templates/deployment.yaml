@@ -73,8 +73,7 @@ spec:
           volumeMounts:
             - name: sparkhs-eventlog-storage
               mountPath: {{ .Values.pvc.eventsDir }}
-          {{- else if .Values.s3.enableS3 }}
-          {{- else }}
+          {{- else if eq .Values.s3.enableS3 false }}
           volumeMounts:
             - name: core-site
               mountPath: /etc/hadoop/core-site.xml
