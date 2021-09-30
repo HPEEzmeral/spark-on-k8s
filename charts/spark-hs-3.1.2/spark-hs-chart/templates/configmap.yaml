@@ -577,6 +577,8 @@ data:
     spark.ssl.enabled false
     spark.ssl.enabled true
     spark.ssl.fs.enabled true
+    spark.ssl.trustStore /opt/mapr/conf/ssl_truststore
+    spark.ssl.keyStore /opt/mapr/conf/ssl_keystore
     spark.ssl.protocol TLSv1.2
 
     # - PAM
