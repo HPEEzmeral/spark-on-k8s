@@ -46,7 +46,7 @@ tenantIsUnsecure: false
 serviceAccount:
   # Specifies whether a service account should be created
   # This will look for existing hpe-{{ ReleaseNamespace }} ServiceAccount and use it if it exists and creates when it is not present
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use. Please only use the tenant Service Account
@@ -57,7 +57,7 @@ serviceAccount:
 #Create RBAC for the Service Account
 rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
-  create: true
+  create: false
 
 podSecurityContext: {}
 
@@ -99,8 +99,10 @@ sessionRecovery:
   ## use this option to add pvcName for the kind pvc
   pvcName: ""
 
+#default spark image for spark applications created with livy
 deImage: spark-2.4.7:202106220630P141
 
+# Config map created by hive metastore. Used to connect livy with metastore
 hiveSiteSource: hivesite-cm
 
 sparkHistoryServer:
