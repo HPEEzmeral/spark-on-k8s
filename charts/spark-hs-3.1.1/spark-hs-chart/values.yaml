@@ -80,6 +80,12 @@ hdfs:
   logDirectory: hdfs://hdfs/history/
   HADOOP_CONF_DIR: /etc/hadoop
 
+s3:
+  enableS3: false
+  eventsDir: ""
+  s3Endpoint: ""
+  s3AccessKey: ""
+  s3SecretKey: ""
 imagePullSecrets: []
 
 nodeSelector: {}
