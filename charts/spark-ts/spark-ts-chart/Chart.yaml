@@ -3,7 +3,7 @@ name: sparkts
 description: A Helm chart for spark thrift server
 type: application
 version: 0.2.0
-appVersion: "2.4.7"
+appVersion: "latest"
 dependencies:
   - name: common
     repository: "file://../../common/"
