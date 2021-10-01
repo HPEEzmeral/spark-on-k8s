@@ -9,10 +9,14 @@ replicaCount: 1
 image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
-  # -- Image Name
-  imageName: spark-ts-2.4.7
-  # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202106291513C"
+  # -- Image Name for 3.1.2 version
+  imageName: spark-ts-3.1.2
+  # -- Image Name for 2.4.7 version
+#  imageName: spark-ts-2.4.7
+  # -- Image tag for 3.1.2 version
+  tag: "202109271517C"
+  # -- Image tag for 2.4.7 version
+#  tag: "202106291513C"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -36,7 +40,9 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-2.4.7
+sparkVersion: spark-3.1.2
+# spark version for 2.4.7
+#sparkVersion: spark-2.4.7
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
@@ -48,7 +54,7 @@ defaultPullSecret: imagepull
 serviceAccount:
   # Specifies whether a service account should be created
   # This will look for existing hpe-{{ ReleaseNamespace }} ServiceAccount and use it if it exists and creates when it is not present
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use. Please only use the tenant Service Account
@@ -59,7 +65,7 @@ serviceAccount:
 #RBAC for the ServiceAccount
 rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
-  create: true
+  create: false
 
 #Resources for thrift Server driver and executor pods
 thriftServerResources:
@@ -87,12 +93,12 @@ ports:
 # resources -- Pod resource requests and limits
 resources:
   limits:
-    cpu: 8000m
-    memory: 8Gi
+    cpu: 2000m
+    memory: 2Gi
     ephemeral-storage: 30Gi
   requests:
-    cpu: 2000m
-    memory: 8Gi
+    cpu: 1000m
+    memory: 2Gi
     ephemeral-storage: 30Gi
 
 #owner Reference

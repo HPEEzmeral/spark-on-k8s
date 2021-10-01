@@ -1,17 +1,15 @@
-{{ $roleName := printf "%s-role" .Chart.Name }}
----
 {{- if and .Values.rbac.create .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ $roleName }}
+  name: {{ include "spark-ts-chart.roleName" . }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
   labels:
-  {{- include "common.labels" (dict "componentName" $roleName "namespace" .Release.Namespace ) | nindent 4 }}
+  {{- include "common.labels" (dict "componentName" ( include "spark-ts-chart.roleName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
 rules:
 - apiGroups:
     - ""
@@ -23,24 +21,23 @@ rules:
     - "*"
 {{- end }}
 
-{{ $roleBindingName := printf "%s-role-binding" .Chart.Name }}
 ---
 {{- if and .Values.rbac.create .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ $roleBindingName }}
+  name: {{ include "spark-ts-chart.roleBindingName" . }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
   labels:
-  {{- include "common.labels" (dict "componentName" $roleBindingName "namespace" .Release.Namespace ) | nindent 4 }}
+  {{- include "common.labels" (dict "componentName" ( include "spark-ts-chart.roleBindingName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ $roleName }}
+  name: {{ include "spark-ts-chart.roleName" . }}
 subjects:
 - name:  {{ include "spark-ts-chart.serviceAccountName" . }}
   kind: ServiceAccount

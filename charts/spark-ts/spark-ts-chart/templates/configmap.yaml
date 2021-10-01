@@ -1,15 +1,14 @@
-{{ $componentName := printf "%s-cm" .Chart.Name }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $componentName }}
+  name: {{ include "spark-ts-chart.conifgmapName" . }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
   labels:
-  {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 4 }}
+  {{- include "common.labels" (dict "componentName" ( include "spark-ts-chart.conifgmapName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
 data:
   post-startup.sh: |
   #!/usr/bin/env bash
@@ -23,8 +22,10 @@ data:
 
     spark.kubernetes.authenticate.serviceAccountName {{ include "spark-ts-chart.serviceAccountName" . }}
     spark.kubernetes.container.image {{ .Values.image.baseRepository }}/{{ .Values.sparkVersion }}:{{ .Values.image.tag }}
-    spark.kubernetes.container.image.pullSecrets {{ .Values.imagePullSecrets }}
-    spark.kubernetes.container.image.pullPolicy {{ join "," .Values.image.pullPolicy }}
+    {{- with ( first .Values.imagePullSecrets ) }}
+    spark.kubernetes.container.image.pullSecrets {{ .name }}
+    {{- end }}
+    spark.kubernetes.container.image.pullPolicy {{ .Values.image.pullPolicy }}
     spark.kubernetes.namespace {{ .Release.Namespace }}
     spark.authenticate false
     spark.authenticate.enableSaslEncryption false
