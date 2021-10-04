@@ -568,17 +568,14 @@ data:
 
     spark.yarn.historyServer.address spark-hs-container-d46d4fd9d-zvnlf.spark-hs-container-svc.internaltenant.svc.cluster.local:18480
     spark.history.ui.port {{ .Values.ports.httpPort }}
-    {{- if .Values.tenantIsUnsecure }}
+    {{- if not .Values.tenantIsUnsecure }}
     # SECURITY BLOCK
     # ALL SECURITY PROPERTIES MUST BE PLACED IN THIS BLOCK
 
     # ssl
     spark.ssl.historyServer.port {{ .Values.ports.httpsPort }}
-    spark.ssl.enabled false
     spark.ssl.enabled true
     spark.ssl.fs.enabled true
-    spark.ssl.trustStore /opt/mapr/conf/ssl_truststore
-    spark.ssl.keyStore /opt/mapr/conf/ssl_keystore
     spark.ssl.protocol TLSv1.2
 
     # - PAM
