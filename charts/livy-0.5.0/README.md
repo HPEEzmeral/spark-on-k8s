@@ -11,10 +11,9 @@ Note that this chart requires ECP tenant operator to be installed and Tenant CR 
 
 This will create the helm chart in the `sampletenant` namespace.  
 Please note:
-<li>This assumes you are installing in an 'internal' or 'external' Tenant Namespace. Installing spark-ts chart in a non -tenant namespace can cause error because of missing configmaps and secrets. </li>
-<li>If you are using PVC, the pvc should exist in the same namespace.</li>
-
-Integrations for Spark History server and metastore can be customized in the values.yaml file.
+* This assumes you are installing in an 'internal' or 'external' Tenant Namespace. Installing livy chart in a non tenant namespace can cause error because of missing configmaps and secrets. </li>
+* If you are using PVC, the pvc should exist in the same namespace.</li>
+* Integrations for Spark History server and metastore can be customized in the values.yaml file.
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
