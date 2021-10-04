@@ -144,6 +144,9 @@ return volume mounts for containers
 */}}
 {{- define "livy-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumeMounts" . }}
+{{- end }}
 {{- if eq .Values.sessionRecovery.kind "pvc" }}
 - name: livy-sessionstore
   mountPath: "/opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store"
@@ -157,6 +160,9 @@ returns volumes for deployment
 */}}
 {{- define "livy-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . )  "componentName" .Chart.Name ) }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumes" . }}
+{{- end }}
 {{- if and  ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcName ) }}
 - name: livy-sessionstore
   persistentVolumeClaim:
