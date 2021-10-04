@@ -1,17 +1,19 @@
-# Helm Chart for Spark Operator V2.4.7
+### Helm chart for HPE spark operator v2.4.7
 
-### Installing the Chart
+The helm chart is preconfigured to deploy spark operator in a tenant namespace.
+Some values (e.g. imagepullsecret, service accounts) are preset. By default, spark job RBACs
+are not created by the chart.
 
-#### Install command
-`helm install spark-operator ./spark-operator-chart -n spark-operator-ns`
+To install spark operator in 'compute' tenant, execute the following script:
+```shell
+helm install -f spark-operator-chart/values.yaml spark-operator-compute ./spark-operator-chart/ \
+--namespace compute \
+--set sparkJobNamespace=compute \
+--set webhook.namespaceSelector=hpe.com/tenant=compute \
+--set fullnameOverride=spark-operator-compute
+```
 
-This will create spark operator components in already created `spark-operator-ns` . If the `-n` option is not provided, helm chart will create a new namespace using the 
-release namespace.
-
-### Install without spark SA and RBAC 
-
-`helm install spark-operator ./spark-operator-chart -n spark-operator-ns --set serviceAccounts.spark.create=false,rbac.create=false`
-
-## Uninstalling the Chart
-
-`helm delete spark-operator -n spark-operator-ns`
+Uninstalling chart from 'compute' namespace:
+```shell
+helm uninstall spark-operator-compute -n compute
+```
