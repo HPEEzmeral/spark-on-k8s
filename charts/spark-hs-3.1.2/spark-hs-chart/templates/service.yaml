@@ -16,6 +16,6 @@ spec:
     - port: {{ include "spark-hs-chart.getHttpPortSparkHsUI" . }}
       targetPort: {{ include "spark-hs-chart.getHttpPortSparkHsUI" . }}
       protocol: TCP
-      name: http
+      name: {{- if .Values.tenantIsUnsecure }} http {{ else }} https {{- end }}
   selector:
     {{- include "common.selectorLabels" (dict "componentName" .Chart.Name ) | nindent 4 }}
