@@ -1,4 +1,4 @@
-# Helm Chart for Livy-0.5.0
+# Helm Chart for Livy-0.7.0
 
 [Livy](https://livy.incubator.apache.org/) provides a REST API for Spark.
 

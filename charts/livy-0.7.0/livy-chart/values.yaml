@@ -8,9 +8,9 @@ image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
-  imageName: livy-0.5.0
+  imageName: livy-0.7.0
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202106291513C"
+  tag: "202110050857C-livy"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -37,7 +37,7 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-2.4.7
+sparkVersion: spark-3.1.2
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
@@ -95,12 +95,12 @@ ownerReference:
 
 sessionRecovery:
   ##supported sessionRecovery Kind: disabled, pvc, zookeeper
-  kind: zookeeper
+  kind: disabled
   ## use this option to add pvcName for the kind pvc
   pvcName: ""
 
 #default spark image for spark applications created with livy
-deImage: spark-2.4.7:202106220630P141
+deImage: spark-3.1.2:202110062359AN-livy
 
 # Config map created by hive metastore. Used to connect livy with metastore
 hiveSiteSource: ""
