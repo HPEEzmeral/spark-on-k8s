@@ -13,8 +13,6 @@ This will create the helm chart in the `default` namespace. To create the chart 
 ` -n sampletenant `.
 Please note that if you are using PVC, the pvc should exist in the same namespace.
 
-To set the tenant namespace use the flag `--set tenantNameSpace=sampletenant` during installation
-
 ### Viewing the UI
 After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
 
@@ -24,7 +22,6 @@ Install spark history server deployment named 'spark-test-hs' in 'sampletenant' 
 ```shell script
 helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
 --namespace sampletenant \
---set tenantNameSpace=sampletenant \
 --set tenantIsUnsecure=false \
 --set eventlogstorage.kind=maprfs
 ```
@@ -36,7 +33,6 @@ if 'spark-hs-pvc' doesn't exist. The PVC should have access mode 'ReadWriteMany'
 ```shell script
 helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
 --namespace sampletenant \
---set tenantNameSpace=sampletenant \
 --set tenantIsUnsecure=true \
 --set eventlogstorage.kind=pvc \
 --set eventlogstorage.pvcname=spark-hs-pvc
