@@ -43,7 +43,7 @@ helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-ch
 ```
 
 ### S3
-This example assumes that there is minio server with created bucket apps bucket and spark/tenanname folders inside bucket. Spark-HS server pod will not start
+This example assumes that there is minio server with created bucket folders inside bucket. Spark-HS server pod will not start
 if S3 configuration is wrong.
 ```shell script
 helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
@@ -52,6 +52,7 @@ helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-ch
 --set tenantIsUnsecure=true \
 --set eventlogstorage.kind=s3 \
 --set eventlogstorage.s3Endpoint=http://s3host:9000 \
+--set eventlogstorage.s3path=s3a://bucket/folder \
 --set eventlogstorage.s3AccessKey=AccessKey \
 --set eventlogstorage.s3SecretKey=secretKey
 ```

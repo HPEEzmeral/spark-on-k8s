@@ -91,6 +91,7 @@ ownerReference:
 #configurations for event log storage
 eventlogstorage:
   kind: maprfs #supported types are pvc, maprfs and s3
+  s3path: ""
   pvcname: "" #example pvc; to be replaced by an existing pvc in the tenant namespace
   s3Endpoint: ""
   s3AccessKey: ""
