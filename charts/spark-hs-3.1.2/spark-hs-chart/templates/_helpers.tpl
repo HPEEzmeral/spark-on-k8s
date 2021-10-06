@@ -182,7 +182,7 @@ Return pvcVolume
 {{- if ( eq .Values.eventlogstorage.kind "pvc") -}}
 file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
 {{- else if ( eq .Values.eventlogstorage.kind "s3") -}}
-s3a://apps/spark/{{ .Values.tenantNameSpace }}
+s3a://apps/spark/{{ .Release.Namespace }}
 {{- else -}}
 maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
 {{- end -}}
