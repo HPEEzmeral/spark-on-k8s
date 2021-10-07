@@ -8,5 +8,3 @@ To delete use :
 
 helm delete metastore -n <NAMESPACE>
 
-
-
