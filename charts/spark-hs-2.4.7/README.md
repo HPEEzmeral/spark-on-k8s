@@ -13,8 +13,6 @@ This will create the helm chart in the `default` namespace. To create the chart 
 ` -n sampletenant `.
 Please note that if you are using PVC, the pvc should exist in the same namespace.
 
-To set the tenant namespace use the flag `--set tenantNameSpace=sampletenant` during installation
-
 ### Viewing the UI
 After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
 
