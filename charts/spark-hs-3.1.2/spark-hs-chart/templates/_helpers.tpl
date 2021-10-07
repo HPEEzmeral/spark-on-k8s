@@ -181,6 +181,8 @@ Return pvcVolume
 {{- define "spark-hs-chart.eventLogPath" -}}
 {{- if ( eq .Values.eventlogstorage.kind "pvc") -}}
 file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+{{- else if ( eq .Values.eventlogstorage.kind "s3") -}}
+{{ .Values.eventlogstorage.s3path }}
 {{- else -}}
 maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
 {{- end -}}

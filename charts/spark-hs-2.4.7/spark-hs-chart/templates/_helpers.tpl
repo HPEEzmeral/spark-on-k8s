@@ -132,7 +132,6 @@ Return ports
   containerPort: {{ include "spark-hs-chart.getHttpPortSparkHsUI" . }}
 - name: "ssh"
   protocol: "TCP"
-  hostPort: {{ .Values.ports.sshHostPort }}
   containerPort: {{ .Values.ports.sshPort }}
 {{- end }}
 
@@ -182,6 +181,8 @@ Return pvcVolume
 {{- define "spark-hs-chart.eventLogPath" -}}
 {{- if ( eq .Values.eventlogstorage.kind "pvc") -}}
 file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+{{- else if ( eq .Values.eventlogstorage.kind "s3") -}}
+{{ .Values.eventlogstorage.s3path }}
 {{- else -}}
 maprfs:///apps/spark/{{ .Values.tenantNameSpace }}
 {{- end -}}
@@ -203,8 +204,6 @@ return env for containers
 */}}
 {{- define "spark-hs-chart.env" -}}
 {{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
-- name: SSH_PORT
-  value: {{ .Values.ports.sshHostPort | quote }}
 {{- end }}
 
 {/*

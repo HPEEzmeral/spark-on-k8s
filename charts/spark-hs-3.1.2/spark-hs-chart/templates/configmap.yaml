@@ -603,6 +603,14 @@ data:
 
     spark.eventLog.dir {{ include "spark-hs-chart.eventLogPath" . }}
     spark.history.fs.logDirectory {{ include "spark-hs-chart.eventLogPath" . }}
+
+    {{- if ( eq .Values.eventlogstorage.kind "s3") }}
+    spark.hadoop.fs.s3a.endpoint:   {{ .Values.eventlogstorage.s3Endpoint }}
+    spark.hadoop.fs.s3a.access.key: {{ .Values.eventlogstorage.s3AccessKey }}
+    spark.hadoop.fs.s3a.secret.key: {{ .Values.eventlogstorage.s3SecretKey }}
+    spark.history.provider          org.apache.hadoop.fs.s3a.S3AFileSystem
+    spark.hadoop.fs.s3a.impl        org.apache.hadoop.fs.s3a.S3AFileSystem
+    {{- end }}
   spark-defaults.conf.template: |
     # Default system properties included when running spark-submit.
     # This is useful for setting default environmental settings.
