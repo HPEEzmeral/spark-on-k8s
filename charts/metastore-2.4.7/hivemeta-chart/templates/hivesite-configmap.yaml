@@ -1,0 +1,98 @@
+{{ $componentName := "hivesite-cm" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $componentName }}
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+  {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 4 }}
+data:
+  hive-site.xml: |
+    <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="configuration.xsl"?><configuration>
+      <property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://hivemeta-svc.sample1.svc.cluster.local:9083</value>
+      </property>
+      <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:derby:;databaseName=/opt/mapr/hive/hive-2.3/metastore_db;create=true</value>
+        <description>JDBC connect string for a JDBC metastore</description>
+      </property>
+      <property>
+        <name>hive.metastore.sasl.enabled</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.server2.thrift.sasl.qop</name>
+        <value>auth-conf</value>
+      </property>
+      <property>
+        <name>hive.metastore.execute.setugi</name>
+        <value>false</value>
+      </property>
+      <property>
+        <name>hive.security.metastore.authorization.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.StorageBasedAuthorizationProvider</value>
+      </property>
+      <property>
+        <name>hive.metastore.pre.event.listeners</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.AuthorizationPreEventListener</value>
+      </property>
+      <property>
+        <name>hive.server2.webui.use.pam</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.server2.webui.use.ssl</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.server2.use.SSL</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.server2.webui.jetty.response.headers.file</name>
+        <value>/opt/mapr/hive/hive-2.3/conf/headers.xml</value>
+      </property>
+      <property>
+        <name>hive.users.in.admin.role</name>
+        <value>mapr</value>
+      </property>
+      <property>
+        <name>hive.conf.restricted.list</name>
+        <value>hive.security.authenticator.manager,hive.security.authorization.manager,hive.security.metastore.authorization.manager,hive.security.metastore.authenticator.manager,hive.users.in.admin.role,hive.server2.xsrf.filter.enabled,hive.security.authorization.enabled,hive.server2.authentication.ldap.baseDN,hive.server2.authentication.ldap.url,hive.server2.authentication.ldap.Domain,hive.server2.authentication.ldap.groupDNPattern,hive.server2.authentication.ldap.groupFilter,hive.server2.authentication.ldap.userDNPattern,hive.server2.authentication.ldap.userFilter,hive.server2.authentication.ldap.groupMembershipKey,hive.server2.authentication.ldap.userMembershipKey,hive.server2.authentication.ldap.groupClassKey,hive.server2.authentication.ldap.customLDAPQuery,hive.exec.pre.hooks,hive.exec.post.hooks,hive.exec.failure.hooks,hive.exec.query.redactor.hooks,hive.semantic.analyzer.hook,hive.query.lifetime.hooks,hive.exec.driver.run.hooks,hive.server2.session.hook</value>
+      </property>
+      <property>
+        <name>hive.security.authorization.enabled</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.security.authorization.manager</name>
+        <value>org.apache.hadoop.hive.ql.security.authorization.plugin.fallback.FallbackHiveAuthorizerFactory</value>
+      </property>
+      <property>
+        <name>hive.server2.metrics.enabled</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.server2.metrics.file.location</name>
+        <value>/tmp/hiveserver2_report.json</value>
+      </property>
+      <property>
+        <name>hive.metastore.metrics.enabled</name>
+        <value>true</value>
+      </property>
+      <property>
+        <name>hive.metastore.metrics.file.location</name>
+        <value>/tmp/hivemetastore_report.json</value>
+      </property>
+      <property>
+        <name>hive.service.metrics.reporter</name>
+        <value>JSON_FILE,JMX</value>
+      </property>
+    </configuration>
