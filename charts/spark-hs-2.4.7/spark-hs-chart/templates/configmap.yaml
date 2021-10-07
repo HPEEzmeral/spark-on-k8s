@@ -568,6 +568,10 @@ data:
 
     spark.yarn.historyServer.address spark-hs-container-d46d4fd9d-zvnlf.spark-hs-container-svc.internaltenant.svc.cluster.local:18480
     spark.history.ui.port {{ .Values.ports.httpPort }}
+
+    # - PAM
+    spark.ui.filters  org.apache.spark.ui.filters.MultiauthWebUiFilter
+
     {{- if not .Values.tenantIsUnsecure }}
     # SECURITY BLOCK
     # ALL SECURITY PROPERTIES MUST BE PLACED IN THIS BLOCK
@@ -577,9 +581,6 @@ data:
     spark.ssl.enabled true
     spark.ssl.fs.enabled true
     spark.ssl.protocol TLSv1.2
-
-    # - PAM
-    spark.ui.filters  org.apache.spark.deploy.yarn.YarnProxyRedirectFilter, org.apache.spark.ui.filters.MultiauthWebUiFilter
 
     # - ACLS
     spark.acls.enable       false
