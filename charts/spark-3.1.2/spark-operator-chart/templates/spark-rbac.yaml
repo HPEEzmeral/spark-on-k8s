@@ -1,65 +1,51 @@
 {{- if .Values.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: {{ include "spark-operator.clusterrole" . }}
+  name: spark-role
+  namespace: {{ default .Release.Namespace .Values.sparkJobNamespace }}
+  labels:
+    {{- include "spark-operator.labels" . | nindent 4 }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
 rules:
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["*"]
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["*"]
-  - apiGroups: ["autoscaling"]
-    resources: ["horizontalpodautoscalers"]
-    verbs: ["*"]
-  - apiGroups: [""]
-    resources: ["services", "secrets"]
-    verbs: ["create", "get", "delete"]
-  - apiGroups: ["extensions"]
-    resources: ["ingresses"]
-    verbs: ["create", "get", "delete"]
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["get"]
-  - apiGroups: [""]
-    resources: ["resourcequotas"]
-    verbs: ["get", "list", "watch"]
-  - apiGroups: [""]
-    resources: ["events"]
-    verbs: ["create", "update", "patch"]
-  - apiGroups: ["apiextensions.k8s.io"]
-    resources: ["customresourcedefinitions"]
-    verbs: ["create", "get", "update", "delete"]
-  - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
-    verbs: ["create", "get", "update", "delete"]
-  - apiGroups: ["sparkoperator.hpe.com"]
-    resources: ["sparkapplications", "sparkapplications/status", "sparkapplications/finalizer", "scheduledsparkapplications", "scheduledsparkapplications/status", "sparkapplications/finalizer"]
-    verbs: ["*"]
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - configmaps
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - "*"
 
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: {{ include "spark-operator.clusterrolebinding" . }}
+  name: spark
+  namespace: {{ default .Release.Namespace .Values.sparkJobNamespace }}
+  labels:
+    {{- include "spark-operator.labels" . | nindent 4 }}
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
 subjects:
-  - kind: ServiceAccount
-    name: {{ include "spark.serviceAccountName" . }}
-    namespace: {{ include "spark-operator.sparknamespace" . }}
+- kind: ServiceAccount
+  name: {{ include "spark.serviceAccountName" . }}
+  namespace: {{ default .Release.Namespace .Values.sparkJobNamespace }}
 roleRef:
-  kind: ClusterRole
-  name: {{ include "spark-operator.clusterrole" . }}
+  kind: Role
+  name: spark-role
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

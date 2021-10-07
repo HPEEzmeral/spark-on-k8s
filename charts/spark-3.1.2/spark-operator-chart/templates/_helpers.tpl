@@ -1,17 +1,9 @@
 {{/* vim: set filetype=mustache: */}}
-
 {{/*
 Expand the name of the chart.
 */}}
 {{- define "spark-operator.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Version of spark
-*/}}
-{{- define "spark-operator.sparkversion" -}}
-{{- default "3.1.2" .Values.sparkVersionOverride -}}
 {{- end -}}
 
 {{/*
@@ -40,52 +32,24 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-returns labels
+Common labels
 */}}
 {{- define "spark-operator.labels" -}}
+helm.sh/chart: {{ include "spark-operator.chart" . }}
+{{ include "spark-operator.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "spark-operator.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "spark-operator.name" . }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-return spark namespace
-*/}}
-{{- define "spark-operator.sparknamespace" -}}
-{{- if ne .Release.Namespace "default" -}}
-    {{ .Release.Namespace }}
-{{- else -}}
-    {{ include "spark-operator.fullname" . }}-ns
-{{- end -}}
-{{- end }}
-
-
-{{/*
-return cluster role name
-*/}}
-{{- define "spark-operator.clusterrole" -}}
-{{ include "spark-operator.fullname" . }}-cr
-{{- end -}}
-
-{{/*
-returns cluster role binding name
-*/}}
-{{- define "spark-operator.clusterrolebinding" -}}
-{{ include "spark-operator.fullname" . }}-crb
-{{- end -}}
-
-{{/*
-returns webhook name
-*/}}
-{{- define "spark-operator.webhook" -}}
-{{ include "spark-operator.name" . }}-webhook
-{{- end -}}
-
-{{/*
-returns webhook init name
-*/}}
-{{- define "spark-operator.webhookinit" -}}
-{{ include "spark-operator.webhook" . }}-init
-{{- end -}}
 
 {{/*
 Create the name of the service account to be used by the operator
