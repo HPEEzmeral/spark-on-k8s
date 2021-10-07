@@ -212,5 +212,5 @@ return volume mounts for containers
 {{- define "spark-hs-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
 - name: logs
-  mountPath: "/opt/mapr/spark/spark-{{ .Values.sparkVersion }}/logs"
+  mountPath: "/opt/mapr/spark/{{ .Values.sparkVersion }}/logs"
 {{- end }}
