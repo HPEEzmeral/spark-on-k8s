@@ -10,6 +10,11 @@ metadata:
   name: {{ include "spark-operator.fullname" . }}
   labels:
     {{- include "spark-operator.labels" . | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

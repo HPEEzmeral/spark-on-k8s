@@ -92,8 +92,5 @@ The command removes all the Kubernetes components associated with the chart and 
 | webhook.enable | bool | `false` | Enable webhook server |
 | webhook.namespaceSelector | string | `""` | The webhook server will only operate on namespaces with this label, specified in the form key1=value1,key2=value2. Empty string (default) will operate on all namespaces |
 | webhook.port | int | `8080` | Webhook service port |
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| yuchaoran2011 | yuchaoran2011@gmail.com |  |
+| ownerReference.overRide | boolean | `false` | Whether to add custom owner references |
+| ownerReference.ownerReferences | object | `{}` | Custom owner references |

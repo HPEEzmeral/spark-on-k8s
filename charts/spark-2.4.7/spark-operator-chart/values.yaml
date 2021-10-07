@@ -138,3 +138,8 @@ leaderElection:
 istio:
   # -- When using `istio`, spark jobs need to run without a sidecar to properly terminate
   enabled: false
+
+#owner References
+ownerReference:
+  overRide: false
+  ownerReferences: {}
