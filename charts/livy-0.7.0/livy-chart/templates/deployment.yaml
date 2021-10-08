@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "livy-chart.name" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+spec:
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+    {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+      {{- include "common.labels" (dict "componentName" ( include "livy-chart.name" . ) "namespace" .Release.Namespace ) | nindent 8 }}
+    spec:
+      subdomain: livy-svc
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "common.nodeAffinity.required" . | nindent 12 }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          {{-  include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}
+      tolerations:
+      {{- include "common.tolerations" (dict "componentName" ( include "livy-chart.name" . ) "namespace" .Release.Namespace ) | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "livy-chart.serviceAccountName" . }}
+      restartPolicy: {{ .Values.restartPolicy }}
+      priorityClassName: "hpe-tenant-service"
+      initContainers: []
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken  }}
+      containers:
+        - name: {{  include "livy-chart.name" .  }}
+          args:
+          {{- include "common.args" . | nindent 12 }}
+          command:
+          {{- include "common.commands" . | nindent 12 }}
+          env:
+          {{- include "livy-chart.env" . | nindent 12 }}
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          {{- include "livy-chart.ports" . | nindent 12 }}
+          livenessProbe:
+          {{- include "common.probe.liveness" . | nindent 12 }}
+          readinessProbe:
+          {{- include "common.probe.readiness" . | nindent 12 }}
+          lifecycle:
+          {{- include "common.probe.lifecycle" . | nindent 12 }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+          {{- include "common.securityContext" . | nindent 12 }}
+          volumeMounts:
+          {{- include "livy-chart.volumeMounts" . | nindent 12 }}
+      volumes:
+      {{- include "livy-chart.volumes" . | nindent 8 }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
