@@ -103,7 +103,7 @@ sessionRecovery:
 deImage: spark-2.4.7:202106220630P141
 
 # Config map created by hive metastore. Used to connect livy with metastore
-hiveSiteSource: hivesite-cm
+hiveSiteSource: ""
 
 sparkHistoryServer:
   integrate: false
