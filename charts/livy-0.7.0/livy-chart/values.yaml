@@ -1,0 +1,111 @@
+# Default values for livy-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  # -- Image repository
+  baseRepository: gcr.io/mapr-252711
+  # -- Image Name
+  imageName: livy-0.7.0
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: "202110050857C-livy"
+  # -- Image pull policy
+  pullPolicy: Always
+
+# -- Image pull secrets
+imagePullSecrets:
+  - name: imagepull
+
+createDefaultPullSecret: false
+defaultPullSecret: imagepull
+
+# -- String to partially override `spark-operator.fullname` template (will maintain the release name)
+nameOverride: ""
+
+# -- String to override release name
+fullnameOverride: ""
+
+# -- restart policy
+restartPolicy: "Always"
+
+automountServiceAccountToken: true
+
+progressDeadlineSeconds: 600
+
+revisionHistoryLimit: 10
+
+#sparkVersion for the applications
+sparkVersion: spark-3.1.2
+
+#HPE tenant namespace info
+tenantIsUnsecure: false
+
+#HPE tenant namespace service account
+serviceAccount:
+  # Specifies whether a service account should be created
+  # This will look for existing hpe-{{ ReleaseNamespace }} ServiceAccount and use it if it exists and creates when it is not present
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use. Please only use the tenant Service Account
+  # This name is used only when create ServiceAccount option is set to false.
+  # Otherwise a new Service Account is created using hpe-{{ ReleaseNamespace }}
+  name: ""
+
+#Create RBAC for the Service Account
+rbac:
+  #RBAC is created only when this flag is true and ServiceAccount.create is also true
+  create: false
+
+podSecurityContext: {}
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+#container ports
+ports:
+  sshPort: 22
+  sshHostPort: 7784
+  livyHttpPort: 8998
+  livyInternalPortStart: 10000
+  livyInternalPortEnd: 10010
+
+# resources -- Pod resource requests and limits
+resources:
+  limits:
+    cpu: 8000m
+    memory: 8Gi
+    ephemeral-storage: 30Gi
+  requests:
+    cpu: 2000m
+    memory: 8Gi
+    ephemeral-storage: 30Gi
+
+#owner Reference
+ownerReference:
+  overRide: false
+  ownerReferences: {}
+
+sessionRecovery:
+  ##supported sessionRecovery Kind: disabled, pvc, zookeeper
+  kind: disabled
+  ## use this option to add pvcName for the kind pvc
+  pvcName: ""
+
+#default spark image for spark applications created with livy
+deImage: spark-3.1.2:202110062359AN-livy
+
+# Config map created by hive metastore. Used to connect livy with metastore
+hiveSiteSource: ""
+
+sparkHistoryServer:
+  integrate: false
+  pvcName: ""
+  eventsDir: "maprfs:///apps/spark/sampletenant"

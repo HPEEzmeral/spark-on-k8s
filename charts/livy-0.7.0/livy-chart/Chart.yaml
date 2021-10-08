@@ -1,0 +1,10 @@
+apiVersion: v2
+name: livy
+description: A Helm chart for apache livy
+type: application
+version: 0.1.0
+appVersion: "0.7.0"
+dependencies:
+  - name: common
+    repository: "file://../../common/"
+    version: 0.1.0
