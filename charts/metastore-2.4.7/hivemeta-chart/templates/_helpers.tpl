@@ -187,6 +187,9 @@ return volume mounts for containers
 */}}
 {{- define "hivemeta-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumeMounts" . }}
+{{- end }}
 - name: logs
   mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/logs"
 {{- end }}
