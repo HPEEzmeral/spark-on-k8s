@@ -48,7 +48,6 @@ if S3 configuration is wrong.
 ```shell script
 helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
 --namespace sampletenant \
---set tenantNameSpace=sampletenant \
 --set tenantIsUnsecure=true \
 --set eventlogstorage.kind=s3 \
 --set eventlogstorage.s3Endpoint=http://s3host:9000 \
