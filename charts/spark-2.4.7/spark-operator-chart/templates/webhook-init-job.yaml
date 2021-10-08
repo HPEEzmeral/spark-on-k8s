@@ -32,4 +32,6 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
         command: ["/usr/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "spark-operator.fullname" . }}-webhook", "-p"]
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
 {{ end }}
