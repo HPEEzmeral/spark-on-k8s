@@ -17,20 +17,26 @@
 apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
-  name: spark-pi-secure
-  namespace: hpe-spark-operator
+  name: spark-pi-mapr
+  namespace: test123
 spec:
-  #sparkConf:
+  sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
     #spark.mapr.user.secret: spark-user-secret
     # Note: You do not need to specify a spark.eventLog.dir
     #       it will be auto-generated with the pattern "maprfs:///apps/spark/<namespace>"
-    #spark.eventLog.dir: "maprfs:///apps/spark/sampletenant"
+    spark.eventLog.dir: "s3a://apps/spark/test123"
+    spark.eventLog.enabled: "true"
+    spark.hadoop.fs.s3a.endpoint: "http://16.0.14.114:9000"
+    spark.hadoop.fs.s3a.access.key: "AKIAIOSFODNN7EXAMPLE"
+    spark.hadoop.fs.s3a.secret.key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    spark.hadoop.fs.s3a.path.style.access: "true"
+    spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202109242011C
+  image: gcr.io/mapr-252711/spark-3.1.2:202110062359AN
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
@@ -38,15 +44,22 @@ spec:
   mainApplicationFile: "local:///opt/mapr/spark/spark-3.1.2/examples/jars/spark-examples_2.12-3.1.2.0-eep-SNAPSHOT.jar"
   restartPolicy:
     type: Never
+  volumes:
+    - name: "spark-hs"
+      persistentVolumeClaim:
+        claimName: spark-hs-pvc
   driver:
     cores: 1
     coreLimit: "1000m"
     memory: "512m"
+    volumeMounts:
+      - mountPath: "/var/eventlog"
+        name: spark-hs
     labels:
       version: 3.1.2
     # Note: You do not need to specify a serviceAccount
     #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
-    serviceAccount: hpe-spark-operator
+#    serviceAccount: hpe-spark-operator
   executor:
     cores: 1
     coreLimit: "1000m"
