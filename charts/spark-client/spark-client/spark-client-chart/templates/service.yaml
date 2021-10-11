@@ -15,6 +15,6 @@ spec:
     - port: {{ .Values.service.port.number }}
       targetPort: {{ .Values.service.port.targetPort }}
       protocol: {{ .Values.service.port.protocol }}
-      name: http
+      name: {{- if .Values.tenantIsUnsecure }} http {{ else }} https {{- end }}
   selector:
     {{- include "spark-client-chart.selectorLabels" . | nindent 4 }}
