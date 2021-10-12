@@ -16,7 +16,7 @@ To install the helm chart in tenant type 'none' Namespace use the flag: <br>
 A secret containing credentials for mysql server needs to be present on the cluster
 The secret name & namespace can be configured in values.yaml - mysqlNamespace,mysqlSecret
 By default namespace is set to 'mysql-operator' & secret 'hivemeta-secret'
-Format for the hivemetastore secret is given at the bottom.
+Format and command to create the hivemetastore secret is given at the bottom.
 To use mysqlDB use flag along with the install command: <br>
 `--set mysqlDB=true `
 
@@ -34,6 +34,16 @@ To create a new RBAC for the service account use the flag: <br>
 `helm delete hivemeta -n sampletenant`
 
 ### Format for the hivemetastore secret
+
+#### NOTE : The xml file should be named - hivesite (no extensions)
+
+Command to create secret from file hivesite is as follows
+
+`kubectl create secret generic hivesite-secret --from-file=hivesite=../hivesite -n mysql-operator`
+
+Filename : hivesite
+Namespace for secret : msyql-operator
+
 This secret should consist of an xml file data and the contents should be as follows:
 ```
 <?xml version="1.0"?>
