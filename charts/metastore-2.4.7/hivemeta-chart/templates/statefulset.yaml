@@ -1,5 +1,5 @@
 {{ $componentName := .Chart.Name }}
-{{ $configmapName := printf "%s-cm" .Chart.Name  }}
+{{ $configmapName := printf "%s-cm" .Chart.Name }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -65,8 +65,14 @@ spec:
           securityContext:
           {{- include "common.securityContext" . | nindent 12 }}
           volumeMounts:
+          {{- if .Values.mysqlDB }}
+          {{- include "hivemeta-chart.secretVolumeMount" . | nindent 12 }}
+          {{- end}}
           {{- include "hivemeta-chart.volumeMounts" . | nindent 12 }}
       volumes:
+      {{- if .Values.mysqlDB }}
+      {{- include "hivemeta-chart.secretVolume" . | nindent 8 }}
+      {{- end }}
       {{- include "common.volumes" (dict "configmapName" $configmapName "componentName" $componentName) | nindent 8 }}
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}

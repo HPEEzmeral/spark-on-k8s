@@ -12,7 +12,7 @@ image:
   # -- Image pull policy
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202106291513C"
+  tag: "202110111547-AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -30,10 +30,12 @@ restartPolicy: "Always"
 createDefaultPullSecret: false
 defaultPullSecret: imagepull
 
-automountServiceAccountToken: true
+mysqlNamespace: "mysql-operator"
+mysqlSecret: "hivemetastore-mysql"
+hiveSecret: "hivemeta-secret"
+mysqlDB: false
 
-#sparkVersion for the applications
-sparkVersion: spark-2.4.7
+automountServiceAccountToken: true
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
@@ -42,7 +44,7 @@ tenantIsUnsecure: false
 serviceAccount:
   # Specifies whether a service account should be created
   # This will look for existing hpe-{{ ReleaseNamespace }} ServiceAccount and use it if it exists and creates when it is not present
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -53,7 +55,7 @@ serviceAccount:
 #RBAC for the ServiceAccount
 rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
-  create: true
+  create: false
 
 podSecurityContext: {}
 

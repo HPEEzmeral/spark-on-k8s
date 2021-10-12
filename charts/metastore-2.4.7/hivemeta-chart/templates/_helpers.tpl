@@ -187,6 +187,25 @@ return volume mounts for containers
 */}}
 {{- define "hivemeta-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumeMounts" . }}
+{{- end }}
 - name: logs
   mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/logs"
+{{- end }}
+
+{{/*
+Return secretVolume
+*/}}
+{{- define "hivemeta-chart.secretVolume" -}}
+- name: hive-secret
+  secret:
+    secretName: {{ .Values.hiveSecret }}
+{{- end }}
+{{/*
+Return secretVolumeMount
+*/}}
+{{- define "hivemeta-chart.secretVolumeMount" }}
+- name: hive-secret
+  mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/conf"
 {{- end }}
