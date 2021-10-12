@@ -12,6 +12,13 @@ Please note: This assumes you are installing in an 'internal' or 'external' Tena
 To install the helm chart in tenant type 'none' Namespace use the flag: <br>
 `--set tenantIsUnsecure=true ` along with the install command
 
+### For using MySQLDB as backend for hivemetastore
+A secret containing credentials for mysql server needs to be present on the cluster
+The secret name & namespace can be configured in values.yaml - mysqlNamespace,mysqlSecret
+By default namespace is set to 'mysql-operator' & secret 'hivemeta-secret'
+To use mysqlDB use flag
+`--set mysqlDB=true ` along with the install command
+
 ### Creating a service account
 This helm chart does not create Service Account and RBAC. To use an existing Service Account either update values.yaml or use the following flag with install command: <br>
 ` --set serviceaccount.name=xyz  --set serviceaccount.create=false`

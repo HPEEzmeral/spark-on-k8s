@@ -12,7 +12,7 @@ image:
   # -- Image pull policy
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202110081509-AJ"
+  tag: "202110111547-AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -29,6 +29,11 @@ restartPolicy: "Always"
 
 createDefaultPullSecret: false
 defaultPullSecret: imagepull
+
+mysqlNamespace: "mysql-operator"
+mysqlSecret: "hivemetastore-mysql"
+hiveSecret: "hivemeta-secret"
+mysqlDB: false
 
 automountServiceAccountToken: true
 
