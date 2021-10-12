@@ -59,7 +59,7 @@ spec:
             - name: SPARK_NO_DAEMONIZE
               value: {{ .Values.daemonize }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           {{- include "spark-hs-chart.ports" . | nindent 12 }}

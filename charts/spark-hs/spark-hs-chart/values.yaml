@@ -8,11 +8,18 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: gcr.io/mapr-252711/spark-hs-2.4.7
+  baseRepository: gcr.io/mapr-252711
+  # -- Image Name for 3.1.2 version
+  imageName: spark-hs-3.1.2
+  # -- Image name for 2.4.7 version
+  #  imageName: spark-hs-2.4.7
   # -- Image pull policy
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202110061237C"
+  # -- Image tag for 3.1.2 version
+  tag: "202109281537C"
+  # -- Image tag for 2.4.7 version
+  # tag: "202110061237C"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -37,7 +44,9 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-2.4.7
+sparkVersion: spark-3.1.2
+## spark version for 2.4.7
+#sparkVersion: spark-2.4.7
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
@@ -68,7 +77,6 @@ service:
 #container ports
 ports:
   sshPort: 22
-  sshHostPort: 7779
   httpPort: 18080
   httpsPort: 18480
 
