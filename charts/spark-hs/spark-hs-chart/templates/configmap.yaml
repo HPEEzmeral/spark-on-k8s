@@ -760,7 +760,7 @@ data:
     SPARK_SUBMIT_OPTS="$SPARK_SUBMIT_OPTS -Dspark.executor.extraClassPath=$MAPR_HBASE_CLASSPATH:$MAPR_MESOS_CLASSPATH"
 
     # Set SPARK_DIST_CLASSPATH
-    export SPARK_DIST_CLASSPATH="$MAPR_SPARK_CLASSPATH:$SPARK_MAPR_HOME/lib/mapr-security-web-6.2.0.8-mapr.jar"
+    export SPARK_DIST_CLASSPATH="$MAPR_SPARK_CLASSPATH:$SPARK_MAPR_HOME/lib/*"
 
     # Security status
     source $MAPR_HOME/conf/env.sh
@@ -769,7 +769,7 @@ data:
     fi
 
     # scala
-    export SCALA_VERSION=2.11
+    export SCALA_VERSION=2.12
     export SPARK_SCALA_VERSION=$SCALA_VERSION
     export SCALA_HOME=${SPARK_HOME}/scala
     export SCALA_LIBRARY_PATH=${SCALA_HOME}/lib
@@ -800,6 +800,7 @@ data:
 
     #UI
     export SPARK_SUBMIT_OPTS="$SPARK_SUBMIT_OPTS -Djava.library.path=$SPARK_MAPR_HOME/lib"
+    export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Djava.library.path=$SPARK_MAPR_HOME/lib"
 
 
   spark-env.sh.template: |

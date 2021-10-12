@@ -7,45 +7,20 @@
 Note that this chart requires ECP tenant operator to be installed and Tenant CR applied in the tenant namespace.
 
 ### Install command
-`helm install spark-hs ./spark-hs-chart `
+`helm install spark-hs ./spark-hs-chart -n sampletenant`
+This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with v3.1.2  
 
-This will create the helm chart in the `default` namespace. To create the chart in a different existing namespace use the flag
-` -n sampletenant `.
-Please note that if you are using PVC, the pvc should exist in the same namespace.
+To install spark history server V2.4.7 use the flags: <br>
+`--set image.imageName=spark-hs-2.4.7 --set image.tag=202110061237C --set sparkVersion=spark-2.4.7`
 
-### Viewing the UI
-After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
+#### Installing in a non DF Tenant
+To install the helm chart in tenant type 'none' Namespace use the flag:  
+`--set tenantIsUnsecure=true --set eventlogstorage.kind=pvc --set eventlogstorage.pvcname=spark-hs-pvc`  
+Please note that if you are using an existing PVC, the pvc should exist in the same namespace.
 
-## Examples
-
-Install spark history server deployment named 'spark-test-hs' in 'sampletenant' tenant, assuming that tenant type is 'internal' or 'external':
-```shell script
-helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
---namespace sampletenant \
---set tenantIsUnsecure=false \
---set eventlogstorage.kind=maprfs
+##### Using S3 for storing logs
+Alternatively you can create history server with existing s3 buckets for events log storage. To use this you can add the following flags to install command:
 ```
-
-Install spark history server deployment named 'spark-test-hs' in 'sampletenant' tenant, assuming that tenant type is 'none'.
-Put attention that 'maprfs' eventlog storage kind is not applicable for 'none' tenants. Instead, 'pvc' or 's3' should be used.
-
-### PVC
-This example assumes that 'spark-hs-pvc' PVC has been created or will be created later. Spark-HS server pod will not start
-if 'spark-hs-pvc' doesn't exist. The PVC should have access mode 'ReadWriteMany'.
-```shell script
-helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
---namespace sampletenant \
---set tenantIsUnsecure=true \
---set eventlogstorage.kind=pvc \
---set eventlogstorage.pvcname=spark-hs-pvc
-```
-
-### S3
-This example assumes that there is minio server with created bucket folders inside bucket. Spark-HS server pod will not start
-if S3 configuration is wrong.
-```shell script
-helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-chart/ \
---namespace sampletenant \
 --set tenantIsUnsecure=true \
 --set eventlogstorage.kind=s3 \
 --set eventlogstorage.s3Endpoint=http://s3host:9000 \
@@ -54,8 +29,12 @@ helm install -f ./spark-hs-chart/values.yaml spark-hs-sampletenant ./spark-hs-ch
 --set eventlogstorage.s3SecretKey=secretKey
 ```
 
-Uninstall spark history server deployment named "spark-test-hs" from 'sampletenant' tenant
-```shell script
-helm uninstall spark-test-hs --namespace sampletenant
+### Viewing the UI
+After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
+
+## Uninstalling the Chart
+Uninstall spark history server deployment named "spark-hs" from 'sampletenant' tenant
 ```
-Please note that this won't delete the PVC in case you are using a PVC. PVC will have to be manually deleted.
+helm uninstall spark-hs -n sampletenant
+```
+Please note that this won't delete the PVC in case you are using an existing PVC. PVC will have to be manually deleted.
