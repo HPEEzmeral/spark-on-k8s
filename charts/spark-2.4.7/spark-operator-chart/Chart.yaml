@@ -1,5 +1,0 @@
-apiVersion: v2
-name: hpe-spark-operator
-description: A Helm chart for HPE Spark on Kubernetes operator
-version: 1.0.5
-appVersion: v1beta2-1.2.0-2.4.7

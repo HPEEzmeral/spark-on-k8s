@@ -8,11 +8,17 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: gcr.io/mapr-252711/spark-operator-2.4.7
+  baseRepository: gcr.io/mapr-252711
+  # -- Image Name for 3.1.2 version
+  imageName: spark-operator-3.1.2
+  # -- Image Name for 2.4.7 version
+  #  imageName: spark-operator-2.4.7
+  # -- Image tag for 3.1.2 version
+  tag: "202109131054AN"
+  # -- Image tag for 2.4.7 version
+  #  tag: "202110041001"
   # -- Image pull policy
   pullPolicy: IfNotPresent
-  # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202110041001"
 
 # -- Image pull secrets
 imagePullSecrets:

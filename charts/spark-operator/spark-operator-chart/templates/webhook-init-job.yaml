@@ -27,7 +27,7 @@ spec:
       {{- end }}
       containers:
       - name: main
-        image: {{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}
+        image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ default .Chart.AppVersion .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
