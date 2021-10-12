@@ -11,6 +11,12 @@ helm install -f spark-operator-chart/values.yaml spark-operator-compute ./spark-
 --set fullnameOverride=spark-operator-compute
 ```
 
+This will create the helm chart in the `compute` namespace.  This will install Spark Operator version 3.1.2 as default </br>
+
+To install Spark Operator version 2.4.7 use the flags:
+
+`--set image.imageName=spark-operator-2.4.7 --set image.tag=202110041001 `
+
 Uninstalling chart from 'compute' namespace:
 ```shell
 helm uninstall spark-operator-compute -n compute
