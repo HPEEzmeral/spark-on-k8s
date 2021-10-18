@@ -72,7 +72,7 @@ Return ports
 Create the name of the service account to use
 */}}
 {{- define "livy-chart.serviceAccountName" -}}
-{{- if ( and ( not .Values.serviceAccount.create )  ( not ( empty .Values.serviceAccount.name)) )  -}}
+{{- if ( and ( not .Values.serviceAccount.create ) ( not ( empty .Values.serviceAccount.name)) ) -}}
     {{- .Values.serviceAccount.name }}
 {{- else -}}
     hpe-{{ .Release.Namespace }}
@@ -83,7 +83,7 @@ Create the name of the service account to use
 Create the name of the configmap
 */}}
 {{- define "livy-chart.configmapName" -}}
-{{ printf "%s-cm" .Chart.Name  }}
+{{ printf "%s-cm" .Chart.Name }}
 {{- end }}
 
 {{/*
@@ -159,11 +159,11 @@ return volume mounts for containers
 returns volumes for deployment
 */}}
 {{- define "livy-chart.volumes" -}}
-{{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . )  "componentName" .Chart.Name ) }}
+{{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . ) "componentName" .Chart.Name ) }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
 {{- end }}
-{{- if and  ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcName ) }}
+{{- if and ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcName ) }}
 - name: livy-sessionstore
   persistentVolumeClaim:
     claimName: {{ .Values.sessionRecovery.pvcName }}

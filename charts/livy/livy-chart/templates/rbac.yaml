@@ -5,7 +5,7 @@ kind: Role
 metadata:
   name: {{ include "livy-chart.roleName" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with  .Values.ownerReference.ownerReferences }}
+  {{- with .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
@@ -29,7 +29,7 @@ kind: RoleBinding
 metadata:
   name: {{ include "livy-chart.roleBindingName" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with  .Values.ownerReference.ownerReferences }}
+  {{- with .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
@@ -40,6 +40,6 @@ roleRef:
   kind: Role
   name: {{ include "livy-chart.roleName" . }}
 subjects:
-- name:  {{ include "livy-chart.serviceAccountName" . }}
+- name: {{ include "livy-chart.serviceAccountName" . }}
   kind: ServiceAccount
 {{- end }}

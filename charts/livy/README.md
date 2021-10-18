@@ -16,7 +16,7 @@ Please note:
 * Integrations for Spark History server and metastore can be customized in the values.yaml file.
 
 ### Install with different version
-To install livy-0.5.0 with spark-2.4.7 support use the flags: <br>
+To install livy-0.5.0 with spark-2.4.7 support use the flags:  
 `--set image.imageName=livy-0.5.0 --set image.tag=202106291513C --set sparkVersion=spark-2.4.7 --set sessionRecovery.kind=zookeeper --set deImage=spark-2.4.7:202106220630P141 `
 
 #### Installing in a non DF Tenant
