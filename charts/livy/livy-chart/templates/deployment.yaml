@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "livy-chart.name" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with  .Values.ownerReference.ownerReferences }}
+  {{- with .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
@@ -28,12 +28,12 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
+          {{- include "common.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
-          {{-  include "common.nodeAffinity.required" . | nindent 12 }}
+          {{- include "common.nodeAffinity.required" . | nindent 12 }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-          {{-  include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}
+          {{- include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}
       tolerations:
       {{- include "common.tolerations" (dict "componentName" ( include "livy-chart.name" . ) "namespace" .Release.Namespace ) | nindent 8 }}
       {{- with .Values.imagePullSecrets }}
@@ -44,9 +44,9 @@ spec:
       restartPolicy: {{ .Values.restartPolicy }}
       priorityClassName: "hpe-tenant-service"
       initContainers: []
-      automountServiceAccountToken: {{ .Values.automountServiceAccountToken  }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       containers:
-        - name: {{  include "livy-chart.name" .  }}
+        - name: {{ include "livy-chart.name" . }}
           args:
           {{- include "common.args" . | nindent 12 }}
           command:

@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "livy-chart.configmapName" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with  .Values.ownerReference.ownerReferences }}
+  {{- with .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
@@ -23,7 +23,7 @@ data:
     livy.rsc.jars = local:///opt/mapr/livy/livy-0.7.0/rsc-jars/asm-5.0.4.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/livy-api-0.7.0.0-eep-SNAPSHOT.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/livy-rsc-0.7.0.0-eep-SNAPSHOT.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/minlog-1.3.0.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/netty-all-4.1.54.Final.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/objenesis-2.5.1.jar,local:///opt/mapr/livy/livy-0.7.0/rsc-jars/reflectasm-1.11.3.jar
     livy.rsc.pyspark.archives = local:///opt/mapr/spark/spark-3.1.2/python/lib/pyspark.zip,local:///opt/mapr/spark/spark-3.1.2/python/lib/py4j-0.10.9-src.zip
     {{- end }}
-    {{- if eq .Values.sessionRecovery.kind "zookeeper"  }}
+    {{- if eq .Values.sessionRecovery.kind "zookeeper" }}
     livy.server.recovery.mode = recovery
     livy.server.recovery.state-store = zookeeper
     livy.server.recovery.state-store.url = ${MAPR_ZK_QUORUM}
@@ -31,7 +31,7 @@ data:
     {{- else if eq .Values.sessionRecovery.kind "pvc" }}
     livy.server.recovery.mode = recovery
     livy.server.recovery.state-store = filesystem
-    livy.server.recovery.state-store.url = file://opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store
+    livy.server.recovery.state-store.url = file:///opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store
     {{- else }}
     livy.server.recovery.mode = off
     {{- end }}
@@ -51,7 +51,7 @@ data:
     spark.kubernetes.executor.limit.cores 1
 
     spark.kubernetes.container.image {{ include "livy-chart.fullDeImage" . }}
-    {{- if .Values.sparkHistoryServer.integrate  }}
+    {{- if .Values.sparkHistoryServer.integrate }}
     {{- if .Values.sparkHistoryServer.pvcName }}
     spark.kubernetes.driver.volumes.persistentVolumeClaim.sparkhs-eventlog-storage.options.claimName {{ .Values.sparkHistoryServer.pvcName }}
     spark.kubernetes.driver.volumes.persistentVolumeClaim.sparkhs-eventlog-storage.mount.path {{ .Values.sparkHistoryServer.eventsDir }}
