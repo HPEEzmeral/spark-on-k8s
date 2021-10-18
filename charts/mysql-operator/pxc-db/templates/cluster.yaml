@@ -1,0 +1,337 @@
+apiVersion: pxc.percona.com/v{{ .Chart.AppVersion | replace "." "-" }}
+kind: PerconaXtraDBCluster
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"pxc.percona.com/v{{ .Chart.AppVersion | replace "." "-" }}","kind":"PerconaXtraDBCluster"}
+  name: {{ include "pxc-database.fullname" . }}
+  labels:
+{{ include "pxc-database.labels" . | indent 4 }}
+  finalizers:
+{{ .Values.finalizers | toYaml | indent 4 }}
+spec:
+  crVersion: {{ .Chart.AppVersion }}
+  {{- if hasKey .Values.pxc "clusterSecretName" }}
+  secretsName: {{ .Values.pxc.clusterSecretName }}
+  {{- else }}
+  secretsName: {{ include "pxc-database.fullname" . }}
+  {{- end }}
+  {{- if not .Values.pxc.disableTLS }}
+  {{- if hasKey .Values.secrets.tls "cluster" }}
+  sslSecretName: {{ .Values.secrets.tls.cluster }}
+  {{- else }}
+  sslSecretName: {{ include "pxc-database.fullname" . }}-ssl
+  {{- end }}
+  {{- if hasKey .Values.secrets.tls "internal" }}
+  sslInternalSecretName: {{ hasKey .Values.secrets.tls.cluster }}
+  {{- else }}
+  sslInternalSecretName: {{ include "pxc-database.fullname" . }}-ssl-internal
+  {{- end }}
+  {{- end }}
+  {{- if hasKey .Values.pxc "vaultSecretName" }}
+  vaultSecretName: {{ .Values.pxc.vaultSecretName }}
+  {{- else }}
+  vaultSecretName: {{ include "pxc-database.fullname" . }}-vault
+  {{- end }}
+  {{- if hasKey .Values.pxc "logCollectorSecretName" }}
+  logCollectorSecretName: {{ .Values.pxc.logCollectorSecretName }}
+  {{- else }}
+  logCollectorSecretName: {{ include "pxc-database.fullname" . }}-log-collector
+  {{- end }}
+  {{- if or .Values.allowUnsafeConfigurations .Values.pxc.disableTLS }}
+  allowUnsafeConfigurations: true
+  {{- end }}
+  pause: {{ .Values.pause }}
+  updateStrategy: {{ .Values.updateStrategy }}
+  {{- if hasKey .Values.upgradeOptions "versionServiceEndpoint" }}
+  upgradeOptions:
+    versionServiceEndpoint: {{ .Values.upgradeOptions.versionServiceEndpoint }}
+    apply: {{ .Values.upgradeOptions.apply }}
+    schedule: {{ .Values.upgradeOptions.schedule }}
+  {{- end }}
+  {{- $pxc := .Values.pxc }}
+  pxc:
+    size: {{ $pxc.size }}
+    image: "{{ $pxc.image.repository }}:{{ $pxc.image.tag }}"
+    autoRecovery: {{ $pxc.autoRecovery }}
+    readinessDelaySec: {{ $pxc.readinessDelaySec }}
+    livenessDelaySec: {{ $pxc.livenessDelaySec }}
+    forceUnsafeBootstrap: {{ $pxc.forceUnsafeBootstrap }}
+    {{- if $pxc.configuration }}
+    configuration: |
+    {{ tpl $pxc.configuration $ | nindent 6 }}
+    {{- end }}
+    {{- if $pxc.imagePullSecrets }}
+    imagePullSecrets:
+{{ $pxc.imagePullSecrets | toYaml | indent 6 }}
+    {{- end }}
+{{- if hasKey $pxc "priorityClassName" }}
+    priorityClassName: {{ $pxc.priorityClassName }}
+{{- end }}
+    annotations:
+{{ $pxc.annotations | toYaml | indent 6 }}
+    labels:
+{{ $pxc.labels | toYaml | indent 6 }}
+    {{- if $pxc.expose }}
+    expose:
+{{ tpl ($pxc.expose | toYaml) $ | indent 6 }}
+    {{- end }}
+    {{- if $pxc.replicationChannels }}
+    replicationChannels:
+{{ tpl ($pxc.replicationChannels | toYaml) $ | indent 6 }}
+    {{- end }}
+    resources:
+      requests:
+{{ tpl ($pxc.resources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($pxc.resources.limits | toYaml) $ | indent 8 }}
+    sidecars:
+{{ $pxc.sidecars | toYaml | indent 6 }}
+    sidecarResources:
+      requests:
+{{ tpl ($pxc.sidecarResources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($pxc.sidecarResources.limits | toYaml) $ | indent 8 }}
+    nodeSelector:
+{{ $pxc.nodeSelector | toYaml | indent 6 }}
+    affinity:
+{{ $pxc.affinity | toYaml | indent 6 }}
+    tolerations:
+{{ $pxc.tolerations | toYaml | indent 6 }}
+    podDisruptionBudget:
+{{ $pxc.podDisruptionBudget | toYaml | indent 6 }}
+    volumeSpec:
+    {{- if not $pxc.persistence.enabled }}
+      emptyDir: {}
+    {{- else }}
+    {{- if hasKey $pxc.persistence "hostPath" }}
+      hostPath:
+        path: {{ $pxc.persistence.hostPath }}
+        type: Directory
+    {{- else }}
+      persistentVolumeClaim:
+        {{- if $pxc.persistence.storageClass }}
+        {{- if (eq "-" $pxc.persistence.storageClass) }}
+        storageClassName: ""
+        {{- else }}
+        storageClassName: "{{ $pxc.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
+        accessModes: [{{ $pxc.persistence.accessMode | quote }}]
+        resources:
+          requests:
+            storage: {{ $pxc.persistence.size | quote }}
+    {{- end }}
+    {{- end }}
+    gracePeriod: {{ $pxc.gracePeriod }}
+    readinessProbes:
+{{ tpl ($pxc.readinessProbes | toYaml) $ | indent 6 }}
+    livenessProbes:
+{{ tpl ($pxc.livenessProbes | toYaml) $ | indent 6 }}
+
+  {{- if or (not .Values.haproxy.enabled) .Values.proxysql.enabled }}
+  haproxy:
+    enabled: false
+  {{- else }}
+  {{- $haproxy := .Values.haproxy }}
+  haproxy:
+    enabled: true
+    size: {{ $haproxy.size }}
+    image: {{ include "pxc-db.haproxy-image" . }}
+    {{- if $haproxy.imagePullSecrets }}
+    imagePullSecrets:
+{{ $haproxy.imagePullSecrets | toYaml | indent 6 }}
+    {{- end }}
+    {{- if $haproxy.configuration }}
+    configuration: |
+    {{ tpl $haproxy.configuration $ | nindent 6 }}
+    {{- end }}
+{{- if hasKey $haproxy "priorityClassName" }}
+    priorityClassName: {{ $haproxy.priorityClassName }}
+{{- end }}
+{{- if hasKey $haproxy "externalTrafficPolicy" }}
+    externalTrafficPolicy: {{ $haproxy.externalTrafficPolicy }}
+{{- end }}
+{{- if hasKey $haproxy "loadBalancerSourceRanges" }}
+    loadBalancerSourceRanges:
+{{ $haproxy.loadBalancerSourceRanges | toYaml | indent 6 }}
+{{- end }}
+{{- if hasKey $haproxy "serviceType" }}
+    serviceType: {{ $haproxy.serviceType }}
+{{- end }}
+{{- if hasKey $haproxy "serviceAnnotations" }}
+    serviceAnnotations:
+{{ $haproxy.serviceAnnotations | toYaml | indent 6 }}
+{{- end }}
+    annotations:
+{{ $haproxy.annotations | toYaml | indent 6 }}
+    labels:
+{{ $haproxy.labels | toYaml | indent 6 }}
+    resources:
+      requests:
+{{ $haproxy.resources.requests | toYaml | indent 8 }}
+      limits:
+{{ $haproxy.resources.limits | toYaml | indent 8 }}
+    sidecars:
+{{ $haproxy.sidecars | toYaml | indent 6 }}
+    sidecarResources:
+      requests:
+{{ tpl ($haproxy.sidecarResources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($haproxy.sidecarResources.limits | toYaml) $ | indent 8 }}
+    nodeSelector:
+{{ $haproxy.nodeSelector | toYaml | indent 6 }}
+    affinity:
+{{ $haproxy.affinity | toYaml | indent 6 }}
+    tolerations:
+{{ $haproxy.tolerations | toYaml | indent 6 }}
+    podDisruptionBudget:
+{{ $haproxy.podDisruptionBudget | toYaml | indent 6 }}
+    volumeSpec:
+      emptyDir: {}
+    gracePeriod: {{ $haproxy.gracePeriod }}
+    readinessProbes:
+{{ tpl ($haproxy.readinessProbes | toYaml) $ | indent 6 }}
+    livenessProbes:
+{{ tpl ($haproxy.livenessProbes | toYaml) $ | indent 6 }}
+  {{- end }}
+  {{- if not .Values.proxysql.enabled }}
+  proxysql:
+    enabled: false
+  {{- else }}
+  {{- $proxysql := .Values.proxysql }}
+  proxysql:
+    enabled: true
+    size: {{ $proxysql.size }}
+    image: {{ include "pxc-db.proxysql-image" . }}
+    {{- if $proxysql.imagePullSecrets }}
+    imagePullSecrets:
+    {{- $proxysql.imagePullSecrets | toYaml | indent 6 }}
+    {{- end }}
+    {{- if $proxysql.configuration }}
+    configuration: |
+    {{ tpl $proxysql.configuration $ | nindent 6 }}
+    {{- end }}
+{{- if hasKey $proxysql "priorityClassName" }}
+    priorityClassName: {{ $proxysql.priorityClassName }}
+{{- end }}
+{{- if hasKey $proxysql "externalTrafficPolicy" }}
+    externalTrafficPolicy: {{ $proxysql.externalTrafficPolicy }}
+{{- end }}
+{{- if hasKey $proxysql "loadBalancerSourceRanges" }}
+    loadBalancerSourceRanges:
+{{ $proxysql.loadBalancerSourceRanges | toYaml | indent 6 }}
+{{- end }}
+{{- if hasKey $proxysql "serviceType" }}
+    serviceType: {{ $proxysql.serviceType }}
+{{- end }}
+{{- if hasKey $proxysql "serviceAnnotations" }}
+    serviceAnnotations:
+{{ $proxysql.serviceAnnotations | toYaml | indent 6 }}
+{{- end }}
+    annotations:
+{{ $proxysql.annotations | toYaml | indent 6 }}
+    labels:
+{{ $proxysql.labels | toYaml | indent 6 }}
+    resources:
+      requests:
+{{ $proxysql.resources.requests | toYaml | indent 8 }}
+      limits:
+{{ $proxysql.resources.limits | toYaml | indent 8 }}
+    sidecars:
+{{ $proxysql.sidecars | toYaml | indent 6 }}
+    sidecarResources:
+      requests:
+{{ tpl ($proxysql.sidecarResources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($proxysql.sidecarResources.limits | toYaml) $ | indent 8 }}
+    nodeSelector:
+{{ $proxysql.nodeSelector | toYaml | indent 6 }}
+    affinity:
+{{ $proxysql.affinity | toYaml | indent 6 }}
+    tolerations:
+{{ $proxysql.tolerations | toYaml | indent 6 }}
+    podDisruptionBudget:
+{{ $proxysql.podDisruptionBudget | toYaml | indent 6 }}
+    volumeSpec:
+    {{- if not $proxysql.persistence.enabled }}
+      emptyDir: {}
+    {{- else }}
+    {{- if hasKey $proxysql.persistence "hostPath" }}
+      hostPath:
+        path: {{ $proxysql.persistence.hostPath }}
+        type: Directory
+    {{- else }}
+      persistentVolumeClaim:
+        {{- if $proxysql.persistence.storageClass }}
+        {{- if (eq "-" $proxysql.persistence.storageClass) }}
+        storageClassName: ""
+        {{- else }}
+        storageClassName: "{{ $proxysql.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
+        accessModes: [{{ $proxysql.persistence.accessMode | quote }}]
+        resources:
+          requests:
+            storage: {{ $proxysql.persistence.size | quote }}
+    {{- end }}
+    {{- end }}
+    gracePeriod: {{ $proxysql.gracePeriod }}
+  {{- end }}
+  logcollector:
+  {{- if not .Values.logcollector.enabled }}
+    enabled: false
+  {{- else }}
+    {{- $logcollector := .Values.logcollector }}
+    enabled: true
+    image: {{ include "pxc-db.logcollector-image" . }}
+    {{- if $logcollector.configuration }}
+    configuration: |
+    {{ tpl $logcollector.configuration $ | nindent 6 }}
+    {{- end }}
+    resources:
+      requests:
+{{ tpl ($logcollector.resources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($logcollector.resources.limits | toYaml) $ | indent 8 }}
+  {{- end }}
+  pmm:
+  {{- if not .Values.pmm.enabled }}
+    enabled: false
+  {{- else }}
+    {{- $pmm := .Values.pmm }}
+    enabled: true
+    image: {{ $pmm.image.repository }}:{{ $pmm.image.tag }}
+    serverHost: {{ $pmm.serverHost }}
+    serverUser: {{ $pmm.serverUser }}
+    resources:
+      requests:
+{{ tpl ($pmm.resources.requests | toYaml) $ | indent 8 }}
+      limits:
+{{ tpl ($pmm.resources.limits | toYaml) $ | indent 8 }}
+  {{- end }}
+  {{- $backup := .Values.backup }}
+
+  backup:
+  {{- if not $backup.enabled }}
+    enabled: false
+  {{- end }}
+    image: {{ include "pxc-db.backup-image" . }}
+    {{- if $backup.imagePullSecrets }}
+    imagePullSecrets:
+{{ $backup.imagePullSecrets | toYaml | indent 6 }}
+    {{- end }}
+    pitr:
+    {{- if not $backup.pitr.enabled }}
+      enabled: false
+    {{- else }}
+      enabled: true
+      storageName: {{ $backup.pitr.storageName }}
+      timeBetweenUploads: {{ $backup.pitr.timeBetweenUploads }}
+    {{- end }}
+    storages:
+{{ include "pxc-database.storages" . | indent 6 }}
+{{- if $backup.enabled }}
+    schedule:
+{{ $backup.schedule | toYaml | indent 6 }}
+{{- end }}
