@@ -183,6 +183,33 @@ return env for containers
 {{- end }}
 
 {/*
+return component name
+*/}}
+{{- define "hivemeta-chart.getComponentName" -}}
+{{- $componentName := .Chart.Name -}}
+{{ print $componentName }}
+{{- end -}}
+
+{/*
+return config map name
+*/}}
+{{- define "hivemeta-chart.getConfigMapName" -}}
+{{- $configmapName := printf "%s-cm" .Chart.Name -}}
+{{ print $configmapName }}
+{{- end -}}
+
+{/*
+return volume for containers
+*/}}
+{{- define "hivemeta-chart.volumes" -}}
+{{ include "common.volumes" (dict "configmapName" ( include "hivemeta-chart.getConfigMapName" . )
+"componentName" ( include "hivemeta-chart.getComponentName" . )) }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumes" . }}
+{{- end }}
+{{- end }}
+
+{/*
 return volume mounts for containers
 */}}
 {{- define "hivemeta-chart.volumeMounts" -}}

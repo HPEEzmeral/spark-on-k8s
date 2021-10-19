@@ -73,6 +73,6 @@ spec:
       {{- if .Values.mysqlDB }}
       {{- include "hivemeta-chart.secretVolume" . | nindent 8 }}
       {{- end }}
-      {{- include "common.volumes" (dict "configmapName" $configmapName "componentName" $componentName) | nindent 8 }}
+      {{- include "hivemeta-chart.volumes" . | nindent 8 }}
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
