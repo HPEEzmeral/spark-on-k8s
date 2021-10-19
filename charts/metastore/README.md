@@ -22,10 +22,10 @@ To use mysqlDB use flag along with the install command: <br>
 
 ### Creating a service account
 This helm chart does not create Service Account and RBAC. To use an existing Service Account either update values.yaml or use the following flag with install command: <br>
-` --set serviceaccount.name=xyz  --set serviceaccount.create=false`
+` --set serviceAccount.name=xyz  --set serviceAccount.create=false`
 
 To create a new Service account use the flag: <br>
-` --set serviceaccount.create=true`
+` --set serviceAccount.create=true`
 
 To create a new RBAC for the service account use the flag: <br>
 ` --set rbac.create=true`

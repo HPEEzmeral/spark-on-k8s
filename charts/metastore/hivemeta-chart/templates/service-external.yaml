@@ -1,5 +1,4 @@
 {{ $componentName := printf "%s-ext-svc" .Chart.Name }}
-{{- if (lookup "v1" "ServiceAccount" .Release.Namespace $componentName) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,5 +18,4 @@ spec:
       protocol: TCP
       targetPort: {{ .Values.service.port }}
   selector:
-  {{- include "common.selectorLabels" (dict "componentName" $componentName ) | nindent 4 }}
-  {{- end }}
+  {{- include "common.selectorLabels" (dict "componentName" .Chart.Name ) | nindent 4 }}
