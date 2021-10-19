@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "livy-chart.name" . }}
   {{- if .Values.ownerReference.overRide }}
@@ -8,17 +8,12 @@ metadata:
   {{- end }}
   {{- end }}
 spec:
-  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
     {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+  serviceName: {{ include "livy-chart.serviceName" . }}
   template:
     metadata:
       labels:
