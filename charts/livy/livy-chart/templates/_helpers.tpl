@@ -87,18 +87,10 @@ Create the name of the configmap
 {{- end }}
 
 {{/*
-Returns the name for livy http service
+Returns the name for livy service
 */}}
-{{- define "livy-chart.httpServiceName" -}}
-livy-http
-{{- end }}
-
-
-{{/*
-Returns the name for livy internal service
-*/}}
-{{- define "livy-chart.internalServiceName" -}}
-livy-internal
+{{- define "livy-chart.serviceName" -}}
+livy-svc
 {{- end }}
 
 {{/*
