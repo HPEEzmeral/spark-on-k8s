@@ -92,3 +92,21 @@ return volume mounts for containers
 - name: logs
   mountPath: "/opt/mapr/spark/{{ .Values.sparkVersion }}/logs"
 {{- end }}
+
+{{/*
+Returns a PVC name
+*/}}
+{{- define "spark-hs-chart.pvcName" -}}
+{{- if .Values.eventlogstorage.pvcName -}}
+    {{ .Values.eventlogstorage.pvcName }}
+{{- else -}}
+    {{ printf "%s-pvc" .Release.Name }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Returns a PV name
+*/}}
+{{- define "spark-hs-chart.pvName" -}}
+    {{ printf "%s-pv" .Release.Name }}
+{{- end }}
