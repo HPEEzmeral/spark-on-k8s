@@ -9,7 +9,6 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
     {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 6 }}

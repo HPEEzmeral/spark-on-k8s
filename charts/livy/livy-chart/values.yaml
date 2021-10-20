@@ -40,8 +40,6 @@ restartPolicy: "Always"
 
 automountServiceAccountToken: true
 
-revisionHistoryLimit: 10
-
 #HPE tenant namespace info
 tenantIsUnsecure: false
 
