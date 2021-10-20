@@ -1,0 +1,23 @@
+{{- if and ( eq  .Values.eventlogstorage.kind "pvc" ) (not .Values.eventlogstorage.pvcName) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "spark-hs-chart.pvcName" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
+    helm.sh/chart: {{ include "spark-hs-chart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.eventlogstorage.storageSize | quote }}
+  {{- if .Values.eventlogstorage.storageClass }}
+  {{- if (eq "-" .Values.eventlogstorage.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.eventlogstorage.storageClass }}"
+  {{- end }}
+  {{- end }}
+{{- end }}
