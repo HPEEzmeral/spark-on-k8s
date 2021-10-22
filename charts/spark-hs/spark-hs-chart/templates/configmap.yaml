@@ -11,6 +11,8 @@ metadata:
   labels:
   {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 4 }}
 data:
+  storageKind: "{{- print .Values.eventlogstorage.kind }}"
+  pvcName: "{{- print .Values.eventlogstorage.pvcName }}"
   dep-blacklist.txt: ""
   pre-startup.sh: |
     #!/usr/bin/env bash
