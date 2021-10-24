@@ -159,7 +159,6 @@ Return ports
   containerPort: {{ include "hivemeta-chart.getQeryPort" . }}
 - name: "ssh"
   protocol: "TCP"
-  hostPort: {{ .Values.ports.sshHostPort }}
   containerPort: {{ .Values.ports.sshPort }}
 {{- end }}
 
@@ -168,8 +167,6 @@ return env for containers
 */}}
 {{- define "hivemeta-chart.env" -}}
 {{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
-- name: SSH_PORT
-  value: {{ .Values.ports.sshHostPort | quote }}
 - name: HIVE_USE_DB
   valueFrom:
     configMapKeyRef:

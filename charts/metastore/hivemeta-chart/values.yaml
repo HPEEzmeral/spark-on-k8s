@@ -72,7 +72,6 @@ externalService:
 #container ports
 ports:
   sshPort: 22
-  sshHostPort: 7778
   queryPort: 9083
 
 # resources -- Pod resource requests and limits
