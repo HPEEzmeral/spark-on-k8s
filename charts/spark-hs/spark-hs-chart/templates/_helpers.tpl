@@ -91,6 +91,82 @@ return volume mounts for containers
 {{ include "common.volumeMounts" . }}
 - name: logs
   mountPath: "/opt/mapr/spark/{{ .Values.sparkVersion }}/logs"
+{{- if eq .Values.eventlogstorage.kind "s3"  }}
+- name: spark-hs-s3-secret
+  mountPath: "/opt/mapr/kubernetes/s3-secrets"
+  readOnly: true
+{{- end }}
+{{- end }}
+
+{{/*
+    returns volumes
+*/}}
+{{- define "spark-hs-chart.volumes" -}}
+{{ include "common.volumes" (dict "configmapName" ( include "spark-hs-chart.conifgmapName" . ) "componentName" ( include "spark-hs-chart.deploymentName" . )) }}
+{{- if ( eq .Values.eventlogstorage.kind "pvc") }}
+{{ include "spark-hs-chart.pvcVolume" . }}
+{{- end }}
+{{- if not .Values.tenantIsUnsecure }}
+{{ include "common.security.volumes" . }}
+{{- end }}
+{{- if eq .Values.eventlogstorage.kind "s3"  }}
+- name: spark-hs-s3-secret
+  secret:
+    secretName: spark-hs-s3-secret
+{{- end }}
+{{- end }}
+
+{{/*
+Returns a PVC name
+*/}}
+{{- define "spark-hs-chart.pvcName" -}}
+{{- if .Values.eventlogstorage.pvcname -}}
+{{ .Values.eventlogstorage.pvcname }}
+{{- else -}}
+{{ printf "%s-pvc" .Release.Name }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Returns a PV name
+*/}}
+{{- define "spark-hs-chart.pvName" -}}
+{{ printf "%s-pv"  .Release.Name }}
+{{- end }}
+
+{{/*
+Returns deployment name
+*/}}
+{{- define "spark-hs-chart.deploymentName" -}}
+{{ .Chart.Name }}
+{{- end }}
+
+{{/*
+Returns configmap name
+*/}}
+{{- define "spark-hs-chart.conifgmapName" -}}
+{{ .Chart.Name }}-cm
+{{- end }}
+
+{{/*
+Returns service name
+*/}}
+{{- define "spark-hs-chart.serviceName" -}}
+{{ .Chart.Name }}-svc
+{{- end }}
+
+{{/*
+Returns Role name
+*/}}
+{{- define "spark-hs-chart.roleName" -}}
+{{ .Chart.Name }}-role
+{{- end }}
+
+{{/*
+Returns role binding name
+*/}}
+{{- define "spark-hs-chart.roleBindingName" -}}
+{{ .Chart.Name }}-role-binding
 {{- end }}
 
 {{/*

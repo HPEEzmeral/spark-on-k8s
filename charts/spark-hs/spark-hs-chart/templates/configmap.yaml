@@ -607,8 +607,6 @@ data:
 
     {{- if ( eq .Values.eventlogstorage.kind "s3") }}
     spark.hadoop.fs.s3a.endpoint:   {{ .Values.eventlogstorage.s3Endpoint }}
-    spark.hadoop.fs.s3a.access.key: {{ .Values.eventlogstorage.s3AccessKey }}
-    spark.hadoop.fs.s3a.secret.key: {{ .Values.eventlogstorage.s3SecretKey }}
     spark.history.fs.logDirectory   {{ .Values.eventlogstorage.s3path }}
     spark.hadoop.fs.s3a.impl        org.apache.hadoop.fs.s3a.S3AFileSystem
     {{- end }}
