@@ -44,13 +44,12 @@ tenantIsUnsecure: false
 #HPE tenant namespace service account
 serviceAccount:
   # Specifies whether a service account should be created
-  # This will look for existing hpe-{{ ReleaseNamespace }} ServiceAccount and use it if it exists and creates when it is not present
+  # Default Service account is hpe-{{ ReleaseNamespace }}, which is created by Tenant operator.
   create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use. Please only use the tenant Service Account
-  # This name is used only when create ServiceAccount option is set to false.
-  # Otherwise a new Service Account is created using hpe-{{ ReleaseNamespace }}
+  # This name is used only when create ServiceAccount option is set to true.
   name: ""
 
 #Create RBAC for the Service Account
