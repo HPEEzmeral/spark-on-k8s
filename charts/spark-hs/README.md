@@ -30,7 +30,6 @@ spark_ssl:
   ssl_secret_name: "spark-ssl-secret"
   secret_mount_path: /var/spark
 
-use_extra_configs: true
 spark_extra_configs: |
   spark.ssl.historyServer.enabled           true
   spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
@@ -47,10 +46,11 @@ Alternatively you can create history server with existing s3 buckets for events 
 --set eventlogstorage.kind=s3 \
 --set eventlogstorage.s3Endpoint=http://s3host:9000 \
 --set eventlogstorage.s3path=s3a://bucket/folder \
+--set eventlogstorage.s3AccessKey=AccessKey \
+--set eventlogstorage.s3SecretKey=secretKey
 ```
-To pass S3 credentials in secure way, use "extra_configs" feature like this:
+Also, you can pass S3 credentials in secure way using "extra_configs" feature like this:
 ```yaml
-use_extra_configs: true
 spark_extra_configs: |
   spark.hadoop.fs.s3a.access.key: [access_key]
   spark.hadoop.fs.s3a.secret.key: [secret_key]

@@ -84,10 +84,8 @@ spec:
             - name: spark-ssl-secrets
               mountPath: {{ .Values.spark_ssl.secret_mount_path }}
             {{- end }}
-            {{- if .Values.use_extra_configs }}
             - name: spark-extra-configs
               mountPath: /opt/mapr/kubernetes/spark_secrets
-            {{- end }}
           {{- include "spark-hs-chart.volumeMounts" . | nindent 12 }}
           {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
           {{- include "spark-hs-chart.pvcVolumeMount" . | nindent 12 }}
@@ -110,12 +108,10 @@ spec:
             defaultMode: 420
             optional: false
       {{- end }}
-      {{- if .Values.use_extra_configs }}
         - name: spark-extra-configs
           secret:
             secretName: spark-hs-secret-configs
             defaultMode: 420
             optional: false
-      {{- end }}
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
