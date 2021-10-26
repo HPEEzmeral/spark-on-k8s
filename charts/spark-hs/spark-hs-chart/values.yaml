@@ -17,7 +17,7 @@ image:
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
   # -- Image tag for 3.1.2 version
-  tag: "202109281537C"
+  tag: "202110261648AN"
   # -- Image tag for 2.4.7 version
   # tag: "202110061237C"
 
@@ -77,8 +77,8 @@ service:
 #container ports
 ports:
   sshPort: 22
-  httpPort: 18080
-  httpsPort: 18480
+  httpPort: "18080"
+  httpsPort: "18480"
 
 # resources -- Pod resource requests and limits
 resources:
@@ -119,3 +119,21 @@ eventlogstorage:
 
 # activate daemonize mode for hs
 daemonize: true
+
+# Alpha feature
+# Data provided in "spark_extra_configs" will be added to spark configuration through a K8S secret
+# Useful to pass secure config options to spark, e.g. S3 credentials
+use_extra_configs: false
+spark_extra_configs: |
+  spark.ssl.historyServer.enabled           true
+  spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
+  spark.ssl.historyServer.keyStorePassword  examplepass
+  spark.ssl.historyServer.keyPassword       examplepass
+  spark.ssl.historyServer.protocol          TLSv1.2
+  spark.ssl.historyServer.keyStoreType      PKCS12
+
+# Alpha feature
+spark_ssl:
+  use_custom_keystore: false
+  ssl_secret_name: "spark-hs-ssl-secret"
+  secret_mount_path: /var/spark
