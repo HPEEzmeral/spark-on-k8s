@@ -51,7 +51,6 @@ Return ports
   containerPort: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
 - name: "ssh"
   protocol: "TCP"
-  hostPort: {{ .Values.ports.sshHostPort }}
   containerPort: {{ .Values.ports.sshPort }}
 {{- end }}
 
@@ -72,8 +71,6 @@ return env for containers
 */}}
 {{- define "spark-ts-chart.env" -}}
 {{ include "common.defaultEnv" (dict "containerName" ( include "spark-ts-chart.deploymentName" . ) ) }}
-- name: SSH_PORT
-  value: {{ .Values.ports.sshHostPort | quote }}
 - name: HIVE_SITE_CM_NAME
   value: {{ .Values.hiveSiteSource }}
 {{- end }}

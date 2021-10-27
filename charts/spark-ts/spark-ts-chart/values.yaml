@@ -84,7 +84,6 @@ service:
 #container ports
 ports:
   sshPort: 22
-  sshHostPort: 7780
   httpPort: 4040
   httpsPort: 4440
   sparkTsPort: 2304

@@ -70,7 +70,6 @@ securityContext: {}
 #container ports
 ports:
   sshPort: 22
-  sshHostPort: 7784
   livyHttpPort: 8998
   livyInternalPortStart: 10000
   livyInternalPortEnd: 10010

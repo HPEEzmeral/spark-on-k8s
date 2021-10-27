@@ -64,7 +64,6 @@ Return ports
 {{- end }}
 - name: ssh
   containerPort: {{ .Values.ports.sshPort }}
-  hostPort: {{ .Values.ports.sshHostPort }}
   protocol: TCP
 {{- end }}
 
@@ -123,8 +122,6 @@ return env for containers
 */}}
 {{- define "livy-chart.env" -}}
 {{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
-- name: SSH_PORT
-  value: {{ .Values.ports.sshHostPort | quote }}
 {{- if .Values.hiveSiteSource }}
 - name: LIVY_HIVESITE_SOURCE
   value: {{ .Values.hiveSiteSource }}
