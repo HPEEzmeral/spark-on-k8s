@@ -80,6 +80,12 @@ spec:
           securityContext:
           {{- include "common.securityContext" . | nindent 12 }}
           volumeMounts:
+            {{- if .Values.spark_ssl.use_custom_keystore }}
+            - name: spark-ssl-secrets
+              mountPath: {{ .Values.spark_ssl.secret_mount_path }}
+            {{- end }}
+            - name: spark-extra-configs
+              mountPath: /opt/mapr/kubernetes/spark_secrets
           {{- include "spark-hs-chart.volumeMounts" . | nindent 12 }}
           {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
           {{- include "spark-hs-chart.pvcVolumeMount" . | nindent 12 }}
@@ -95,5 +101,17 @@ spec:
       {{- if not .Values.tenantIsUnsecure }}
       {{- include "common.security.volumes" . | nindent 8 }}
       {{- end }}
+      {{- if .Values.spark_ssl.use_custom_keystore }}
+        - name: spark-ssl-secrets
+          secret:
+            secretName: {{ .Values.spark_ssl.ssl_secret_name }}
+            defaultMode: 420
+            optional: false
+      {{- end }}
+        - name: spark-extra-configs
+          secret:
+            secretName: spark-hs-secret-configs
+            defaultMode: 420
+            optional: false
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
