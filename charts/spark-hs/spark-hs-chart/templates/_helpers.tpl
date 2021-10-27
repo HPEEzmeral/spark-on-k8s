@@ -42,14 +42,14 @@ Return pvcVolume
 {{- define "spark-hs-chart.pvcVolume" -}}
 - name: sparkhs-eventlog-storage
   persistentVolumeClaim:
-    claimName: {{ .Values.eventlogstorage.pvcname }}
+    claimName: {{ .Values.eventlogstorage.pvcName }}
 {{- end }}
 
 {{/*
   returns pvc volumeMount
 */}}
 {{- define "spark-hs-chart.pvcVolumeMount" }}
-- mountPath: /opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+- mountPath: /var/log/sparkhs-eventlog-storage
   name: sparkhs-eventlog-storage
 {{- end }}
 
@@ -58,7 +58,7 @@ Return pvcVolume
 */}}
 {{- define "spark-hs-chart.eventLogPath" -}}
 {{- if ( eq .Values.eventlogstorage.kind "pvc") -}}
-file:///opt/mapr/spark/{{- .Values.sparkVersion -}}/logs/sparkhs-eventlog-storage
+file:///var/log/sparkhs-eventlog-storage
 {{- else if ( eq .Values.eventlogstorage.kind "s3") -}}
 {{ .Values.eventlogstorage.s3path }}
 {{- else -}}
