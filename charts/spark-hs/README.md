@@ -54,8 +54,8 @@ If set, 's3AccessKey' and 's3SecretKey' configs will be passed to spark HS throu
 Also, you can pass S3 credentials in secure way using "extra_configs" feature like this:
 ```yaml
 spark_extra_configs: |
-  spark.hadoop.fs.s3a.access.key: [access_key]
-  spark.hadoop.fs.s3a.secret.key: [secret_key]
+  spark.hadoop.fs.s3a.access.key [access_key]
+  spark.hadoop.fs.s3a.secret.key [secret_key]
 ```
 
 ### Viewing the UI

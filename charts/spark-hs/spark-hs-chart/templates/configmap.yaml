@@ -305,8 +305,12 @@ data:
     spark.history.fs.logDirectory {{ include "spark-hs-chart.eventLogPath" . }}
 
     {{- if ( eq .Values.eventlogstorage.kind "s3") }}
-    spark.hadoop.fs.s3a.endpoint:   {{ .Values.eventlogstorage.s3Endpoint }}
-    spark.history.fs.logDirectory   {{ .Values.eventlogstorage.s3path }}
+    {{/*
+    s3Endpoint might be empty if AWS is used
+    */}}
+    {{- if not (empty .Values.eventlogstorage.s3Endpoint) }}
+    spark.hadoop.fs.s3a.endpoint   {{ .Values.eventlogstorage.s3Endpoint }}
+    {{- end }}
     spark.hadoop.fs.s3a.impl        org.apache.hadoop.fs.s3a.S3AFileSystem
     {{- end }}
   spark-jars.sh: |
