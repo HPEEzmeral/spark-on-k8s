@@ -49,6 +49,8 @@ Alternatively you can create history server with existing s3 buckets for events 
 --set eventlogstorage.s3AccessKey=AccessKey \
 --set eventlogstorage.s3SecretKey=secretKey
 ```
+If set, 's3AccessKey' and 's3SecretKey' configs will be passed to spark HS through a kubernetes secret.
+
 Also, you can pass S3 credentials in secure way using "extra_configs" feature like this:
 ```yaml
 spark_extra_configs: |
