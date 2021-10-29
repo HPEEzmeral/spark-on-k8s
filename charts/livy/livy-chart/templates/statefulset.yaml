@@ -67,3 +67,5 @@ spec:
       {{- include "livy-chart.volumes" . | nindent 8 }}
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
+  volumeClaimTemplates:
+  {{- include "livy-chart.volumeClaimTemplates" . | nindent 4 }}

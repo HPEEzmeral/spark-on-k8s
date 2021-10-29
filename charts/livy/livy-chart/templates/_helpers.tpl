@@ -151,17 +151,12 @@ return volume mounts for containers
 {{- end }}
 
 {{/*
-returns volumes for deployment
+returns volumes for StatefulSet
 */}}
 {{- define "livy-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . ) "componentName" .Chart.Name ) }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
-{{- end }}
-{{- if and ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcName ) }}
-- name: livy-sessionstore
-  persistentVolumeClaim:
-    claimName: {{ .Values.sessionRecovery.pvcName }}
 {{- end }}
 {{- if .Values.livySsl.useCustomKeystore }}
 - name: livy-secret-ssl
@@ -175,4 +170,13 @@ returns volumes for deployment
     secretName: livy-secret-configs
     defaultMode: 420
     optional: false
+{{- end }}
+
+{{/*
+returns volumeClaimTemplates for StatefulSet
+*/}}
+{{- define "livy-chart.volumeClaimTemplates" -}}
+{{- if and ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcTemplate ) -}}
+- {{- toYaml .Values.sessionRecovery.pvcTemplate | nindent 2 }}
+{{- end }}
 {{- end }}
