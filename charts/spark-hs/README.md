@@ -10,7 +10,7 @@ Note that this chart requires ECP tenant operator to be installed and Tenant CR 
 `helm install spark-hs ./spark-hs-chart -n sampletenant`
 This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with v3.1.2  
 
-To install spark history server V2.4.7 use the flags: <br>
+To install spark history server V2.4.7 use the flags:  
 `--set image.imageName=spark-hs-2.4.7 --set image.tag=202110061237C --set sparkVersion=spark-2.4.7`
 
 #### Installing in a non DF Tenant
@@ -25,12 +25,12 @@ Spark HS SSL configuration options can be passed to spark-hs in secure manner us
 as shown in example below. Assuming that the secret name is "spark-ssl-secret", and the keystore key name in secret is 
 "ssl_keystore", and passwords are "examplepass", update values.yaml like this:
 ```yaml
-spark_ssl:
-  use_custom_keystore: true
-  ssl_secret_name: "spark-ssl-secret"
-  secret_mount_path: /var/spark
+sparkSsl:
+  useCustomKeystore: true
+  sslSecretName: "spark-ssl-secret"
+  secretMountPath: /var/spark
 
-spark_extra_configs: |
+sparkExtraConfigs: |
   spark.ssl.historyServer.enabled           true
   spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
   spark.ssl.historyServer.keyStorePassword  examplepass
@@ -53,7 +53,7 @@ If set, 's3AccessKey' and 's3SecretKey' configs will be passed to spark HS throu
 
 Also, you can pass S3 credentials in secure way using "extra_configs" feature like this:
 ```yaml
-spark_extra_configs: |
+sparkExtraConfigs: |
   spark.hadoop.fs.s3a.access.key [access_key]
   spark.hadoop.fs.s3a.secret.key [secret_key]
 ```
