@@ -120,9 +120,9 @@ eventlogstorage:
 daemonize: true
 
 # Alpha feature
-# Data provided in "spark_extra_configs" will be added to spark configuration through a K8S secret
+# Data provided in "sparkExtraConfigs" will be added to spark configuration through a K8S secret
 # Useful to pass secure config options to spark, e.g. S3 credentials
-spark_extra_configs: |
+sparkExtraConfigs: |
 #  spark.ssl.historyServer.enabled           true
 #  spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
 #  spark.ssl.historyServer.keyStorePassword  examplepass
@@ -131,7 +131,7 @@ spark_extra_configs: |
 #  spark.ssl.historyServer.keyStoreType      PKCS12
 
 # Alpha feature
-spark_ssl:
-  use_custom_keystore: false
-  ssl_secret_name: "spark-hs-ssl-secret"
-  secret_mount_path: /var/spark
+sparkSsl:
+  useCustomKeystore: false
+  sslSecretName: "spark-hs-ssl-secret"
+  secretMountPath: /var/spark
