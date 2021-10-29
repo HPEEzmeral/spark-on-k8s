@@ -80,9 +80,9 @@ spec:
           securityContext:
           {{- include "common.securityContext" . | nindent 12 }}
           volumeMounts:
-            {{- if .Values.spark_ssl.use_custom_keystore }}
+            {{- if .Values.sparkSsl.useCustomKeystore }}
             - name: spark-ssl-secrets
-              mountPath: {{ .Values.spark_ssl.secret_mount_path }}
+              mountPath: {{ .Values.sparkSsl.secretMountPath }}
             {{- end }}
             - name: spark-extra-configs
               mountPath: /opt/mapr/kubernetes/spark_secrets
@@ -101,10 +101,10 @@ spec:
       {{- if not .Values.tenantIsUnsecure }}
       {{- include "common.security.volumes" . | nindent 8 }}
       {{- end }}
-      {{- if .Values.spark_ssl.use_custom_keystore }}
+      {{- if .Values.sparkSsl.useCustomKeystore }}
         - name: spark-ssl-secrets
           secret:
-            secretName: {{ .Values.spark_ssl.ssl_secret_name }}
+            secretName: {{ .Values.sparkSsl.sslSecretName }}
             defaultMode: 420
             optional: false
       {{- end }}
