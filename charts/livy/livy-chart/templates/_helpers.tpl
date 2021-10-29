@@ -164,11 +164,11 @@ returns volumes for deployment
     claimName: {{ .Values.sessionRecovery.pvcName }}
 {{- end }}
 {{- if .Values.livySsl.useCustomKeystore }}
-  - name: livy-secret-ssl
-    secret:
-      secretName: {{ .Values.livySsl.sslSecretName }}
-      defaultMode: 420
-      optional: false
+- name: livy-secret-ssl
+  secret:
+    secretName: {{ .Values.livySsl.sslSecretName }}
+    defaultMode: 420
+    optional: false
 {{- end }}
 - name: livy-extra-configs
   secret:
