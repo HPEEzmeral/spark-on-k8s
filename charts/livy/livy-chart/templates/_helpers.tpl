@@ -140,6 +140,12 @@ return volume mounts for containers
 - name: livy-sessionstore
   mountPath: "/opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store"
 {{- end }}
+{{- if .Values.livySsl.useCustomKeystore }}
+- name: livy-secret-ssl
+  mountPath: {{ .Values.livySsl.secretMountPath }}
+{{- end }}
+- name: livy-extra-configs
+  mountPath: /opt/mapr/kubernetes/livy-secret-configs
 - name: logs
   mountPath: /opt/mapr/livy/livy-{{ .Chart.AppVersion }}/logs
 {{- end }}
@@ -157,4 +163,16 @@ returns volumes for deployment
   persistentVolumeClaim:
     claimName: {{ .Values.sessionRecovery.pvcName }}
 {{- end }}
+{{- if .Values.livySsl.useCustomKeystore }}
+- name: livy-secret-ssl
+  secret:
+    secretName: {{ .Values.livySsl.sslSecretName }}
+    defaultMode: 420
+    optional: false
+{{- end }}
+- name: livy-extra-configs
+  secret:
+    secretName: livy-secret-configs
+    defaultMode: 420
+    optional: false
 {{- end }}
