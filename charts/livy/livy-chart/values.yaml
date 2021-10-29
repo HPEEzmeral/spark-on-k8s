@@ -11,14 +11,14 @@ image:
   imageName: livy-0.7.0
   #imageName: livy-0.5.0
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202110200355R"
+  tag: "202110290908R"
   # -- Image pull policy
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.1.2:202110200355R
+deImage: spark-3.1.2:202110290908R
 #for livy-0.5.0/spark-2.4.7
-#deImage: spark-2.4.7:202110200355R
+#deImage: spark-2.4.7:202110290908R
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -103,3 +103,18 @@ sparkHistoryServer:
   integrate: false
   pvcName: ""
   eventsDir: "maprfs:///apps/spark/sampletenant"
+
+# Alpha feature
+livySsl:
+  useCustomKeystore: false
+  sslSecretName: "livy-ssl-secret"
+  secretMountPath: /var/livy
+
+# Alpha feature
+# Data provided in "extraConfigs" will be added to configuration files through a K8S secret.
+# Availale files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
+extraConfigs:
+  livy.conf: |
+    # livy.keystore = /var/livy/ssl_keystore
+    # livy.keystore.password = examplepass
+    # livy.key-password = examplepass

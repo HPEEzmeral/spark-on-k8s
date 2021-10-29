@@ -21,7 +21,7 @@ Please note that if you are using an existing PVC, the pvc should exist in the s
 ##### Using custom keystore
 To use a custom keystore, you'll need to create a secret with that keystore file in tenant namespace manually.
 The secret should have keystore file stored under a particular key, e.g. "ssl_keystore".
-Spark HS SSL configuration options can be passed to spark-hs in secure manner using 'extra_configs' section, 
+Spark HS SSL configuration options can be passed to spark-hs in secure manner using 'sparkExtraConfigs' section, 
 as shown in example below. Assuming that the secret name is "spark-ssl-secret", and the keystore key name in secret is 
 "ssl_keystore", and passwords are "examplepass", update values.yaml like this:
 ```yaml
