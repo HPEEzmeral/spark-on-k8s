@@ -17,11 +17,30 @@ Please note:
 
 ### Install with different version
 To install livy-0.5.0 with spark-2.4.7 support use the flags:  
-`--set image.imageName=livy-0.5.0 --set image.tag=202106291513C --set sparkVersion=spark-2.4.7 --set sessionRecovery.kind=zookeeper --set deImage=spark-2.4.7:202106220630P141 `
+`--set image.imageName=livy-0.5.0 --set image.tag=202106291513C --set sparkVersion=spark-2.4.7 --set sessionRecovery.kind=zookeeper --set deImage=spark-2.4.7:202106220630P141`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
 `--set tenantIsUnsecure=true `
+
+##### Using custom keystore
+To use a custom keystore, you'll need to create a secret with that keystore file in tenant namespace manually.
+The secret should have keystore file stored under a particular key, e.g. "ssl_keystore".
+Livy SSL configuration options can be passed to Livy in secure manner using `extraConfigs` section, 
+as shown in example below. Assuming that the secret name is "livy-ssl-secret", and the keystore key name in secret is 
+"ssl_keystore", and passwords are "examplepass", update values.yaml like this:
+```yaml
+livySsl:
+  useCustomKeystore: true
+  sslSecretName: "livy-ssl-secret"
+  secretMountPath: /var/livy
+
+extraConfigs:
+  livy.conf: |
+    livy.keystore = /var/livy/ssl_keystore
+    livy.keystore.password = examplepass
+    livy.key-password = examplepass
+```
 
 ## Uninstalling the Chart
 `helm delete livy -n sampletenant`
