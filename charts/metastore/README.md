@@ -12,13 +12,11 @@ Please note: This assumes you are installing in an 'internal' or 'external' Tena
 To install the helm chart in tenant type 'none' Namespace use the flag: <br>
 `--set tenantIsUnsecure=true ` along with the install command
 
-### For using MySQLDB as backend for hivemetastore
-A secret containing credentials for mysql server needs to be present on the cluster
-The secret name & namespace can be configured in values.yaml - mysqlNamespace,mysqlSecret
-By default namespace is set to 'mysql-operator' & secret 'hivemeta-secret'
-Format and command to create the hivemetastore secret is given at the bottom.
-To use mysqlDB use flag along with the install command: <br>
-`--set mysqlDB=true `
+### For using MySQLDB as backend for hive metastore
+A secret containing credentials for mysql server needs to be present on the cluster in `sampletenant` namespace
+Format and command to create the hive metastore secret is given at the bottom.
+To use mysqlDB use flag along with the install command:
+`--set mysqlDB=true --set hiveSecret=hivemeta-secret`
 
 ### Creating a service account
 This helm chart does not create Service Account and RBAC. To use an existing Service Account either update values.yaml or use the following flag with install command: <br>
@@ -35,13 +33,14 @@ To create a new RBAC for the service account use the flag: <br>
 
 ### Format for the hivemetastore secret
 
-#### NOTE : The xml file should be named - hivesite (no extensions)
+#### NOTE : The secret for mysql server credentials needs to be present in `sampletenant` namespace
 
-Command to create secret from file hivesite is as follows
+
+Command to create secret from file hivemeta-secret is as follows
 
 `kubectl create secret generic hivemeta-secret --from-file=hive-site.xml=../hivesite -n sampletenant`
 
-Filename : hivesite
+Filename : hivesite <xml file name which has credentials>
 Namespace for secret : sampletenant
 
 This secret should consist of an xml file data and the contents should be as follows:
