@@ -30,8 +30,6 @@ restartPolicy: "Always"
 createDefaultPullSecret: false
 defaultPullSecret: imagepull
 
-mysqlNamespace: "mysql-operator"
-mysqlSecret: "hivemetastore-mysql"
 hiveSecret: "hivemeta-secret"
 mysqlDB: false
 
