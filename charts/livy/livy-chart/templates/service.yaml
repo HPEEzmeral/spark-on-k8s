@@ -11,6 +11,7 @@ metadata:
     {{- include "common.labels" (dict "componentName" ( include "livy-chart.serviceName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
 spec:
   type: NodePort
+  sessionAffinity: ClientIP
   ports:
     - port: {{ .Values.ports.livyHttpPort }}
       targetPort: {{ .Values.ports.livyHttpPort }}
