@@ -38,10 +38,13 @@ To create a new RBAC for the service account use the flag: <br>
 
 Command to create secret from file hivemeta-secret is as follows
 
-`kubectl create secret generic hivemeta-secret --from-file=hive-site.xml=../hivesite -n sampletenant`
+`kubectl create secret generic hivemeta-secret --from-file=hive-site.xml=hive-site.xml -n sampletenant`
 
-Filename : hivesite <xml file name which has credentials>
+Filename : hive-site.xml <xml file name which has mysql credentials>
 Namespace for secret : sampletenant
+
+This hive-site.xml only contains the mysql server connection information
+By mounting this secret, we will append this hive-site.xml to the original hive-site.xml
 
 This secret should consist of an xml file data and the contents should be as follows:
 ```
