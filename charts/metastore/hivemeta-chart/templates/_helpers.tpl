@@ -231,5 +231,5 @@ Return secretVolumeMount
 */}}
 {{- define "hivemeta-chart.secretVolumeMount" }}
 - name: hive-secret
-  mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/conf"
+  mountPath: "/var/tmp/"
 {{- end }}
