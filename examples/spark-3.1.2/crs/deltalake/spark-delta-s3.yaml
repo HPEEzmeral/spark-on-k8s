@@ -21,7 +21,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/apache-spark-3.1.2:202109242011C"
+  image: "gcr.io/mapr-252711/spark-3.1.2:202111050742R"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
@@ -36,8 +36,9 @@ spec:
     memory: "512m"
     labels:
       version: 3.1.2
-    # Note: If you run app in tenant namespace - change serviceAccount name to "hpe-<namespace>"
-    serviceAccount: spark
+      # Note: You do not need to specify a serviceAccount
+      #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
+#    serviceAccount: spark
   executor:
     cores: 1
     instances: 1
@@ -51,8 +52,3 @@ spec:
     "spark.hadoop.fs.s3a.access.key": #minio access key
     "spark.hadoop.fs.s3a.secret.key": #minio secret key
     "spark.hadoop.fs.s3a.impl": org.apache.hadoop.fs.s3a.S3AFileSystem
-  deps:
-    jars:
-      - local:///opt/spark/deltalake/jars/delta-core_2.12-1.0.0.jar
-      - local:///opt/spark/deltalake/jars/hadoop-aws-3.2.0.jar
-      - local:///opt/spark/deltalake/jars/aws-java-sdk-bundle-1.11.1026.jar
