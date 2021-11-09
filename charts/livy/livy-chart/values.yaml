@@ -93,8 +93,16 @@ ownerReference:
 sessionRecovery:
   ##supported sessionRecovery Kind: disabled, pvc, zookeeper
   kind: disabled
-  ## use this option to add pvcName for the kind pvc
-  pvcName: ""
+  ##use this option to configure volumeClaimTemplate for kind pvc
+  pvcTemplate:
+    metadata:
+      name: livy-sessionstore
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
 
 # Config map created by hive metastore. Used to connect livy with metastore
 hiveSiteSource: ""
