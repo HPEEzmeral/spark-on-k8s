@@ -6,7 +6,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/spark-3.1.2-hive-example:202109242011C"
+  image: "gcr.io/mapr-252711/spark-3.1.2-hive-example:202111101511P150RC3"
   imagePullPolicy: Always
   mainClass: com.hpe.examples.spark.sql.hive.SparkHiveExample
   mainApplicationFile: "local:///opt/spark/examples/jars/spark-hive-example-3.1.2.jar"

@@ -18,7 +18,7 @@ apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
   name: spark-pi-secure
-  namespace: hpe-spark-operator
+  namespace: sampletenant
 spec:
   #sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
@@ -30,7 +30,7 @@ spec:
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202109242011C
+  image: gcr.io/mapr-252711/spark-3.1.2:202111101511P150RC3
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
@@ -46,7 +46,7 @@ spec:
       version: 3.1.2
     # Note: You do not need to specify a serviceAccount
     #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
-    serviceAccount: hpe-spark-operator
+#    serviceAccount: hpe-spark-operator
   executor:
     cores: 1
     coreLimit: "1000m"
