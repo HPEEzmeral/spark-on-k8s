@@ -84,7 +84,7 @@ return volume mounts for containers
 {{ include "common.security.volumeMounts" . }}
 {{- end }}
 - name: logs
-  mountPath: "/opt/mapr/spark/spark-{{ .Values.sparkVersion }}/logs"
+  mountPath: "/opt/mapr/spark/{{ .Values.sparkVersion }}/logs"
 {{- end }}
 
 {{/*

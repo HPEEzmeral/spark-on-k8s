@@ -14,14 +14,14 @@ data:
   #!/usr/bin/env bash
   pre-startup.sh: |
     #!/usr/bin/env bash
-  spark-defaults.conf.extras: |-
+  spark-defaults.conf: |-
     spark.kubernetes.driver.request.cores {{ .Values.thriftServerResources.driver.requestCores }}
     spark.kubernetes.driver.limit.cores  {{ .Values.thriftServerResources.driver.limitCores }}
     spark.kubernetes.executor.request.cores {{ .Values.thriftServerResources.executor.requestCores }}
     spark.kubernetes.executor.limit.cores {{ .Values.thriftServerResources.executor.limitCores }}
 
     spark.kubernetes.authenticate.serviceAccountName {{ include "spark-ts-chart.serviceAccountName" . }}
-    spark.kubernetes.container.image {{ .Values.image.baseRepository }}/{{ .Values.sparkVersion }}:{{ .Values.image.tag }}
+    spark.kubernetes.container.image {{ .Values.image.baseRepository }}/{{ .Values.sparkVersion }}:{{ .Values.image.executorTag }}
     {{- with ( first .Values.imagePullSecrets ) }}
     spark.kubernetes.container.image.pullSecrets {{ .name }}
     {{- end }}
@@ -29,3 +29,10 @@ data:
     spark.kubernetes.namespace {{ .Release.Namespace }}
     spark.authenticate false
     spark.authenticate.enableSaslEncryption false
+
+    {{- if .Values.tenantIsUnsecure }}
+    spark.hadoop.fs.default.name file:///
+    {{- end }}
+
+    # Fix for SPARK-7819
+    spark.sql.hive.metastore.sharedPrefixes  com.mysql.jdbc,org.postgresql,com.microsoft.sqlserver,oracle.jdbc,com.mapr.fs.shim.LibraryLoader,com.mapr.security.JNISecurity,com.mapr.fs.jni,com.mapr.fs.ShimLoader

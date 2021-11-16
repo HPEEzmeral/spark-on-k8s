@@ -17,6 +17,7 @@ image:
   tag: "202109271517C"
   # -- Image tag for 2.4.7 version
 #  tag: "202106291513C"
+  executorTag: 202111101511P150RC3
   # -- Image pull policy
   pullPolicy: Always
 
