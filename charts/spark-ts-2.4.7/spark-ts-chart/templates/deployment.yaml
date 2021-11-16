@@ -62,9 +62,16 @@ spec:
           ports:
           {{- include "spark-ts-chart.ports" . | nindent 12 }}
           livenessProbe:
-          {{- include "common.probe.liveness" . | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.ports.sparkTsPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
           readinessProbe:
-          {{- include "common.probe.readiness" . | nindent 12 }}
+            tcpSocket:
+              port: {{ .Values.ports.sparkTsPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          
           lifecycle:
           {{- include "common.probe.lifecycle" . | nindent 12 }}
           resources:
