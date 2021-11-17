@@ -36,8 +36,8 @@ Common labels
 {{- define "livy-chart.labels" -}}
 helm.sh/chart: {{ include "livy-chart.chart" . }}
 {{ include "livy-chart.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- if .Values.livyVersion }}
+app.kubernetes.io/version: {{ .Values.livyVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -138,7 +138,7 @@ return volume mounts for containers
 {{- end }}
 {{- if eq .Values.sessionRecovery.kind "pvc" }}
 - name: livy-sessionstore
-  mountPath: "/opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store"
+  mountPath: "/opt/mapr/livy/livy-{{ .Values.livyVersion }}/session-store"
 {{- end }}
 {{- if .Values.livySsl.useCustomKeystore }}
 - name: livy-secret-ssl
@@ -147,7 +147,7 @@ return volume mounts for containers
 - name: livy-extra-configs
   mountPath: /opt/mapr/kubernetes/livy-secret-configs
 - name: logs
-  mountPath: /opt/mapr/livy/livy-{{ .Chart.AppVersion }}/logs
+  mountPath: /opt/mapr/livy/livy-{{ .Values.livyVersion }}/logs
 {{- end }}
 
 {{/*

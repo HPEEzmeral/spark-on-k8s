@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+livyVersion: 0.7.0
+
 image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711

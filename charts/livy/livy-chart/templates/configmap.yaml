@@ -31,7 +31,7 @@ data:
     {{- else if eq .Values.sessionRecovery.kind "pvc" }}
     livy.server.recovery.mode = recovery
     livy.server.recovery.state-store = filesystem
-    livy.server.recovery.state-store.url = file:///opt/mapr/livy/livy-{{ .Chart.AppVersion }}/session-store
+    livy.server.recovery.state-store.url = file:///opt/mapr/livy/livy-{{ .Values.livyVersion }}/session-store
     {{- else }}
     livy.server.recovery.mode = off
     {{- end }}
