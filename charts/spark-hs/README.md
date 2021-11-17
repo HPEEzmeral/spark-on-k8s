@@ -7,8 +7,12 @@
 Note that this chart requires ECP tenant operator to be installed and Tenant CR applied in the tenant namespace.
 
 ### Install command
-`helm install spark-hs ./spark-hs-chart -n sampletenant`
-This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with v3.1.2  
+```sh
+helm dependency update ./spark-hs-chart
+helm install spark-hs ./spark-hs-chart -n sampletenant
+```
+
+This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with v3.1.2.
 
 To install spark history server V2.4.7 use the flags:  
 `--set image.imageName=spark-hs-2.4.7 --set image.tag=202110061237C --set sparkVersion=spark-2.4.7`

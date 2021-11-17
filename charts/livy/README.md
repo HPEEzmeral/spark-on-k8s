@@ -7,7 +7,10 @@
 Note that this chart requires ECP tenant operator to be installed and Tenant CR applied in the tenant namespace.
 
 ### Install command with default version
-`helm install livy ./livy-chart -n sampletenant`
+```sh
+helm dependency update ./livy-chart
+helm install livy ./livy-chart -n sampletenant
+```
 
 This will create the helm chart in the `sampletenant` namespace. This will create livy-0.7.0 with support for spark v3.1.2  
 Please note:
