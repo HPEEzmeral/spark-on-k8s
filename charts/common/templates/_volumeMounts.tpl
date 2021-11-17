@@ -27,4 +27,6 @@ Returns standard volume mounts
   name: client-secrets
 - mountPath: "/opt/mapr/kubernetes/server-secrets"
   name: server-secrets
+- mountPath: /opt/mapr/kubernetes/ldapcert-secrets
+  name: ldapcert-secret
 {{- end }}
