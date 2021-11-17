@@ -20,11 +20,11 @@ Please note:
 
 ### Install with different version
 To install livy-0.5.0 with spark-2.4.7 support use the flags:  
-`--set image.imageName=livy-0.5.0 --set image.tag=202106291513C --set sparkVersion=spark-2.4.7 --set sessionRecovery.kind=zookeeper --set deImage=spark-2.4.7:202106220630P141`
+`--set image.imageName=livy-0.5.0 --set image.tag=202106291513C --set livyVersion=livy-0.5.0 --set deImage=spark-2.4.7:202106220630P141`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
-`--set tenantIsUnsecure=true `
+`--set tenantIsUnsecure=true`
 
 ##### Using custom keystore
 To use a custom keystore, you'll need to create a secret with that keystore file in tenant namespace manually.
