@@ -57,4 +57,8 @@ Params:
   secret:
     defaultMode: 420
     secretName: server
+- name: ldapcert-secret
+  secret:
+    defaultMode: 420
+    secretName: ldapcert
 {{- end }}
