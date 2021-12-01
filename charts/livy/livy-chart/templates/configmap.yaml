@@ -61,3 +61,5 @@ data:
     {{- else }}
     spark.eventLog.enabled false
     {{- end }}
+
+    spark.ssl.enabled false
