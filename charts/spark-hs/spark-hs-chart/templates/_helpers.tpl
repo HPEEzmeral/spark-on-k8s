@@ -14,23 +14,18 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Return HttpPortSparkHsUI
-*/}}
-{{- define "spark-hs-chart.getHttpPortSparkHsUI" -}}
-{{- $httpPortSparkHsUI := .Values.ports.httpPort -}}
-{{- if(not .Values.tenantIsUnsecure)  -}}
-{{- $httpPortSparkHsUI = .Values.ports.httpsPort -}}
-{{- end -}}
-{{ print $httpPortSparkHsUI }}
-{{- end -}}
-
-{{/*
 Return ports
 */}}
 {{- define "spark-hs-chart.ports" -}}
+{{-  if  or  ( not .Values.tenantIsUnsecure) (.Values.useCustomSSL)  }}
+- name: "https"
+  containerPort: {{ .Values.ports.httpsPort }}
+  protocol: TCP
+{{ else }}
 - name: "http"
-  protocol: "TCP"
-  containerPort: {{ include "spark-hs-chart.getHttpPortSparkHsUI" . }}
+  containerPort: {{ .Values.ports.httpPort }}
+  protocol: TCP
+{{- end }}
 - name: "ssh"
   protocol: "TCP"
   containerPort: {{ .Values.ports.sshPort }}
@@ -124,4 +119,3 @@ Returns a list of extra spark conf items
     {{- end }}
     {{ println }}
 {{- end }}
-
