@@ -62,12 +62,12 @@ spec:
           livenessProbe:
             tcpSocket:
               port: {{ .Values.ports.sparkTsPort }}
-            initialDelaySeconds: 15
+            initialDelaySeconds: 180
             periodSeconds: 20
           readinessProbe:
             tcpSocket:
               port: {{ .Values.ports.sparkTsPort }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 10
           
           lifecycle:
