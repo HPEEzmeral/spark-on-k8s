@@ -37,7 +37,7 @@ Return pvcVolume
 {{- define "spark-hs-chart.pvcVolume" -}}
 - name: sparkhs-eventlog-storage
   persistentVolumeClaim:
-    claimName: {{ .Values.eventlogstorage.pvcName }}
+    claimName: {{  include "spark-hs-chart.pvcName" . }}
 {{- end }}
 
 {{/*
