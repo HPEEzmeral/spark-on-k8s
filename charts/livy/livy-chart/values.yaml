@@ -93,7 +93,7 @@ ownerReference:
   ownerReferences: {}
 
 sessionRecovery:
-  ##supported sessionRecovery Kind: disabled, pvc, zookeeper
+  ##supported sessionRecovery Kind: disabled, pvc
   kind: disabled
   ##use this option to configure volumeClaimTemplate for kind pvc
   pvcTemplate:
