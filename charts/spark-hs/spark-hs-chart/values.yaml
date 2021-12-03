@@ -51,6 +51,9 @@ sparkVersion: spark-3.1.2
 #HPE tenant namespace info
 tenantIsUnsecure: false
 
+# set this only when tenant is unsecure and custom SSL is present
+useCustomSSL: false
+
 #HPE tenant namespace service account
 serviceAccount:
   # Specifies whether a service account should be created

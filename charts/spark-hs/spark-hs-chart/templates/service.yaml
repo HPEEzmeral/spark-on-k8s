@@ -13,13 +13,16 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: http
-      port: {{ .Values.ports.httpPort }}
-      targetPort: {{ .Values.ports.httpPort }}
-      protocol: TCP
+    {{-  if  or  ( not .Values.tenantIsUnsecure) (.Values.useCustomSSL)  }}
     - name: https
       port: {{ .Values.ports.httpsPort }}
       targetPort: {{ .Values.ports.httpsPort }}
       protocol: TCP
+    {{ else }}
+    - name: http
+      port: {{ .Values.ports.httpPort }}
+      targetPort: {{ .Values.ports.httpPort }}
+      protocol: TCP
+    {{- end }}
   selector:
     {{- include "common.selectorLabels" (dict "componentName" .Chart.Name ) | nindent 4 }}
