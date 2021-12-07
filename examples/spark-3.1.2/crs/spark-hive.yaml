@@ -30,10 +30,10 @@ spec:
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202111101511P150RC3
+  image: gcr.io/mapr-252711/spark-3.1.2:202112061039R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.sql.hive.SparkHiveExample
-  mainApplicationFile: "local:///opt/mapr/spark/spark-3.1.2/examples/jars/spark-examples_2.12-3.1.2.0-eep-SNAPSHOT.jar"
+  mainApplicationFile: "local:///opt/mapr/spark/spark-3.1.2/examples/jars/spark-examples_2.12-3.1.2.2-eep-800.jar"
   restartPolicy:
     type: Never
   imagePullSecrets:
