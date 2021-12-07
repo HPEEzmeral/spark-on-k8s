@@ -11,16 +11,16 @@
   <repositories>
     <repository>
       <id>mapr</id>
-      <url>http://repository.mapr.com/maven/</url>
+      <url>https://repository.mapr.com/maven/</url>
     </repository>
   </repositories>
 
   <properties>
     <spark.app.name>SparkExamples</spark.app.name>
 
-    <spark.version>3.1.2</spark.version>
+    <spark.version>3.1.2.0-eep-800</spark.version>
     <scala.version>2.12.12</scala.version>
-    <hadoop.version>2.7.0</hadoop.version>
+    <hadoop.version>2.7.6.100-eep-800</hadoop.version>
     <spark.scala.version>2.12</spark.scala.version>
 
     <maven.compiler.source>11</maven.compiler.source>
@@ -44,6 +44,24 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
       <version>${hadoop.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>${hadoop.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming-kafka-0-10_${spark.scala.version}</artifactId>
+      <version>${spark.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_${spark.scala.version}</artifactId>
+      <version>${spark.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
