@@ -14,12 +14,12 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     {{-  if  or  ( not .Values.tenantIsUnsecure) (.Values.useCustomSSL)  }}
-    - name: https
+    - name: https-sparkhs
       port: {{ .Values.ports.httpsPort }}
       targetPort: {{ .Values.ports.httpsPort }}
       protocol: TCP
     {{ else }}
-    - name: http
+    - name: http-sparkhs
       port: {{ .Values.ports.httpPort }}
       targetPort: {{ .Values.ports.httpPort }}
       protocol: TCP

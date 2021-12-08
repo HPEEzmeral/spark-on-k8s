@@ -15,7 +15,7 @@ spec:
     - port: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
       targetPort: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
       protocol: TCP
-      name: http
+      name: http-thrift
     - port: {{ .Values.ports.sparkTsPort }}
       targetPort: {{ .Values.ports.sparkTsPort }}
       protocol: TCP
