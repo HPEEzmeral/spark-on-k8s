@@ -32,6 +32,8 @@ data:
 
     {{- if .Values.tenantIsUnsecure }}
     spark.hadoop.fs.default.name file:///
+    {{- else }}
+    spark.sql.warehouse.dir maprfs:/user/hive/warehouse
     {{- end }}
 
     # Fix for SPARK-7819
