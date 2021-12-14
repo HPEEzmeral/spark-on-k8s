@@ -16,6 +16,10 @@ spec:
     - port: {{ .Values.ports.livyHttpPort }}
       targetPort: {{ .Values.ports.livyHttpPort }}
       protocol: TCP
+      {{- if or (not .Values.tenantIsUnsecure) (.Values.livySsl.useCustomKeystore) }}
+      name: https-livy
+      {{ else }}
       name: http-livy
+      {{- end }}
   selector:
     {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 4 }}
