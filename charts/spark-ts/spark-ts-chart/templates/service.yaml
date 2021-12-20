@@ -15,7 +15,11 @@ spec:
     - port: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
       targetPort: {{ include "spark-ts-chart.getHttpPortSparkTsUI" . }}
       protocol: TCP
+      {{- if .Values.tenantIsUnsecure }}
       name: http-thrift
+      {{ else }}
+      name: https-thrift
+      {{- end }}
     - port: {{ .Values.ports.sparkTsPort }}
       targetPort: {{ .Values.ports.sparkTsPort }}
       protocol: TCP
