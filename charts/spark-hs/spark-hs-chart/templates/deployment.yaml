@@ -59,6 +59,8 @@ spec:
             - name: SPARK_NO_DAEMONIZE
               value: {{ .Values.daemonize }}
           {{- end }}
+            - name: SPARK_HISTORY_OPTS
+              value: {{ .Values.HSJavaOpts }}
           image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

@@ -138,3 +138,6 @@ sparkSsl:
   useCustomKeystore: false
   sslSecretName: "spark-hs-ssl-secret"
   secretMountPath: /var/spark
+
+# Space separated Java options for Spark HS (Will be added to SPARK_HISTORY_OPTS in spark-env.sh)
+#HSJavaOpts: -Dx=y
