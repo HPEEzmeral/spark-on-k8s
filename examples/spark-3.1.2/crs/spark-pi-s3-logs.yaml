@@ -33,28 +33,24 @@ spec:
     spark.hadoop.fs.s3a.secret.key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
     spark.hadoop.fs.s3a.path.style.access: "true"
     spark.hadoop.fs.s3a.impl: "org.apache.hadoop.fs.s3a.S3AFileSystem"
+    ## Note: To customize truststore with AWS s3 uncomment these flags
+    #spark.driver.extraJavaOptions: "-Dcom.amazonaws.sdk.disableCertChecking=true"
+    #spark.executor.extraJavaOptions: "-Dcom.amazonaws.sdk.disableCertChecking=true"
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202110062359AN
+  image: gcr.io/mapr-252711/spark-3.1.2:202112061039R
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
   mainClass: org.apache.spark.examples.SparkPi
-  mainApplicationFile: "local:///opt/mapr/spark/spark-3.1.2/examples/jars/spark-examples_2.12-3.1.2.0-eep-SNAPSHOT.jar"
+  mainApplicationFile: "local:///opt/mapr/spark/spark-3.1.2/examples/jars/spark-examples_2.12-3.1.2.2-eep-800.jar"
   restartPolicy:
     type: Never
-  volumes:
-    - name: "spark-hs"
-      persistentVolumeClaim:
-        claimName: spark-hs-pvc
   driver:
     cores: 1
     coreLimit: "1000m"
     memory: "512m"
-    volumeMounts:
-      - mountPath: "/var/eventlog"
-        name: spark-hs
     labels:
       version: 3.1.2
     # Note: You do not need to specify a serviceAccount
