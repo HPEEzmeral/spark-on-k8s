@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ include "spark-operator.fullname" . }}-webhook
+  name: {{ include "spark-operator.webhookName" . }}
   labels:
     {{- include "spark-operator.labels" . | nindent 4 }}
   {{- if .Values.ownerReference.overRide }}

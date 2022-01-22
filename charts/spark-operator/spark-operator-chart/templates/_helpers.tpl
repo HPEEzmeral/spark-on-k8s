@@ -73,3 +73,31 @@ Create the name of the service account to be used by spark apps
     {{ default "default" .Values.serviceAccounts.spark.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the webhook Init pod
+*/}}
+{{- define "spark-operator.webhookInitName" -}}
+    {{- printf "%s-webhook-init" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create the name of the webhook
+*/}}
+{{- define "spark-operator.webhookName" -}}
+    {{- printf "%s-webhook" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create the name of the webhook config
+*/}}
+{{- define "spark-operator.webhookConfigName" -}}
+    {{- printf "%s-webhook-config" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create the name of the webhook cleanup pod
+*/}}
+{{- define "spark-operator.webhookCleanUpName" -}}
+    {{- printf "%s-webhook-cleanup" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
