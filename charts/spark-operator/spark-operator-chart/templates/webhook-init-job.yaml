@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "spark-operator.fullname" . }}-webhook-init
+  name: {{  include "spark-operator.webhookInitName" . }}
   labels:
     {{- include "spark-operator.labels" . | nindent 4 }}
   {{- if .Values.ownerReference.overRide }}
@@ -13,7 +13,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ include "spark-operator.fullname" . }}-webhook-init
+      name: {{ include "spark-operator.webhookInitName" . }}
       {{- if .Values.istio.enabled }}
       annotations:
         "sidecar.istio.io/inject": "false"
@@ -31,7 +31,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
-        command: ["/usr/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "spark-operator.fullname" . }}-webhook", "-p"]
+        command: ["/usr/bin/gencerts.sh", "-n", "{{ .Release.Namespace }}", "-s", "{{ include "spark-operator.webhookName" . }}", "-p"]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
 {{ end }}

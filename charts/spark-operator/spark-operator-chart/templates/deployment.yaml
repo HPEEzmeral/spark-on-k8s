@@ -75,8 +75,8 @@ spec:
         - -enable-webhook=true
         - -webhook-svc-namespace={{ .Release.Namespace }}
         - -webhook-port={{ .Values.webhook.port }}
-        - -webhook-svc-name={{ include "spark-operator.fullname" . }}-webhook
-        - -webhook-config-name={{ include "spark-operator.fullname" . }}-webhook-config
+        - -webhook-svc-name={{ include "spark-operator.webhookName" . }}
+        - -webhook-config-name={{ include "spark-operator.webhookConfigName" . }}
         - -webhook-namespace-selector={{ .Values.webhook.namespaceSelector }}
         {{- end }}
         - -enable-resource-quota-enforcement={{ .Values.resourceQuotaEnforcement.enable }}
