@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "spark-operator.fullname" . }}-webhook-cleanup
+  name: {{ include "spark-operator.webhookCleanUpName" . }}
   annotations:
     "helm.sh/hook": pre-delete, pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -16,7 +16,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ include "spark-operator.fullname" . }}-webhook-cleanup
+      name: {{ include "spark-operator.webhookCleanUpName" . }}
       {{- if .Values.istio.enabled }}
       annotations:
         "sidecar.istio.io/inject": "false"
@@ -50,7 +50,7 @@ spec:
           -H \"Accept: application/json\" \
           -H \"Content-Type: application/json\" \
           --data \"{\\\"kind\\\":\\\"DeleteOptions\\\",\\\"apiVersion\\\":\\\"batch/v1\\\",\\\"propagationPolicy\\\":\\\"Foreground\\\"}\" \
-          https://kubernetes.default.svc/apis/batch/v1/namespaces/{{ .Release.Namespace }}/jobs/{{ include "spark-operator.fullname" . }}-webhook-init"
+          https://kubernetes.default.svc/apis/batch/v1/namespaces/{{ .Release.Namespace }}/jobs/{{ include "spark-operator.webhookInitName" . }}"
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
 {{ end }}
