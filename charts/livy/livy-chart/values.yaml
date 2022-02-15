@@ -107,7 +107,7 @@ sessionRecovery:
           storage: 1Gi
 
 # Config map created by hive metastore. Used to connect livy with metastore
-hiveSiteSource: "hivesite-cm"
+hiveSiteSource: ""
 
 sparkHistoryServer:
   integrate: false
