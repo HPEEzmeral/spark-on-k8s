@@ -31,7 +31,7 @@ spec:
   sparkVersion: 3.1.2
   pythonVersion: "3"
   mode: cluster
-  image: gcr.io/mapr-252711/spark-py-3.1.2:202112061039R
+  image: gcr.io/mapr-252711/spark-py-3.1.2:202202141308P150
   imagePullPolicy: Always
   mainApplicationFile: local:///maprfs-csi/path/to/main/file/app.py
   deps:
