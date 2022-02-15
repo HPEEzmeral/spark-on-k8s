@@ -13,14 +13,14 @@ image:
   imageName: livy-0.7.0
   #imageName: livy-0.5.0
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202112061039R"
+  tag: "202202141308P150"
   # -- Image pull policy
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.1.2:202112061039R
+deImage: spark-3.1.2:202202141308P150
 #for livy-0.5.0/spark-2.4.7
-#deImage: spark-2.4.7:202112061039R
+#deImage: spark-2.4.7:202202141308P150
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -107,7 +107,7 @@ sessionRecovery:
           storage: 1Gi
 
 # Config map created by hive metastore. Used to connect livy with metastore
-hiveSiteSource: ""
+hiveSiteSource: "hivesite-cm"
 
 sparkHistoryServer:
   integrate: false
