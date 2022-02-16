@@ -6,7 +6,7 @@ metadata:
 spec:
   sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
-    #       you do not need to specify a spark.mapr.user.secret
+#           you do not need to specify a spark.mapr.user.secret
 #    spark.mapr.user.secret: mapr-secret
 
     # Enabling RAPIDs plugin
@@ -22,7 +22,7 @@ spec:
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202202041010R-gpu
+  image: gcr.io/mapr-252711/spark-3.1.2:202202141308P150-gpu
   imagePullPolicy: Always
   mainApplicationFile: /path/to/examples/jar/file
   mainClass: com.hpe.examples.spark.sql.SqlOnGpuExample
