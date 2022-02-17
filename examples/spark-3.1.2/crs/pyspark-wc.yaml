@@ -31,7 +31,7 @@ spec:
   sparkVersion: 3.1.2
   pythonVersion: "3"
   mode: cluster
-  image: gcr.io/mapr-252711/spark-py-3.1.2:202202141308P150
+  image: gcr.io/mapr-252711/spark-py-3.1.2:202202161825P150
   imagePullPolicy: Always
   mainApplicationFile: local:///opt/mapr/spark/spark-3.1.2/examples/src/main/python/wordcount.py
   restartPolicy:
