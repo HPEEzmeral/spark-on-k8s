@@ -75,6 +75,12 @@ spec:
               port: {{ .Values.ports.httpPort }}
             initialDelaySeconds: 5
             periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 30
           lifecycle:
           {{- include "common.probe.lifecycle" . | nindent 12 }}
           resources:
