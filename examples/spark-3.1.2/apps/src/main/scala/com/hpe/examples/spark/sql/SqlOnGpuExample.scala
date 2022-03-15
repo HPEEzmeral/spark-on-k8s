@@ -2,7 +2,7 @@ package com.hpe.examples.spark.sql
 
 import org.apache.spark.sql.SparkSession
 
-class SqlOnGpuExample {
+object SqlOnGpuExample {
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
