@@ -32,6 +32,8 @@ spec:
     spark.hadoop.fs.dtap.impl: "com.bluedata.hadoop.bdfs.Bdfs"
     spark.hadoop.fs.AbstractFileSystem.dtap.impl: "com.bluedata.hadoop.bdfs.BdAbstractFS"
     spark.hadoop.fs.dtap.impl.disable.cache: "false"
+    spark.driver.extraClassPath: "/opt/bdfs/bluedata-dtap.jar"
+    spark.executor.extraClassPath: "/opt/bdfs/bluedata-dtap.jar"
   type: Java
   sparkVersion: 3.1.2
   mode: cluster
