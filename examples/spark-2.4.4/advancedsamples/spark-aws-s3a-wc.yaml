@@ -52,6 +52,11 @@ spec:
     memory: "512m"
     labels:
       version: 2.4.4
+    # If you need to trust external CA, you can mount it to /usr/share/pki/ca-trust-source/anchors/
+    volumeMounts:
+      - name: aws-cert-volume
+        mountPath: /usr/share/pki/ca-trust-source/anchors/AmazonRootCA1.pem
+        subPath: AmazonRootCA1.pem
     # Note: You do not need to specify a serviceAccount
     #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
     #serviceAccount: hpe-sampletenant
@@ -62,3 +67,12 @@ spec:
     memory: "512m"
     labels:
       version: 2.4.4
+    # Same for executor
+    volumeMounts:
+      - name: aws-cert-volume
+        mountPath: /usr/share/pki/ca-trust-source/anchors/AmazonRootCA1.pem
+        subPath: AmazonRootCA1.pem
+  volumes:
+    - name: aws-cert-volume
+      configMap:
+        name: aws-cert-cm
