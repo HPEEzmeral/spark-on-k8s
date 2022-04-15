@@ -22,7 +22,7 @@ spec:
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202202141308P150-gpu
+  image: gcr.io/mapr-252711/spark-3.1.2:202202161825P150-gpu
   imagePullPolicy: Always
   mainApplicationFile: /path/to/examples/jar/file
   mainClass: com.hpe.examples.spark.sql.SqlOnGpuExample
