@@ -25,3 +25,8 @@ appVersion: "3.2.0"
 
 # Spark-2.4.7
 # appVersion: "2.4.7"
+
+dependencies:
+  - name: common
+    repository: "file://../../common/"
+    version: 0.1.0
