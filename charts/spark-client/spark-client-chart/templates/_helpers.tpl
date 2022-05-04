@@ -54,11 +54,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "spark-client-chart.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "spark-client-chart.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
+{{- if ( and ( not .Values.serviceAccount.create ) ( not ( empty .Values.serviceAccount.name)) ) -}}
+    {{- .Values.serviceAccount.name }}
+{{- else -}}
+    hpe-{{ .Release.Namespace }}
+{{- end -}}
 {{- end }}
 
 
@@ -72,3 +72,13 @@ Create imagepullsecrets
     {{- toYaml .Values.imagePullSecrets | nindent 8 }}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Volume mounts for containers
+*/}}
+{{- define "spark-client.volumeMounts" -}}
+{{ include "common.volumeMounts" . }}
+{{ if .Values.datafabric.fullIntegrationEnabled }}
+    {{- include "common.security.volumeMounts" . }}
+{{- end -}}
+{{- end }}

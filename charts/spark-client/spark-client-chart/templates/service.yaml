@@ -15,6 +15,6 @@ spec:
     - port: {{ .Values.service.port.number }}
       targetPort: {{ .Values.service.port.targetPort }}
       protocol: {{ .Values.service.port.protocol }}
-      name: {{- if .Values.tenantIsUnsecure }} http {{ else }} https {{- end }}
+      name: "ssh"
   selector:
     {{- include "spark-client-chart.selectorLabels" . | nindent 4 }}
