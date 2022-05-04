@@ -6,12 +6,12 @@ replicaCount: 1
 
 image:
   repository: gcr.io/mapr-252711
-  imageName: spark-client-3.1.2
+  imageName: spark-client-3.2.0
   # Spark-2.4.7
   # imageName: spark-client-2.4.7
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202202161825P150"
+  tag: "202205031457R"
   # Spark-2.4.7
   # tag: 202110041707C
 

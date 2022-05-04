@@ -1,14 +1,14 @@
-### Hive scala examples for Apache spark-3.1.2
+### Hive scala examples for Apache spark-3.2.0
 
 Source code for these examples can be found in 'apps' folder.
 
 ### Configurations for running the example -
 
 1. If you built the jar file from the source code -
-   a) Rename the jar file to - `spark-hive-example-3.1.2.jar`
+   a) Rename the jar file to - `spark-hive-example-3.2.0.jar`
    b) Place this jar file in - `opt/spark/examples/jars`
-   c) Create the image from Dockerfile (spark-3.1.2) and place it in -
-   `gcr.io/mapr-252711/spark-3.1.2-hive-example`
+   c) Create the image from Dockerfile (spark-3.2.0) and place it in -
+   `gcr.io/mapr-252711/spark-3.2.0-hive-example`
 
    
 2. Create PVCs with the name - `spark-hive-claim`

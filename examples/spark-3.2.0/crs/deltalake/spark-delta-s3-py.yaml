@@ -22,12 +22,12 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: "gcr.io/mapr-252711/spark-py-3.1.2:202202161825P150"
+  image: "gcr.io/mapr-252711/spark-py-3.2.0:202205031457R"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
   mainApplicationFile: "s3a://jobs/delta.py"
-  sparkVersion: "3.1.2"
+  sparkVersion: "3.2.0"
   restartPolicy:
     type: Never
   driver:
@@ -35,7 +35,7 @@ spec:
     coreLimit: "1200m"
     memory: "512m"
     labels:
-      version: 3.1.2
+      version: 3.2.0
       # Note: You do not need to specify a serviceAccount
       #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
 #    serviceAccount: spark
@@ -44,7 +44,7 @@ spec:
     instances: 1
     memory: "512m"
     labels:
-      version: 3.1.2
+      version: 3.2.0
   arguments:
     - s3a://test/tmp/test1
   sparkConf:

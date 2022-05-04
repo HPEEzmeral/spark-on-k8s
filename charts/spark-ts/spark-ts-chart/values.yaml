@@ -9,15 +9,15 @@ replicaCount: 1
 image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
-  # -- Image Name for 3.1.2 version
-  imageName: spark-ts-3.1.2
+  # -- Image Name for 3.2.0 version
+  imageName: spark-ts-3.2.0
   # -- Image Name for 2.4.7 version
 #  imageName: spark-ts-2.4.7
-  # -- Image tag for 3.1.2 version
-  tag: "202202161825P150"
+  # -- Image tag for 3.2.0 version
+  tag: "202205031457R"
   # -- Image tag for 2.4.7 version
-#  tag: "202202161825P150"
-  executorTag: 202202161825P150
+#  tag: "202205031457R"
+  executorTag: 202205031457R
   # -- Image pull policy
   pullPolicy: Always
 
@@ -41,7 +41,7 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-3.1.2
+sparkVersion: spark-3.2.0
 # spark version for 2.4.7
 #sparkVersion: spark-2.4.7
 

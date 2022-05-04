@@ -1,4 +1,4 @@
-# Helm Chart for Spark Client V3.1.2
+# Helm Chart for Spark Client V3.2.0
 
 ### Installing the Chart
 

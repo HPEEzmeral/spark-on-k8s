@@ -17,7 +17,7 @@
 apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
-  name: pyspark-with-dependencies
+  name: spark-hive-secure
   namespace: sampletenant
 spec:
   #sparkConf:
@@ -27,16 +27,13 @@ spec:
     # Note: You do not need to specify a spark.eventLog.dir
     #       it will be auto-generated with the pattern "maprfs:///apps/spark/<namespace>"
     #spark.eventLog.dir: "maprfs:///apps/spark/sampletenant"
-  type: Python
-  sparkVersion: 3.1.2
-  pythonVersion: "3"
+  type: Scala
+  sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-py-3.1.2:202202161825P150
+  image: gcr.io/mapr-252711/spark-3.2.0:202205031457R
   imagePullPolicy: Always
-  mainApplicationFile: local:///maprfs-csi/path/to/main/file/app.py
-  deps:
-    pyFiles:
-      - local:///maprfs-csi/path/to/dependency.py
+  mainClass: org.apache.spark.examples.sql.hive.SparkHiveExample
+  mainApplicationFile: "local:///opt/mapr/spark/spark-3.2.0/examples/jars/spark-examples_2.12-3.2.0.0-eep-810.jar"
   restartPolicy:
     type: Never
   imagePullSecrets:
@@ -46,21 +43,22 @@ spec:
     coreLimit: "1000m"
     memory: "512m"
     labels:
-      version: 3.1.2
-    # Note: You do not need to specify a serviceAccount
-    #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
-    #serviceAccount: hpe-sampletenant
+      version: 3.2.0
     volumeMounts:
-      - name: maprfs-volume
-        mountPath: /maprfs-csi
+    - name: hive-site-volume
+      mountPath: /opt/mapr/spark/spark-3.2.0/conf/hive-site.xml
+      subPath: hive-site.xml
   executor:
     cores: 1
     coreLimit: "1000m"
     instances: 2
     memory: "512m"
     labels:
-      version: 3.1.2
+      version: 3.2.0
+    # Note: You do not need to specify a serviceAccount
+    #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
+    #serviceAccount: hpe-sampletenant
   volumes:
-  - name: maprfs-volume
-    persistentVolumeClaim:
-      claimName: mapr-csi-pvc
+  - name: hive-site-volume
+    configMap:
+      name: hivesite-cm

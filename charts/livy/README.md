@@ -12,7 +12,7 @@ helm dependency update ./livy-chart
 helm install livy ./livy-chart -n sampletenant
 ```
 
-This will create the helm chart in the `sampletenant` namespace. This will create livy-0.7.0 with support for spark v3.1.2  
+This will create the helm chart in the `sampletenant` namespace. This will create livy-0.7.0 with support for spark v3.2.0  
 Please note:
 * This assumes you are installing in an 'internal' or 'external' Tenant Namespace. Installing livy chart in a non tenant namespace can cause error because of missing configmaps and secrets.
 * If you are using PVC, the pvc should exist in the same namespace.
@@ -20,7 +20,7 @@ Please note:
 
 ### Install with different version
 To install livy-0.5.0 with spark-2.4.7 support use the flags:  
-`--set image.imageName=livy-0.5.0 --set image.tag=202202161825P150 --set livyVersion=0.5.0 --set deImage=spark-2.4.7:202202161825P150`
+`--set image.imageName=livy-0.5.0 --set image.tag=202205031457R --set livyVersion=0.5.0 --set deImage=spark-2.4.7:202205031457R`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  

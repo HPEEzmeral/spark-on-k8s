@@ -8,11 +8,11 @@ replicaCount: 1
 
 image:
   # -- Image repository
-  repository: gcr.io/mapr-252711/hivemeta-2.3
+  repository: gcr.io/mapr-252711/hivemeta-2.3.7
   # -- Image pull policy
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202202161825P150"
+  tag: "202205031457R"
 
 # -- Image pull secrets
 imagePullSecrets:

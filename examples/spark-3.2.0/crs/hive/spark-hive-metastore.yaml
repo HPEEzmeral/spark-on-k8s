@@ -6,11 +6,11 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/spark-3.1.2:202202161825P150"
+  image: "gcr.io/mapr-252711/spark-3.2.0:202205031457R"
   imagePullPolicy: Always
   mainClass: com.hpe.examples.spark.sql.hive.SparkHiveExample
-  mainApplicationFile: "local:///opt/spark/examples/jars/spark-hive-example-3.1.2.jar"
-  sparkVersion: 3.1.2
+  mainApplicationFile: "local:///opt/spark/examples/jars/spark-hive-example-3.2.0.jar"
+  sparkVersion: 3.2.0
   restartPolicy:
     type: Never
   imagePullSecrets:
@@ -25,7 +25,7 @@ spec:
     coreLimit: "1000m"
     memory: "512m"
     labels:
-      version: 3.1.2
+      version: 3.2.0
     serviceAccount: metastore-spark
     volumeMounts:
       - name: spark-pv
@@ -36,7 +36,7 @@ spec:
     instances: 1
     memory: "512m"
     labels:
-      version: 3.1.2
+      version: 3.2.0
     volumeMounts:
       - name: spark-pv
         mountPath: /opt/spark/work-dir/spark-warehouse/

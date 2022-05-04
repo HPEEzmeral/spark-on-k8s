@@ -18,9 +18,9 @@
   <properties>
     <spark.app.name>SparkExamples</spark.app.name>
 
-    <spark.version>3.1.2.0-eep-800</spark.version>
+    <spark.version>3.2.0.0-eep-810</spark.version>
     <scala.version>2.12.12</scala.version>
-    <hadoop.version>2.7.6.100-eep-800</hadoop.version>
+    <hadoop.version>2.7.6.200-eep-810</hadoop.version>
     <spark.scala.version>2.12</spark.scala.version>
 
     <maven.compiler.source>11</maven.compiler.source>

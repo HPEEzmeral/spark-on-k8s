@@ -36,7 +36,7 @@ spec:
   type: Scala
   sparkVersion: 2.4.7
   mode: cluster
-  image: gcr.io/mapr-252711/spark-2.4.7:202202161825P150
+  image: gcr.io/mapr-252711/spark-2.4.7:202205031457R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.JavaWordCount
   mainApplicationFile: "local:///opt/mapr/spark/spark-2.4.7/examples/jars/spark-examples_2.12-2.4.7.101-mapr-710.jar"
