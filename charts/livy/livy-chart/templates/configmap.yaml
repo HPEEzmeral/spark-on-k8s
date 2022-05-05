@@ -23,7 +23,7 @@ data:
     {{- if eq .Values.image.imageName "livy-0.7.0-2.4.7" }}
     livy.rsc.pyspark.archives = local:///opt/mapr/spark/spark-2.4.7/python/lib/pyspark.zip,local:///opt/mapr/spark/spark-2.4.7/python/lib/py4j-0.10.9-src.zip
     {{- else if eq .Values.image.imageName "livy-0.7.0" }}
-    livy.rsc.pyspark.archives = local:///opt/mapr/spark/spark-3.1.2/python/lib/pyspark.zip,local:///opt/mapr/spark/spark-3.1.2/python/lib/py4j-0.10.9-src.zip
+    livy.rsc.pyspark.archives = local:///opt/mapr/spark/spark-3.2.0/python/lib/pyspark.zip,local:///opt/mapr/spark/spark-3.2.0/python/lib/py4j-0.10.9-src.zip
     {{- end }}
     {{- if eq .Values.sessionRecovery.kind "zookeeper" }}
     livy.server.recovery.mode = recovery
