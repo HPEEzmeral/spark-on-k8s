@@ -30,7 +30,7 @@ spec:
   type: Scala
   sparkVersion: 3.1.2
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.1.2:202202161825P150
+    image: gcr.io/mapr-252711/spark-3.1.2:202202161825P150
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
