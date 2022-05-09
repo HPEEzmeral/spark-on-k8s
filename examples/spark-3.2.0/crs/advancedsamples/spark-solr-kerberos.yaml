@@ -60,7 +60,7 @@ spec:
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:202205031457R
+  image: gcr.io/mapr-252711/spark-3.2.0:202205060755R
   imagePullPolicy: Always
   mainApplicationFile: maprfs:///path/to/application.jar
   mainClass: your.main.Class
