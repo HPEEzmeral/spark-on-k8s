@@ -12,6 +12,7 @@ spec:
     # Enabling RAPIDs plugin
     spark.plugins: "com.nvidia.spark.SQLPlugin"
     spark.rapids.sql.enabled: "true"
+    spark.rapids.force.caller.classloader: "false"
 
     # GPU allocation and discovery settings
     spark.task.resource.gpu.amount: "1"
