@@ -24,6 +24,13 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Define Livy version
+*/}}
+{{- define "livy-chart.livyVersion" -}}
+0.7.0
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "livy-chart.chart" -}}
@@ -36,9 +43,7 @@ Common labels
 {{- define "livy-chart.labels" -}}
 helm.sh/chart: {{ include "livy-chart.chart" . }}
 {{ include "livy-chart.selectorLabels" . }}
-{{- if .Values.livyVersion }}
-app.kubernetes.io/version: {{ .Values.livyVersion | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ include "livy-chart.livyVersion" . | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -138,7 +143,7 @@ return volume mounts for containers
 {{- end }}
 {{- if eq .Values.sessionRecovery.kind "pvc" }}
 - name: livy-sessionstore
-  mountPath: "/opt/mapr/livy/livy-{{ .Values.livyVersion }}/session-store"
+  mountPath: "/opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/session-store"
 {{- end }}
 {{- if .Values.livySsl.useCustomKeystore }}
 - name: livy-secret-ssl
@@ -147,7 +152,7 @@ return volume mounts for containers
 - name: livy-extra-configs
   mountPath: /opt/mapr/kubernetes/livy-secret-configs
 - name: logs
-  mountPath: /opt/mapr/livy/livy-{{ .Values.livyVersion }}/logs
+  mountPath: /opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/logs
 {{- end }}
 
 {{/*
