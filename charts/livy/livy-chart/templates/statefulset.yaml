@@ -40,7 +40,7 @@ spec:
       initContainers: []
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       containers:
-        - name: {{ include "livy-chart.name" . }}
+        - name: {{ .Chart.Name }}
           args:
           {{- include "common.args" . | nindent 12 }}
           command:
