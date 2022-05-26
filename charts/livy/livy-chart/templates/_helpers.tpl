@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "livy-chart.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -34,7 +34,7 @@ Define Livy version
 Create chart name and version as used by the chart label.
 */}}
 {{- define "livy-chart.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name  .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -45,6 +45,13 @@ helm.sh/chart: {{ include "livy-chart.chart" . }}
 {{ include "livy-chart.selectorLabels" . }}
 app.kubernetes.io/version: {{ include "livy-chart.livyVersion" . | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Livy chart secret name
+*/}}
+{{- define "livy-chart.secretName" -}}
+{{- printf "%s" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -87,28 +94,28 @@ Create the name of the service account to use
 Create the name of the configmap
 */}}
 {{- define "livy-chart.configmapName" -}}
-{{ printf "%s-cm" .Chart.Name }}
+{{- printf "%s-cm" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Returns the name for livy service
 */}}
 {{- define "livy-chart.serviceName" -}}
-livy-svc
+{{- printf "%s-svc" .Release.Name  | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Returns the name for livy Role
 */}}
 {{- define "livy-chart.roleName" -}}
-{{ printf "%s-role" .Chart.Name }}
+{{ printf "%s-role" .Release.Name }}
 {{- end }}
 
 {{/*
 Returns the name for livy RoleBinding
 */}}
 {{- define "livy-chart.roleBindingName" -}}
-{{ printf "%s-role-binding" .Chart.Name }}
+{{ printf "%s-role-binding" .Release.Name }}
 {{- end }}
 
 {{/*
@@ -131,6 +138,10 @@ return env for containers
 - name: LIVY_HIVESITE_SOURCE
   value: {{ .Values.hiveSiteSource }}
 {{- end }}
+- name: CHART_RELEASE_NAME
+  value: {{ .Release.Name }}
+- name: LIVY_PORT
+  value: {{ .Values.ports.livyHttpPort | quote }}
 {{- end }}
 
 {{/*
@@ -150,7 +161,7 @@ return volume mounts for containers
   mountPath: {{ .Values.livySsl.secretMountPath }}
 {{- end }}
 - name: livy-extra-configs
-  mountPath: /opt/mapr/kubernetes/livy-secret-configs
+  mountPath: /opt/mapr/kubernetes/{{ include "livy-chart.secretName" . }}
 - name: logs
   mountPath: /opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/logs
 {{- end }}
@@ -172,7 +183,7 @@ returns volumes for StatefulSet
 {{- end }}
 - name: livy-extra-configs
   secret:
-    secretName: livy-secret-configs
+    secretName: {{ include "livy-chart.secretName" . }}
     defaultMode: 420
     optional: false
 {{- end }}
