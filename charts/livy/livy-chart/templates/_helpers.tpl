@@ -136,7 +136,7 @@ return env for containers
 - name: CHART_RELEASE_NAME
   value: {{ .Release.Name }}
 - name: LIVY_SERVICE_PORT
-  value: {{ livy-chart.serviceName | upper | replace '-' '_' }}_SERVICE_PORT
+  value: {{ include "livy-chart.serviceName" . | upper | replace "-" "_" }}_SERVICE_PORT
 - name: LIVY_PORT
   value: {{ .Values.ports.livyHttpPort }}
 {{- end }}
