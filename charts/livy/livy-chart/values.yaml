@@ -126,3 +126,14 @@ extraConfigs:
     # livy.keystore = /var/livy/ssl_keystore
     # livy.keystore.password = examplepass
     # livy.key-password = examplepass
+
+# Uncomment this to enable DTAP integration in 'none' tenant
+#  spark-defaults.conf: |
+#    spark.hadoop.fs.dtap.impl com.bluedata.hadoop.bdfs.Bdfs
+#    spark.hadoop.fs.AbstractFileSystem.dtap.impl com.bluedata.hadoop.bdfs.BdAbstractFS
+#    spark.hadoop.fs.dtap.impl.disable.cache false
+#    spark.kubernetes.driver.label.hpecp.hpe.com/dtap hadoop2
+#    spark.kubernetes.executor.label.hpecp.hpe.com/dtap hadoop2
+#    spark.sql.warehouse.dir dtap://TenantStorage/warehouse
+#    spark.driver.extraClassPath /opt/bdfs/bluedata-dtap.jar
+#    spark.executor.extraClassPath /opt/bdfs/bluedata-dtap.jar

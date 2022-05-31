@@ -294,6 +294,13 @@ data:
     <value>jdbc:derby:;databaseName=/opt/mapr/hive/hive-2.3/metastore_db;create=true</value>
     <description>JDBC connect string for a JDBC metastore</description>
     </property>
+    {{- if .Values.dtap.enable -}}
+      <property>
+      <name>hive.exec.scratchdir</name>
+       <value>{{- .Values.dtap.scratchDir -}}</value>   
+    </property>
+    {{- end }}
+
     </configuration>
 
   hplsql-site.xml:  |
@@ -719,6 +726,11 @@ data:
 
   pre-startup.sh: |
     #!/usr/bin/env bash
+
+{{- if .Values.dtap.enable -}}
+  hive-env.sh: |
+    ln -s /opt/bdfs/bluedata-dtap.jar /opt/mapr/hive/hive-2.3/lib
+{{- end }}
 
   hive-env.sh.template: |
     # Licensed to the Apache Software Foundation (ASF) under one

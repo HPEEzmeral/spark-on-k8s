@@ -86,3 +86,8 @@ resources:
 ownerReference:
   overRide: false
   ownerReferences: {}
+
+# Enable DTAP integration (useful for 'none' tenant)
+dtap:
+  enable: true
+  scratchDir: dtap://TenantStorage/scratchDir
