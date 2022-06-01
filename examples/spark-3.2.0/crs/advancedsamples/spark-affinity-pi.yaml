@@ -30,7 +30,7 @@ spec:
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:202205270530R
+  image: gcr.io/mapr-252711/spark-3.2.0:202206010722R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.SparkPi
   mainApplicationFile: "local:///opt/mapr/spark/spark-3.2.0/examples/jars/spark-examples_2.12-3.2.0.2-eep-810.jar"
