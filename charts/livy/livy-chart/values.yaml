@@ -126,3 +126,6 @@ extraConfigs:
     # livy.keystore = /var/livy/ssl_keystore
     # livy.keystore.password = examplepass
     # livy.key-password = examplepass
+  spark-defaults.conf: |
+    # Uncomment the following property to use Livy with Spark 2.4 on DF 7.0 cluster:
+    # spark.maprSecurityWeb.usage false
