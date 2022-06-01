@@ -9,7 +9,7 @@ IMAGE_JOB="download-image-job.yaml"
 download_image() {
   export DOWNLOADED_IMAGE=${IMAGE_NAME}
 	envsubst < $IMAGE_JOB | ${KUBECTL_APPLY} -
-	if [ $? -eq 0 ]; then
+  if [ $? -eq 0 ]; then
     echo "Successfully created job for downloading image"
   else
     echo "Error while creating job for downloading image"
@@ -17,7 +17,7 @@ download_image() {
 }
 
 create_secret() {
-	${KUBECTL_CREATE_SECRET}${FILENAME}
+	${KUBECTL_CREATE_SECRET}
 	if [ $? -eq 0 ]; then
     echo "Successfully created imagepull secret"
     download_image
