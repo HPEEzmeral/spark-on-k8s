@@ -14,7 +14,7 @@ This will create the helm chart in the `sampletenant` namespace.  This will crea
 Please note: This assumes you are installing in an 'internal' or 'external' Tenant Namespace. Installing spark-ts chart in a non -tenant namespace can cause error because of missing configmaps and secrets. 
 
 To install thrift server V2.4.7 use the flags:  
-`--set image.imageName=spark-ts-2.4.7 --set image.tag=202205270530R --set sparkVersion=spark-2.4.7`
+`--set image.imageName=spark-ts-2.4.7 --set image.tag=202206011136R --set sparkVersion=spark-2.4.7`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
