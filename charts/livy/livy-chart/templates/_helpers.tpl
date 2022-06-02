@@ -161,7 +161,7 @@ return volume mounts for containers
   mountPath: {{ .Values.livySsl.secretMountPath }}
 {{- end }}
 - name: livy-extra-configs
-  mountPath: /opt/mapr/kubernetes/{{ include "livy-chart.secretName" . }}
+  mountPath: /opt/mapr/kubernetes/livy-secret-configs
 - name: logs
   mountPath: /opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/logs
 {{- end }}
