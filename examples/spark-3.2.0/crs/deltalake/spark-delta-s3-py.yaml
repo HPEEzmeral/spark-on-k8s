@@ -22,7 +22,7 @@ spec:
   type: Python
   pythonVersion: "3"
   mode: cluster
-  image: "gcr.io/mapr-252711/spark-py-3.2.0:202206011136R"
+  image: "gcr.io/mapr-252711/spark-py-3.2.0:202206131106R"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
