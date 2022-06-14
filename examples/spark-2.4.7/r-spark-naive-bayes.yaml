@@ -30,7 +30,7 @@ spec:
   type: R
   sparkVersion: 2.4.7
   mode: cluster
-  image: gcr.io/mapr-252711/spark-r-2.4.7:202206131106R
+  image: gcr.io/mapr-252711/spark-r-2.4.7:202206140433R
   imagePullPolicy: Always
   mainApplicationFile: local:///opt/mapr/spark/spark-2.4.7/examples/src/main/r/ml/naiveBayes.R
   restartPolicy:

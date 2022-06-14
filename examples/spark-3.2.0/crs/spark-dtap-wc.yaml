@@ -41,7 +41,7 @@ spec:
   deps:
     jars:
       - local:///opt/bdfs/bluedata-dtap.jar
-  image: gcr.io/mapr-252711/spark-3.2.0:202206131106R
+  image: gcr.io/mapr-252711/spark-3.2.0:202206140433R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.JavaWordCount
   mainApplicationFile: "local:///opt/mapr/spark/spark-3.2.0/examples/jars/spark-examples_2.12-3.2.0.2-eep-810.jar"
