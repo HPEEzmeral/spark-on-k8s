@@ -1,0 +1,66 @@
+apiVersion: "sparkoperator.hpe.com/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-rapids-it-runner
+  namespace: sampletenant
+spec:
+  sparkConf:
+    # Note: If you are executing the application as a K8 user that MapR can verify,
+#           you do not need to specify a spark.mapr.user.secret
+    spark.mapr.user.secret: ${your-secret}
+
+    # Enabling RAPIDs plugin
+    spark.plugins: "com.nvidia.spark.SQLPlugin"
+    spark.rapids.sql.enabled: "true"
+
+    # GPU allocation and discovery settings
+    spark.task.resource.gpu.amount: "1"
+    spark.executor.resource.gpu.amount: "1"
+    spark.executor.resource.gpu.vendor: "nvidia.com"
+    spark.executor.resource.gpu.discoveryScript: "/opt/mapr/spark/spark-3.2.0/examples/src/main/scripts/getGpusResources.sh"
+    spark.rapids.force.caller.classloader: "false"
+  type: Scala
+  sparkVersion: 3.2.0
+  mode: cluster
+  image: gcr.io/mapr-252711/spark-tests:gpu_with_deps
+  imagePullPolicy: Always
+  mainApplicationFile: "local:///${path to integration_tests in maprfs}/runtests.py"
+  restartPolicy:
+    type: Never
+  imagePullSecrets:
+    - imagepull
+  arguments:
+    - --rootdir=/tmp/spark-rapids/integration_tests
+    - /tmp/spark-rapids/integration_tests/src/main/python
+    - -v
+    - -rfExXs ''
+    - --std_input_path=/tmp/spark-rapids/integration_tests/src/test/resources
+    - --color=yes ''
+#    - -k explain_test # specific test for execution
+  driver:
+    cores: 1
+    coreLimit: "1000m"
+    memory: "3G"
+    labels:
+      version: 3.2.0
+    # Note: You do not need to specify a serviceAccount
+    #       it will be auto-generated referencing the pre-existing "hpe-<namespace>"
+      serviceAccount: hpe-sampletenant
+    volumeMounts:
+      - name: hive-site-volume
+        mountPath: /opt/mapr/spark/spark-3.2.0/conf/hive-site.xml
+        subPath: hive-site.xml
+  executor:
+    cores: 1
+    coreLimit: "1000m"
+    instances: 1
+    memory: "5G"
+    gpu:
+      name: "nvidia.com/gpu"
+      quantity: 1
+    labels:
+      version: 3.2.0
+  volumes:
+    - name: hive-site-volume
+      configMap:
+        name: hivesite-cm
