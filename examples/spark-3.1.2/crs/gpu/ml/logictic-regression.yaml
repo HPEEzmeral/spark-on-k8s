@@ -1,13 +1,13 @@
 apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
-  name: bohdan-pyspark-regression
+  name: gpu-pyspark-regression
   namespace: sampletenant
 spec:
   sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
 #           you do not need to specify a spark.mapr.user.secret
-    spark.mapr.user.secret: bohdan-secret
+    spark.mapr.user.secret: ${your secret}
 
     # Enabling RAPIDs plugin
     spark.plugins: "com.nvidia.spark.SQLPlugin"
@@ -24,7 +24,7 @@ spec:
   mode: cluster
   image: gcr.io/mapr-252711/spark-3.1.2:202202161825P150-gpu
   imagePullPolicy: Always
-  mainApplicationFile: "maprfs:///bohdan/logistic_regression.py"
+  mainApplicationFile: "maprfs:///${path to file}/logistic_regression.py"
   restartPolicy:
     type: Never
   arguments:
