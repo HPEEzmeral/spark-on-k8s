@@ -1,7 +1,7 @@
 apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
-  name: gpu-testapps
+  name: gpu-pyspark-regression
   namespace: sampletenant
 spec:
   sparkConf:
@@ -18,17 +18,17 @@ spec:
     spark.executor.resource.gpu.amount: "1"
     spark.executor.resource.gpu.vendor: "nvidia.com"
     spark.executor.resource.gpu.discoveryScript: "/opt/mapr/spark/spark-3.2.0/examples/src/main/scripts/getGpusResources.sh"
+
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
   image: gcr.io/mapr-252711/spark-3.2.0:202202161825P150-gpu
-  command: [ "/bin/bash", "-c", "--" ]
-  args: [ "while true; do sleep 30; done;" ]
   imagePullPolicy: Always
-  mainApplicationFile: "maprfs:///${apps jar file}.jar"
-  mainClass: com.hpe.examples.spark.sql.SqlOnGpuExample
+  mainApplicationFile: "maprfs:///${path to file}/logistic_regression.py"
   restartPolicy:
     type: Never
+  arguments:
+    - file:///opt/mapr/spark/spark-3.2.0/data/mllib/sample_libsvm_data.txt
   imagePullSecrets:
     - imagepull
   driver:
