@@ -89,7 +89,6 @@ object DeltaLakeACIDExample {
     sparkSession
       .read
       .format("delta")
-      .option("versionAsOf", 3)
       .load(args(0))
       .show()
 
