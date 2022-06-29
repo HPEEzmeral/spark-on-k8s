@@ -1,8 +1,7 @@
 ## Running spark-on-gpu example
 ###### This example shows how to configure a spark application to allocate and utilize GPU in sql computations
-1. Build SparkDemo.jar file as described in examples readme file
-2. Put the jar file to available location, e.g., maprfs
-3. Run the scala-gpu example, check physical plan in the output logs:
+1. Put the py script file to available location, e.g., maprfs
+2. Run the example, check physical plan in the output logs:
 ```shell
 == Physical Plan ==
 GpuColumnarToRow false
