@@ -53,7 +53,7 @@ spec:
             defaultMode: 420
       containers:
         - name: sparkcli
-          image: gcr.io/mapr-252711/spark-client-2.4.7:202206140433R
+          image: gcr.io/mapr-252711/spark-client-2.4.7:202206300317R
           command:
             - /tini
             - '--'
