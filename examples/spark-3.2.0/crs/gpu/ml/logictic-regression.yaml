@@ -22,7 +22,7 @@ spec:
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:202202161825P150-gpu
+  image: gcr.io/mapr-252711/spark-gpu-3.2.0:202206300317R
   imagePullPolicy: Always
   mainApplicationFile: "maprfs:///${path to file}/logistic_regression.py"
   restartPolicy:

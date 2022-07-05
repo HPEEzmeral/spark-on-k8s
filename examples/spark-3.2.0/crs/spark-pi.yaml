@@ -30,12 +30,12 @@ spec:
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:202202161825P150
+  image: gcr.io/mapr-252711/spark-3.2.0:202206300317R
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
   mainClass: org.apache.spark.examples.SparkPi
-  mainApplicationFile: "local:///opt/mapr/spark/spark-3.2.0/examples/jars/spark-examples_2.12-3.2.0.3-eep-800.jar"
+  mainApplicationFile: "local:///opt/mapr/spark/spark-3.2.0/examples/jars/spark-examples_2.12-3.2.0.2-eep-810.jar"
   restartPolicy:
     type: Never
   driver:

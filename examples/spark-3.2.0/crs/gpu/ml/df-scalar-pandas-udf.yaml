@@ -7,7 +7,7 @@ spec:
   sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
 #           you do not need to specify a spark.mapr.user.secret
-    spark.mapr.user.secret: ${your secret}
+#    spark.mapr.user.secret: ${your secret}
 
     # Enabling RAPIDs plugin
     spark.plugins: "com.nvidia.spark.SQLPlugin"
@@ -22,7 +22,7 @@ spec:
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:202202161825P150-gpu
+  image: gcr.io/mapr-252711/spark-gpu-3.2.0:202206300317R
   imagePullPolicy: Always
   mainApplicationFile: "maprfs:///${path to file}/dataframe_pandas_scalar_udf.py"
   restartPolicy:
