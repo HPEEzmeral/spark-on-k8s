@@ -11,7 +11,7 @@ image:
   # imageName: spark-client-2.4.7
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "202206140433R"
+  tag: "202206300317R"
   # Spark-2.4.7
   # tag: 202110041707C
 

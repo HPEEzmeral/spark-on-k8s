@@ -123,7 +123,7 @@ Returns the full DeImage
 */}}
 {{- define "livy-chart.fullDeImage" -}}
 {{- if not .Values.deImage }}
-{{ .Values.image.baseRepository }}/spark-2.4.7:202206140433R
+{{ .Values.image.baseRepository }}/spark-2.4.7:202206300317R
 {{- else -}}
 {{ .Values.image.baseRepository }}/{{ .Values.deImage }}
 {{- end }}
