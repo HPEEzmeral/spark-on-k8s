@@ -108,7 +108,6 @@ eventlogstorage:
   ## s3 configs end here
   ##Uncomment these parameters for using pvc as events log storage
 #  pvcName: "" #add an existing PVC if you do not want to create an existing PVC
-#  pvcStoragePath: "/mnt/hs-logs"
 #  ## If defined, storageClass: <storageClass> chart will use the storage class provided
 #  ## If set to "-", storageClass: "", which disables dynamic provisioning
 #  ## If undefined (the default) or set to null, no storageClass spec is set. Default storageClass will be used.
