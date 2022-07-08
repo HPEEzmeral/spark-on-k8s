@@ -10,9 +10,9 @@ image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
-  imageName: spark-operator
+  imageName: spark-operator-1.3.7
   # -- Image tag
-  tag: "mapr-1.0.0-202206292016"
+  tag: "1.3.7.0-202207081007"
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
