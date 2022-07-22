@@ -26,6 +26,11 @@ To install Livy with spark-2.4.7 support use the flags:
 To install the helm chart in tenant type 'none' Namespace use the flag:  
 `--set tenantIsUnsecure=true`
 
+## Uninstalling the Chart
+`helm delete livy -n sampletenant`
+
+Please note that this won't delete the PVC in case you are using a PVC. PVC will have to be manually deleted.
+
 ##### Using custom keystore
 To use a custom keystore, you'll need to create a secret with that keystore file in tenant namespace manually.
 The secret should have keystore file stored under a particular key, e.g. "ssl_keystore".
@@ -44,8 +49,3 @@ extraConfigs:
     livy.keystore.password = examplepass
     livy.key-password = examplepass
 ```
-
-## Uninstalling the Chart
-`helm delete livy -n sampletenant`
-
-Please note that this won't delete the PVC in case you are using a PVC. PVC will have to be manually deleted.
