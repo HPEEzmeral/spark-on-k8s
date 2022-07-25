@@ -44,7 +44,7 @@ spec:
   image: gcr.io/mapr-252711/spark-2.4.7:202207111050R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.JavaWordCount
-  mainApplicationFile: "local:///opt/mapr/spark/spark-2.4.7/examples/jars/spark-examples_2.12-2.4.7.201-mapr-712.jar"
+  mainApplicationFile: "local:///opt/mapr/spark/spark-2.4.7/examples/jars/spark-examples_2.12-2.4.7.203-mapr-712.jar"
   restartPolicy:
     type: Never
   arguments:
