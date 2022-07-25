@@ -35,7 +35,7 @@ class FetchTag(object):
                 for k, v in self.example_files[key].items():
                     file.write(k + ":" + v)
                     file.write("\n")
-    
+
     def get_tags_from_charts_yaml(self, start_dir, process_dict, ignore_dirs=None):
         if ignore_dirs is None:
             ignore_dirs = []

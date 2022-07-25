@@ -64,7 +64,7 @@ while IFS= read -r image_name; do
     envsubst < $IMAGE_JOB | ${KUBECTL_APPLY} -
     if [ $? -eq 0 ]; then
       echo "Successfully created job for downloading image"
-      while :; 
+      while :;
       do
         if [[ "$(docker images -q ${REPO}${image_name} 2> /dev/null)" != "" ]]; then
           echo "Image pull success: ${image_name}"

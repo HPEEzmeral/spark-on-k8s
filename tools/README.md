@@ -14,20 +14,22 @@ minikube start --driver=hyperkit --container-runtime=docker
 3. Set up docker env variables
 ```
 minikube docker-env
-eval $(minikube -p minikube docker-env) 
+eval $(minikube -p minikube docker-env)
 ```
 NOTE: kubectl now has been configured to point to the minikube setup automatically.
-NOTE: docker now has been configured to be used in current session window. 
+NOTE: docker now has been configured to be used in current session window.
 
 #### Store image name and tag in a file
 Run the following command from fetch_tag directory to execute the fetch tag script
 ```
+chmod +x fetch_tag.sh
 ./fetch_tag.sh
 ```
 
 #### Download images from the file and save them to a tar archive
 Run the following command from download_image directory to execute the image download script
 ```
+chmod +x download-images.sh
 ./download-images.sh --image-list ../imagelist.txt
 ```
 
@@ -38,5 +40,3 @@ Use the following command to get the docker images loaded from .tar.gz
 ```
 docker load < images.tar.gz
 ```
-
-
