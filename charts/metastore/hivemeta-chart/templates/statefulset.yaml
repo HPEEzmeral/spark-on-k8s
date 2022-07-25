@@ -52,7 +52,7 @@ spec:
           {{- include "common.commands" . | nindent 12 }}
           env:
           {{- include "hivemeta-chart.env" . | nindent 12 }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           {{- include "hivemeta-chart.ports" . | nindent 12 }}
