@@ -29,13 +29,13 @@ To install the helm chart in tenant type 'none' Namespace use the flag:
 ## Uninstalling the Chart
 `helm uninstall livy -n sampletenant`
 
-Please note that this won't delete the PVC in case you are using a PVC. PVC will have to be manually deleted.
+Please note that this won't delete the PVC in case you are using it. PVC will have to be manually deleted.
 
 ## Configuring Livy
 
 `extraConfigs` section of the `values.yaml` allows to set custom options for the `livy.conf`, `livy-client.conf` and `spark-defaults.conf`.  
 Content of this section would be mounted into the Livy as a K8s Secret.  
-The content of `livy.conf`, `livy-client.conf` and `spark-defaults.conf` subsections of `extraConfigs` section would be appended to the corresponsing configuration files.
+The content of `livy.conf`, `livy-client.conf` and `spark-defaults.conf` subsections of `extraConfigs` section would be appended to the corresponding configuration files.
 
 ### Using custom keystore
 To use a custom keystore, you'll need to manually create a secret with that keystore file in the tenant namespace.
@@ -177,7 +177,7 @@ curl -ks \
 
 To integrate Livy Spark Sessions with DeltaLake, you need to put Delta Lake JAR in storage like DTap and configure Livy to load it.
 
-Firstly, enable DTap storage for Livy Spark Sessions by adding the following options:
+Firstly, enable DTap DataTap for Livy Spark Sessions by adding the following options:
 ```json
 {
     "conf": {
