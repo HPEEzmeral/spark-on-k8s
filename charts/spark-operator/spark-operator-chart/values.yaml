@@ -12,7 +12,7 @@ image:
   # -- Image Name
   imageName: spark-operator-1.3.7
   # -- Image tag
-  tag: "1.3.7.0-202207081007"
+  tag: "1.3.7.1-202207250655"
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
