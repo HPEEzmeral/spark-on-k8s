@@ -1,17 +1,22 @@
 # Script to fetch image tags and download these images from GCR repository on local setup
 
 ### Prerequisites:
-1. Install minikube on your local setup with docker runtime and appropriate configs
+1. Install python
+2. Install yaml package for python
+```
+pip3 install yaml
+```
+3. Install minikube on your local setup with docker runtime and appropriate configs
 ```
 minikube config set cpus 6
 minikube config set memory 64g
 minikube config set disk-size 64g
 ```
-2. Start the minikube single node setup
+4. Start the minikube single node setup
 ```
 minikube start --driver=hyperkit --container-runtime=docker
 ```
-3. Set up docker env variables
+5. Set up docker env variables
 ```
 minikube docker-env
 eval $(minikube -p minikube docker-env)
