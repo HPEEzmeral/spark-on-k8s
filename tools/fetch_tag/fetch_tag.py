@@ -23,8 +23,6 @@ class FetchTag(object):
         use_examples_dirs = ["spark-2.4.7", "spark-3.2.0"]
         self.get_tags_from_charts_yaml(self.charts_dir, self.chart_files, use_charts_dirs)
         self.get_tags_from_examples_yaml(self.examples_dir, self.example_files, use_examples_dirs)
-        print(self.chart_files)
-        print(self.example_files)
         with open(self.imgtxt_file, "w") as file:
             for key in self.chart_files:
                 for k, v in self.chart_files[key].items():
