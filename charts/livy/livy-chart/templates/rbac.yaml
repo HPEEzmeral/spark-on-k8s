@@ -10,7 +10,7 @@ metadata:
   {{- end }}
   {{- end }}
   labels:
-  {{- include "common.labels" (dict "componentName" ( include "livy-chart.roleName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
+  {{- include "livy-chart.labels" . | nindent 4 }}
 rules:
 - apiGroups:
     - ""
@@ -34,7 +34,7 @@ metadata:
   {{- end }}
   {{- end }}
   labels:
-  {{- include "common.labels" (dict "componentName" ( include "livy-chart.roleBindingName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
+  {{- include "livy-chart.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

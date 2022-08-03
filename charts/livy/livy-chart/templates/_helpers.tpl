@@ -38,13 +38,25 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
-Common labels
+All livy labels
 */}}
 {{- define "livy-chart.labels" -}}
+{{ include "common.labels" (dict "componentName" ( printf "%s-svc" (include "livy-chart.componentName" .) ) "namespace" .Release.Namespace) }}
 helm.sh/chart: {{ include "livy-chart.chart" . }}
 {{ include "livy-chart.selectorLabels" . }}
 app.kubernetes.io/version: {{ include "livy-chart.livyVersion" . | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Evaluates component name based on component type
+*/}}
+{{- define "livy-chart.componentName" -}}
+{{ if eq .Values.image.imageName "livy-0.7.0" }}
+{{- print "livy-070" -}}
+{{ else }}
+{{- print "livy-070-247" -}}
+{{- end }}
 {{- end }}
 
 {{/*

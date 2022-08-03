@@ -8,7 +8,7 @@ metadata:
   {{- end }}
   {{- end }}
   labels:
-    {{- include "common.labels" (dict "componentName" ( include "livy-chart.serviceName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
+    {{- include "livy-chart.labels" . | nindent 4 }}
 spec:
   type: NodePort
   sessionAffinity: ClientIP
@@ -22,4 +22,4 @@ spec:
       name: http-livy
       {{- end }}
   selector:
-    {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 4 }}
+    {{- include "livy-chart.selectorLabels" . | nindent 4 }}
