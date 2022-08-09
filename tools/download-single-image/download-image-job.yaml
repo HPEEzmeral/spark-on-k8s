@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: download-image
+  namespace: default
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+      - name: imagepull-secret
+      restartPolicy: OnFailure
+      containers:
+      - name: container
+        image: ${DOWNLOADED_IMAGE}
+        command: ['sh', '-c', 'echo "hello" && sleep 100']

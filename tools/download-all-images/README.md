@@ -32,10 +32,10 @@ chmod +x fetch_tag.sh
 ```
 
 #### Download all images from the file and save them to a tar archive
-Run the following command from download_image directory to execute the download-all-images script
+Run the following command from download_all_images directory to execute the download-images script
 ```
-chmod +x download-all-images.sh
-./download-all-images.sh --image-list ../imagelist.txt
+chmod +x download-images.sh
+./download-images.sh --image-list imagelist.txt
 ```
 
 ###  Unload the images.tar.gz to docker as images

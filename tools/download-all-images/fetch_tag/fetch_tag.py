@@ -15,8 +15,8 @@ class FetchTag(object):
 
         self.re_pattern = re.compile("([a-zA-Z_-]+-\\d+.\\d+.*):(.+)")
 
-        self.charts_dir = os.path.abspath(os.path.join(cur_dir, "../../charts"))
-        self.examples_dir = os.path.abspath(os.path.join(cur_dir, "../../examples"))
+        self.charts_dir = os.path.abspath(os.path.join(cur_dir, "../../../charts"))
+        self.examples_dir = os.path.abspath(os.path.join(cur_dir, "../../../examples"))
         self.imgtxt_file = os.path.abspath(os.path.join(cur_dir, "../imagelist.txt"))
     def run(self):
         use_charts_dirs = ["livy", "metastore", "spark-client", "spark-hs", "spark-operator", "spark-ts"]
