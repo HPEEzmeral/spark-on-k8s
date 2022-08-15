@@ -131,3 +131,9 @@ Returns role binding name
 {{- define "spark-ts-chart.roleBindingName" -}}
 {{ .Chart.Name }}-role-binding
 {{- end }}
+{{/*
+Returns a list of extra spark conf items
+*/}}
+{{- define "spark-ts-chart.extraConfigs" -}}
+    {{ .Values.sparkExtraConfigs }}
+{{- end }}
