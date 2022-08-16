@@ -78,7 +78,14 @@ spec:
           {{- include "common.securityContext" . | nindent 12 }}
           volumeMounts:
           {{- include "spark-ts-chart.volumeMounts" . | nindent 12 }}
+            - name: spark-extra-configs
+              mountPath: /opt/mapr/kubernetes/spark_secrets
       volumes:
         {{- include "spark-ts-chart.volumes" .  | nindent 8  }}
+        - name: spark-extra-configs
+          secret:
+            secretName: spark-ts-secret-configs
+            defaultMode: 420
+            optional: false
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
