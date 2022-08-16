@@ -107,3 +107,8 @@ ownerReference:
 
 #hive site source
 hiveSiteSource: hivesite-cm
+
+sparkExtraConfigs: |
+#  spark.hadoop.fs.s3a.access.key REPLACE-WITH-AWS-ACCESS-KEY
+#  spark.hadoop.fs.s3a.secret.key REPLACE-WITH-AWS-SECRET-KEY
+#  spark.sql.warehouse.dir s3a://YOUR_BUCKET/WAREHOUSE_DIR
