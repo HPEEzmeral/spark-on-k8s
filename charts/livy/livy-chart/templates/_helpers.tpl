@@ -105,6 +105,13 @@ Returns the name for livy service
 {{- end }}
 
 {{/*
+Returns the name for livy ui/rest service
+*/}}
+{{- define "livy-chart.restServiceName" -}}
+{{- printf "%s-rest-svc" .Release.Name  | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Returns the name for livy Role
 */}}
 {{- define "livy-chart.roleName" -}}

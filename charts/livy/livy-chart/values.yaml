@@ -9,16 +9,16 @@ image:
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
   imageName: livy-0.7.0
-#  imageName: livy-0.7.0-2.4.7
+  # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
   tag: "202206300317R"
   # -- Image pull policy
   pullPolicy: Always
 
-#default spark image for spark applications created with livy
+# -- default spark image for spark applications created with livy
 deImage: spark-3.2.0:202206300317R
-#for livy-0.7.0/spark-2.4.7
-#deImage: spark-2.4.7:202206300317R
+# -- for livy-0.7.0/spark-2.4.7
+# deImage: spark-2.4.7:202206300317R
 
 # -- Image pull secrets
 imagePullSecrets:

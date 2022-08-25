@@ -10,6 +10,27 @@ metadata:
   labels:
     {{- include "common.labels" (dict "componentName" ( include "livy-chart.serviceName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
 spec:
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: ClientIP
+  selector:
+    {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 4 }}
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "livy-chart.restServiceName" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+    {{- include "common.labels" (dict "componentName" ( include "livy-chart.restServiceName" . ) "namespace" .Release.Namespace ) | nindent 4 }}
+spec:
   type: NodePort
   sessionAffinity: ClientIP
   ports:
