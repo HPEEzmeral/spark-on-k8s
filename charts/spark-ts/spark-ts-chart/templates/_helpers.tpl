@@ -135,5 +135,9 @@ Returns role binding name
 Returns a list of extra spark conf items
 */}}
 {{- define "spark-ts-chart.extraConfigs" -}}
+{{- if not (empty .Values.sparkExtraConfigs)  -}}
     {{ .Values.sparkExtraConfigs }}
+{{- else -}}
+   # Secret configs are empty
+{{- end -}}
 {{- end }}
