@@ -20,7 +20,7 @@ Please note:
 
 ### Install with spark-2.4.7 version
 To install Livy with spark-2.4.7 support use the flags:  
-`--set image.imageName=livy-0.7.0-2.4.7 --set image.tag=202209131114R --set livyVersion=0.7.0 --set deImage=spark-2.4.7:202209131114R`
+`--set image.imageName=livy-0.7.0-2.4.7 --set image.tag=202209280738R --set livyVersion=0.7.0 --set deImage=spark-2.4.7:202209280738R`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
