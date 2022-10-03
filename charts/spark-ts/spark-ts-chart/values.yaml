@@ -14,10 +14,10 @@ image:
   # -- Image Name for 2.4.7 version
 #  imageName: spark-ts-2.4.7
   # -- Image tag for 3.2.0 version
-  tag: "202209280738R"
+  tag: "202210030219R"
   # -- Image tag for 2.4.7 version
-#  tag: "202209280738R"
-  executorTag: 202209280738R
+#  tag: "202210030219R"
+  executorTag: 202210030219R
   # -- Image pull policy
   pullPolicy: Always
 
