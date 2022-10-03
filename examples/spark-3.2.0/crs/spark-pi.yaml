@@ -20,17 +20,17 @@ metadata:
   name: spark-pi-secure
   namespace: sampletenant
 spec:
-  sparkConf:
+  #sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
-    spark.mapr.user.secret: dev1-secret
+    #spark.mapr.user.secret: spark-user-secret
     # Note: You do not need to specify a spark.eventLog.dir
     #       it will be auto-generated with the pattern "maprfs:///apps/spark/<namespace>"
     #spark.eventLog.dir: "maprfs:///apps/spark/sampletenant"
   type: Scala
   sparkVersion: 3.2.0
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.2.0:opal-test2
+  image: gcr.io/mapr-252711/spark-3.2.0:202210030219R
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
