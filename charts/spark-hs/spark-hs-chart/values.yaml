@@ -119,7 +119,8 @@ eventlogstorage:
   ## PVC configs end here
 
 # activate daemonize mode for hs
-daemonize: true
+isDaemonize: true
+daemonize: "true" 
 
 # Alpha feature
 # Data provided in "sparkExtraConfigs" will be added to spark configuration through a K8S secret

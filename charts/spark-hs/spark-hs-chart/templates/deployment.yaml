@@ -55,7 +55,7 @@ spec:
           {{- include "common.commands" . | nindent 12 }}
           env:
           {{- include "spark-hs-chart.env" . | nindent 12 }}
-          {{- if not .Values.daemonize }}
+          {{- if not .Values.isDaemonize }}
             - name: SPARK_NO_DAEMONIZE
               value: {{ .Values.daemonize }}
           {{- end }}
