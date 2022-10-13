@@ -55,10 +55,8 @@ spec:
           {{- include "common.commands" . | nindent 12 }}
           env:
           {{- include "spark-hs-chart.env" . | nindent 12 }}
-          {{- if .Values.daemonize }}
             - name: SPARK_NO_DAEMONIZE
               value: "true"
-          {{- end }}
             - name: SPARK_HISTORY_OPTS
               value: {{ .Values.HSJavaOpts }}
           image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"

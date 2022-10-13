@@ -113,5 +113,3 @@ sparkExtraConfigs: |
 #  spark.hadoop.fs.s3a.secret.key REPLACE-WITH-AWS-SECRET-KEY
 #  spark.sql.warehouse.dir s3a://YOUR_BUCKET/WAREHOUSE_DIR
 
-# activate SPARK_NO_DAEMONIZE mode for ts option that redirect logs to stdout
-daemonize: true
