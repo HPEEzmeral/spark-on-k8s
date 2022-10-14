@@ -55,6 +55,8 @@ spec:
           {{- include "common.commands" . | nindent 12 }}
           env:
           {{- include "spark-ts-chart.env" . | nindent 12 }}
+            - name: SPARK_NO_DAEMONIZE
+              value: "true"
           image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag}}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

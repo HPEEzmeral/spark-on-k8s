@@ -118,9 +118,6 @@ eventlogstorage:
 ##  volumePluginSpec: {}
   ## PVC configs end here
 
-# activate daemonize mode for hs
-daemonize: true
-
 # Alpha feature
 # Data provided in "sparkExtraConfigs" will be added to spark configuration through a K8S secret
 # Useful to pass secure config options to spark, e.g. S3 credentials
