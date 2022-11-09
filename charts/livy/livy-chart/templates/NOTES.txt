@@ -1,7 +1,7 @@
 1. Get the application URL by running these commands:
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "livy-chart.restServiceName" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-{{- if and (.Values.tenantIsUnsecure) (not .Values.livySsl.useCustomKeystore) }}
+{{- if and (.Values.tenantIsUnsecure) (ne .Values.livySsl.enable "custom") }}
   echo http://$NODE_IP:$NODE_PORT
 {{- else }}
   echo https://$NODE_IP:$NODE_PORT
