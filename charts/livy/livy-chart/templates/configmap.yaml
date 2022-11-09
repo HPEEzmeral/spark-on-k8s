@@ -33,6 +33,11 @@ data:
     {{- else }}
     livy.server.recovery.mode = off
     {{- end }}
+    {{- if not .Values.livySsl.enable }}
+    livy.ssl.enable = false
+    {{- else if eq .Values.livySsl.enable "custom" }}
+    livy.ssl.enable = true
+    {{- end }}
 
   post-startup.sh: |
     #!/usr/bin/env bash

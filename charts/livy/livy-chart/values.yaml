@@ -9,9 +9,9 @@ image:
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
   imageName: livy-0.7.0
-#  imageName: livy-0.7.0-2.4.7
+  # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202210110658R"
+  tag: "202211100753R"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -114,7 +114,12 @@ sparkHistoryServer:
 
 # Alpha feature
 livySsl:
-  useCustomKeystore: false
+  # Available options: auto, no, custom
+  # - "auto" - Use the tenant configuration.
+  # - "no" - Disable SSL for Livy UI.
+  # - "custom" - Use keys provided in the secret specified below.
+  #              This also requires manually configuing kays in livy.conf using extraConfigs section.
+  enable: auto
   sslSecretName: "livy-ssl-secret"
   secretMountPath: /var/livy
 
