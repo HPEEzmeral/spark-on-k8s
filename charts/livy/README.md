@@ -45,7 +45,7 @@ as shown in the example below. Assuming that the secret name is "livy-ssl-secret
 "ssl_keystore" and passwords are "examplepass" update values.yaml like this:
 ```yaml
 livySsl:
-  useCustomKeystore: true
+  enable: true
   sslSecretName: "livy-ssl-secret"
   secretMountPath: /var/livy
 
