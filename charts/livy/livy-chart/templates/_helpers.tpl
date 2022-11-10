@@ -163,7 +163,7 @@ return volume mounts for containers
 - name: livy-sessionstore
   mountPath: "/opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/session-store"
 {{- end }}
-{{- if eq .Values.livySsl.enable "custom" }}
+{{- if eq (.Values.livySsl.enable | toString) "custom" }}
 - name: livy-secret-ssl
   mountPath: {{ .Values.livySsl.secretMountPath }}
 {{- end }}
@@ -181,7 +181,7 @@ returns volumes for StatefulSet
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
 {{- end }}
-{{- if eq .Values.livySsl.enable "custom" }}
+{{- if eq (.Values.livySsl.enable | toString) "custom" }}
 - name: livy-secret-ssl
   secret:
     secretName: {{ .Values.livySsl.sslSecretName }}

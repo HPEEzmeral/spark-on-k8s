@@ -37,10 +37,10 @@ spec:
     - port: {{ .Values.ports.livyHttpPort }}
       targetPort: {{ .Values.ports.livyHttpPort }}
       protocol: TCP
-      {{- if or (not .Values.tenantIsUnsecure) (eq .Values.livySsl.enable "custom") }}
-      name: https-livy
-      {{ else }}
+      {{- if or (and .Values.tenantIsUnsecure (ne (.Values.livySsl.enable | toString) "custom")) (not .Values.livySsl.enable) }}
       name: http-livy
+      {{ else }}
+      name: https-livy
       {{- end }}
   selector:
     {{- include "common.selectorLabels" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 4 }}
