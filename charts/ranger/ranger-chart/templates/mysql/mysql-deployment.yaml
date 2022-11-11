@@ -1,0 +1,98 @@
+{{ $currentScope := .}}
+{{- with .Values.dataStore }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ tpl .service.clusterIp.fullName $ }}
+spec:
+  ports:
+  - port: {{ .listenPort }}
+  selector:
+    app: {{ .label }}
+  #clusterIP: None
+{{- end }}
+
+---
+{{ $currentScope := .}}
+{{- with .Values.dataStore }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ tpl .service.nodePort.fullName $ }}
+spec:
+  selector:
+    app: {{ .label }}
+  ports:
+    - protocol: TCP
+      port: {{ .listenPort }}
+      targetPort: {{ .listenPort }}
+      nodePort: {{ .service.nodePort.nodeport }}
+
+  type: NodePort
+  
+{{- end }}
+
+---
+{{ $currentScope := .}}
+{{- with .Values.dataStore }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .fullname $ }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .label }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .label }}
+    spec:
+      securityContext:
+        runAsUser: 999
+        #runAsGroup: 0
+        fsGroup: 0            
+        #runAsNonRoot: true
+      containers:
+      - name: mysql-cnt
+        image: {{ .containerImage }}
+        env:
+          # TODO: Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: {{ .rootPasswd }}
+        - name: MYSQL_DATABASE
+          value: {{ .dbname }}
+        - name: MYSQL_USER
+          value: {{ .user }}
+          # TODO: Use secret in real usage
+        - name: MYSQL_PASSWORD
+          value: {{ .passwd }}
+        ports:
+        - containerPort: {{ .listenPort }}
+          name: mysql-port
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: {{ .storage.mntPath }}
+
+        lifecycle:
+          postStart:
+            exec:
+              # command: ["/bin/sh", "-c", "sleep 30 && mysql -u root -padmin -e 'GRANT ALL PRIVILEGES ON *.* TO "webservice_rw"@"%"" WITH GRANT OPTION'"]
+              command:
+                - "sh"
+                - "-c"
+                - >
+                  sleep 30 ;
+                  mysql -u root -p{{ .rootPasswd }} -e "GRANT ALL PRIVILEGES ON *.* TO '{{ .user }}'@'%' WITH GRANT OPTION"; 
+
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: {{ tpl .storage.pvcFullname $ }}
+
+{{- end }}

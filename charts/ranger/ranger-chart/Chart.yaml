@@ -1,0 +1,13 @@
+apiVersion: v2
+name: ranger
+description: Ranger instance For EzSQL
+
+type: application
+
+version: 0.0.1
+
+appVersion: "ranger:0.0.1"
+
+maintainers:
+  - email: ezsql-group.support@hpe.com
+    name: R.K. Singh and Team

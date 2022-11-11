@@ -1,0 +1,42 @@
+{{- with .Values.ranger }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .fullname $ }}
+  labels:
+    app: ranger-admin-server
+  #namespace: ranger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ranger-admin-server
+  template:
+    metadata:
+        labels:
+          app: ranger-admin-server
+    spec:
+      initContainers:
+      - name: mysql-init
+        image: busybox:1.31
+        imagePullPolicy: Always
+        command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
+      containers:
+        - name: ranger-admin-server
+          image: {{ .containerImage }}
+          imagePullPolicy: {{ .pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .listenPort }}
+              protocol: TCP
+          volumeMounts:
+            - name: ranger-conf
+              mountPath: /opt/mapr/ranger/ranger-2.3.0/ranger-admin/install.properties
+              subPath: install.properties
+          # TODO: Mount /etc/ranger to a persistent volume. This dir has policy caches and service (repository) info
+      volumes:
+        - name: ranger-conf
+          configMap:
+            name: ranger-property-file
+{{- end }}

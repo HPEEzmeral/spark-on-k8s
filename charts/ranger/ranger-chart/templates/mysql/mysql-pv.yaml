@@ -1,0 +1,37 @@
+{{- with .Values.dataStore.storage }}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ tpl .pvFullname $ }}
+  labels:
+    type: local
+spec:
+  storageClassName: {{ tpl .storageClassName $ }}
+  capacity:
+    storage: {{ .size }}
+  accessModes:
+    - {{ .accessMode }}
+
+  nfs:
+    server: {{ .serverIp }}
+    path: {{ tpl (.storagePath) $ | quote }}
+      
+{{- end }}
+
+---
+{{- with .Values.dataStore.storage }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ tpl .pvcFullname $ }}
+spec:
+  storageClassName: {{ tpl .storageClassName $ }}
+  accessModes:
+    - {{ .accessMode }}
+  resources:
+    requests:
+      storage: {{ .size }}
+
+{{- end }}

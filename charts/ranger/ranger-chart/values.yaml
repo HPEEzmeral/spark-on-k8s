@@ -1,0 +1,51 @@
+env: "localdev"
+
+## Global; used for defining Names
+appName: "{{ .Chart.Name }}"
+relName: "{{ .Release.Name }}"
+uidName: "{{ .Release.Namespace }}"
+
+kind:
+  deployment: dep
+  services: svc
+
+dataStore:
+  fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-mysql"
+  containerImage: mysql:5.7
+  pullPolicy: Always
+  user: admin
+  rootPasswd: admin
+  passwd: admin
+  dbname: ranger
+  listenPort: 3306
+  label: mysql
+
+  storage:
+    serverIp: 16.0.15.159
+    pvFullname: "{{ .Release.Namespace }}-{{ .Values.kind.persistentVolumes }}-mysql"
+    pvcFullname: "{{ .Release.Namespace }}-{{ .Values.kind.persistentVolumeClaim }}-mysql"
+    storageClassName: "{{ .Release.Namespace }}-manual-mysql"
+    storagePath: /nfs/{{ .Release.Namespace }}/mysql-pv/
+    accessMode: ReadWriteMany
+    size: 5Gi
+    mntPath: /var/lib/mysql
+
+  service:
+    clusterIp:
+      fullName: mysql
+
+    nodePort:
+      fullName: mysqlnp
+      nodeport: 32114
+
+ranger:
+  #fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-ranger"
+  fullname: "{{ .Release.Namespace }}-ranger"
+  containerImage: bd-harbor-registry.mip.storage.hpecorp.net/hpe-ezsql/ranger:0.0.2
+  pullPolicy: Always
+  listenPort: 6080
+  nodePort: 30004
+  # PLEASE NOTE :: Password should be minimum 8 characters with min one alphabet and one numeric.
+  # TODO: Use secret in real usage
+  console_password: Admin@123
+
