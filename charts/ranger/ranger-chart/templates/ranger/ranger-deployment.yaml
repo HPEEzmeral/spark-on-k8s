@@ -34,7 +34,6 @@ spec:
             - name: ranger-conf
               mountPath: /opt/mapr/ranger/ranger-2.3.0/ranger-admin/install.properties
               subPath: install.properties
-          # TODO: Mount /etc/ranger to a persistent volume. This dir has policy caches and service (repository) info
       volumes:
         - name: ranger-conf
           configMap:

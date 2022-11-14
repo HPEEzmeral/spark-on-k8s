@@ -13,8 +13,10 @@ dataStore:
   fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-mysql"
   containerImage: mysql:5.7
   pullPolicy: Always
-  user: admin
+  # root database user
   rootPasswd: admin
+  # Ranger specific database and user info
+  user: admin
   passwd: admin
   dbname: ranger
   listenPort: 3306
@@ -41,6 +43,7 @@ dataStore:
 ranger:
   #fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-ranger"
   fullname: "{{ .Release.Namespace }}-ranger"
+  # TODO: Point to the docker image which is created for EEP specific Ranger-Admin
   containerImage: bd-harbor-registry.mip.storage.hpecorp.net/hpe-ezsql/ranger:0.0.2
   pullPolicy: Always
   listenPort: 6080
