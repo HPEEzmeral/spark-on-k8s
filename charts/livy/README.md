@@ -38,7 +38,7 @@ Content of this section would be mounted into the Livy as a K8s Secret.
 The content of `livy.conf`, `livy-client.conf` and `spark-defaults.conf` subsections of `extraConfigs` section would be appended to the corresponding configuration files.
 
 ### Using custom keystore
-To use a custom keystore, you'll need to manually create a secret with that keystore file in the tenant namespace.
+To use a custom keystore to enable HTTPS for the Livy UI, you'll need to manually create a secret with that keystore file in the tenant namespace.
 The secret should have a keystore file stored under a particular key, e.g. "ssl_keystore".
 Livy SSL configuration options can be securely passed to Livy using the `extraConfigs` section, 
 as shown in the example below. Assuming that the secret name is "livy-ssl-secret", the keystore key name in secret is 
