@@ -16,10 +16,10 @@ spec:
     - port: {{ .Values.ports.livyHttpPort }}
       targetPort: {{ .Values.ports.livyHttpPort }}
       protocol: TCP
-      {{- if or (and .Values.tenantIsUnsecure (ne (.Values.livySsl.enable | toString) "custom")) (not .Values.livySsl.enable) }}
-      name: http-livy
-      {{ else }}
+      {{- if .Values.livySsl.enable }}
       name: https-livy
+      {{ else }}
+      name: http-livy
       {{- end }}
   selector:
     {{- include "livy-chart.selectorLabels" . | nindent 4 }}

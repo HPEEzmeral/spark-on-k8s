@@ -114,14 +114,13 @@ sparkHistoryServer:
 
 # Alpha feature
 livySsl:
-  # Available options: auto, no, custom
-  # - "auto" - Use the tenant configuration.
-  # - "no" - Disable SSL for Livy UI.
-  # - "custom" - Use keys provided in the secret specified below.
-  #              This also requires manually configuing kays in livy.conf using extraConfigs section.
-  enable: auto
-  sslSecretName: "livy-ssl-secret"
-  secretMountPath: /var/livy
+  enable: true
+  # Leave the two following options blank to use tenant SSL Keystore.
+  # Alternatively, to use a custom keystore, configure the following options and corresponding options in livy.conf.
+  sslSecretName: ""
+  secretMountPath: ""
+  # sslSecretName: "livy-ssl-secret"
+  # secretMountPath: /var/livy
 
 # Alpha feature
 # Data provided in "extraConfigs" will be added to configuration files through a K8S secret.

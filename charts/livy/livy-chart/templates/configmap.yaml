@@ -33,10 +33,14 @@ data:
     {{- else }}
     livy.server.recovery.mode = off
     {{- end }}
-    {{- if not .Values.livySsl.enable }}
-    livy.ssl.enable = false
-    {{- else if eq .Values.livySsl.enable "custom" }}
+    {{- if .Values.livySsl.enable }}
+      {{- if and .Values.livySsl.sslSecretName .Values.livySsl.secretMountPath }}
     livy.ssl.enable = true
+      {{- else }}
+    livy.ssl.enable = auto
+      {{- end }}
+    {{- else }}
+    livy.ssl.enable = false
     {{- end }}
 
   post-startup.sh: |
