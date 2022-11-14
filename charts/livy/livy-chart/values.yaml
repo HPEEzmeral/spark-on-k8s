@@ -113,6 +113,7 @@ sparkHistoryServer:
   eventsDir: "maprfs:///apps/spark/sampletenant"
 
 # Alpha feature
+# Configure HTTPS for the Livy UI.
 livySsl:
   enable: true
   # Leave the two following options blank to use tenant SSL Keystore.
