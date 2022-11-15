@@ -9,9 +9,9 @@ image:
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
   imageName: livy-0.7.0
-#  imageName: livy-0.7.0-2.4.7
+  # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202210110658R"
+  tag: "202211100753R"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -113,10 +113,15 @@ sparkHistoryServer:
   eventsDir: "maprfs:///apps/spark/sampletenant"
 
 # Alpha feature
+# Configure HTTPS for the Livy UI.
 livySsl:
-  useCustomKeystore: false
-  sslSecretName: "livy-ssl-secret"
-  secretMountPath: /var/livy
+  enable: true
+  # Leave the two following options blank to use tenant SSL Keystore.
+  # Alternatively, to use a custom keystore, configure the following options and corresponding options in livy.conf.
+  sslSecretName: ""
+  secretMountPath: ""
+  # sslSecretName: "livy-ssl-secret"
+  # secretMountPath: /var/livy
 
 # Alpha feature
 # Data provided in "extraConfigs" will be added to configuration files through a K8S secret.
