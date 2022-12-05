@@ -1,0 +1,1092 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: tenants.hcp.hpe.com
+spec:
+  group: hcp.hpe.com
+  names:
+    kind: Tenant
+    listKind: TenantList
+    plural: tenants
+    singular: tenant
+  scope: Cluster
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: Tenant is the Schema for the tenants API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: TenantSpec defines the desired state of Tenant
+            properties:
+              baseimagetag:
+                description: BaseImageTag. This tag (along with service name) will
+                  be used to identify what images to pull unless overridden in a specific
+                  package in Tenant service info
+                maxLength: 128
+                type: string
+              clustername:
+                description: Cluster Name. Name of MapR Cluster. Also, Kubernetes
+                  namespace for internal clusters. MUST BE PROVIDED
+                maxLength: 63
+                minLength: 4
+                type: string
+              clustertype:
+                description: Cluster Type. Type of kubernetes environment the cluster
+                  will run in. MUST BE PROVIDED
+                enum:
+                - internal
+                - external
+                - none
+                type: string
+              corelocation:
+                description: Core Location. Root of directory to write core files
+                  on host node. This directory must be writeable. Default if empty
+                  is /var/log/mapr/cores/. This Tenant will create a subdirectory
+                  for itself under this root
+                maxLength: 3800
+                type: string
+              debugging:
+                description: Debug Info. Settings pertaining to debugging
+                properties:
+                  loglevel:
+                    description: 'Log Level - Change logging level of all Tenant service
+                      containers. Choices are ERROR, INFO, and DEBUG. Note: DEBUG
+                      will generate much additional log churn. Default if not provided
+                      is INFO'
+                    enum:
+                    - ERROR
+                    - INFO
+                    - DEBUG
+                    type: string
+                  preservefailedpods:
+                    description: Preserve Failed Pods. Try to avoid kubernetes restarting
+                      of failing pods. This behavior is not guaranteed for all errors.
+                      This setting is useful during debugging but should be false
+                      in other circumstances to enhance availability. Default is false
+                      or not to preserve pods
+                    type: boolean
+                  ptrace:
+                    description: Ptrace. By default, ptrace is blocked in Docker and
+                      Kubernetesenable due to security concerns. This flag will enable
+                      ptrace system call so that users can attach debugger to porcesses
+                      in the container. Default is false or not to enable ptrace systemm
+                      call.
+                    type: boolean
+                  wipelogs:
+                    description: Wipe Logs. Remove logs at startup for container.
+                      This can assist avoiding old logs. This flag will be ignored
+                      if hostid file is present already on host Default is false or
+                      not to wipe logs
+                    type: boolean
+                type: object
+              grouplist:
+                description: Group List. List of Groups for Tenant
+                items:
+                  type: string
+                maxItems: 10
+                minItems: 0
+                type: array
+                x-kubernetes-list-type: set
+              ignorevalidationfailures:
+                description: Ignore validation failures. Determines whether or not
+                  creates or updates to the CR which trigger validation failures will
+                  succeed or fail.  The default is false.  Set to true to override
+                type: boolean
+              imagepullsecret:
+                description: Image Pull Secret. Name of secret located in mapr-system
+                  used to pull images from registry. It should contain login info
+                  for the registry. This should ALWAYS be provided in unless pulling
+                  images from an open registry. The default secret is named mapr-imagepull-secrets
+                maxLength: 253
+                type: string
+              imageregistry:
+                description: Image Registry. Location to pull images. This should
+                  ALWAYS be provided in unless pulling images from Docker Hub
+                maxLength: 255
+                type: string
+              loglocation:
+                description: Log Location. Root of logging directory on host node.
+                  This directory must be writeable. Default if empty is /var/log/mapr/.
+                  This Tenant will create a subdirectory for itself under this root
+                maxLength: 3800
+                type: string
+              podinfolocation:
+                description: Pod Info Location. Root of directory to store misc podinfo
+                  on host node. This directory must be writeable. Default if empty
+                  is /var/log/mapr/podinfo/. This Tenant will create a subdirectory
+                  for itself under this root
+                maxLength: 3800
+                type: string
+              quotas:
+                description: Quotas. Various Quota Settings
+                properties:
+                  resourcequotas:
+                    description: Resource Quotas. Quotas for physical resources
+                    properties:
+                      cpu:
+                        description: CPU Limit. All pods running in this Tenant including
+                          Tenant Services cannot exceed this threshold
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      memory:
+                        description: Memory Limit.  All pods running in Tenant including
+                          Tenant Services cannot exceed this threshold
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                    required:
+                    - cpu
+                    - memory
+                    type: object
+                type: object
+              security:
+                description: Security. Security Settings pertaining to security in
+                  the Tenant. Security info is inherited from the cluster for internal
+                  tenants
+                properties:
+                  dnsdomain:
+                    description: DNS Domain. Domain name for kubernetes pods. Default
+                      value is cluster.local
+                    maxLength: 253
+                    type: string
+                  environmenttype:
+                    description: 'Environment Type. The Type of Kubernetes environment
+                      that this Tenant will run in. Legal values are currently: gce,
+                      vanilla, and openshift'
+                    enum:
+                    - gke
+                    - vanilla
+                    - hcp
+                    type: string
+                  externalclientsecret:
+                    description: External Client Secret. Name of secret in hpe-external-info
+                      containing client info for external cluster. Configmap usually
+                      generated by gen-external-secrets.sh. Default value is mapr-client-secrets
+                    maxLength: 253
+                    type: string
+                  externalconfigmap:
+                    description: External Configmap. Name of configmap in hpe-external-info
+                      containing external server info for external cluster. Configmap
+                      usually generated by gen-external-secrets.sh. Default value
+                      is mapr-external-cm
+                    maxLength: 253
+                    type: string
+                  externalhivesiteconfigmap:
+                    description: External Hivesite Configmap. Name of configmap that
+                      contains hivesite info for a hivemetastore on an external data
+                      cluster. Configmap usually generated by gen-external-secrets.sh.
+                      Default value is mapr-hivesite-external-cm
+                    maxLength: 253
+                    type: string
+                  externalserversecret:
+                    description: External Server Secret. Name of secret in hpe-external-info
+                      containing external server info for external cluster. Configmap
+                      usually generated by gen-external-secrets.sh. Default value
+                      is mapr-server-secrets
+                    maxLength: 253
+                    type: string
+                  externalusersecret:
+                    description: External User Secret. Name of secret in hpe-external-info
+                      containing user info for external cluster. Configmap usually
+                      generated by gen-external-secrets.sh. Default value is mapr-user-secrets
+                    maxLength: 253
+                    type: string
+                  ldapcertsecret:
+                    description: LDAP Cert Secret. The name of an LDAP secret template
+                      in hpe-secure. The default template provided is ldapcert-secret.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  ldapclientconfig:
+                    description: LDAPClient ConfigMap. The name of a configmap template
+                      containing LDAP Client config file in hpe-secure. The default
+                      template provided is ldapclient-cm. You can replace with your
+                      own
+                    maxLength: 253
+                    type: string
+                  podsecuritypolicy:
+                    description: PodSecurityPolicy. The name of a podsecuritypolicy
+                      template in hpe-secure. The default template provided is tenant-PSP
+                    maxLength: 253
+                    type: string
+                  role:
+                    description: Role. The name of a role template in hpe-secure.
+                      The default template provided is tenant-role. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  sshsecret:
+                    description: SSH Secret. The name of a secret containing SSH configuration
+                      information in hpe-secure. This file along with LDAP Client
+                      is how you configure Kubernetes pods to use your LDAP or AD
+                      to validate users. The default template provided is sssd-secrets.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  sslsecret:
+                    description: SSL Secret. The name of a secret containing SSL configuration
+                      information in hpe-secure. This file along with LDAP Client
+                      is how you configure Kubernetes pods to use your LDAP or AD
+                      to validate users. The default template provided is sssd-secrets.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  sssdsecret:
+                    description: SSSD Secret. The name of a secret containing SSSD
+                      configuration information in hpe-secure. This file along with
+                      LDAP Client is how you configure Kubernetes pods to use your
+                      LDAP or AD to validate users. The default template provided
+                      is sssd-secrets. You can replace with your own
+                    maxLength: 253
+                    type: string
+                  systemusersecret:
+                    description: System Secret. The name of a secret containing mapr
+                      user info in hpe-secure. The default template provided is system.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  terminalrole:
+                    description: TerminalRole. The name of a terminal role template
+                      in hpe-secure. The default template provided is tenant-terminal-role.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  userrole:
+                    description: UserRole. The name of a user and group role template
+                      in hpe-secure. The default template provided is tenant-user-role.
+                      You can replace with your own
+                    maxLength: 253
+                    type: string
+                  usesssd:
+                    description: Use SSSD. Use SSSD to connect to corporate directory
+                      or use raw linux users in pods. Default value is false
+                    type: boolean
+                required:
+                - environmenttype
+                type: object
+              tenantcustomizationfiles:
+                description: Tenant Customization Files. Set of template files used
+                  to customize Tenant service pods
+                properties:
+                  hiveMetastoreconfig:
+                    description: HiveMetastore ConfigMap. The name of a configmap
+                      template containing Hive Metastore config files in hpe-config-compute.
+                      The default template provided is hivemetastore-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  livyconfig:
+                    description: Livy Server ConfigMap. The name of a configmap template
+                      containing Livy Server config files in hpe-config-compute. The
+                      default template provided is livy-cm. You can replace with your
+                      own
+                    maxLength: 253
+                    type: string
+                  sparkhsconfig:
+                    description: Spark History Server ConfigMap. The name of a configmap
+                      template containing Spark HistoryServer config files in hpe-config-compute.
+                      The default template provided is sparkhistory-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  sparkmasterconfig:
+                    description: Spark Master ConfigMap. The name of a configmap template
+                      containing Spark Master config files in hpe-config-compute.
+                      The default template provided is sparkhistory-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  sparktsconfig:
+                    description: Spark Thrift Server ConfigMap. The name of a configmap
+                      template containing Spark ThriftServer config files in hpe-config-compute.
+                      The default template provided is sparkthrift-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  sparkuiproxyconfig:
+                    description: Spark UI Proxy ConfigMap. The name of a configmap
+                      template containing Spark UI Proxy config files in hpe-config-compute.
+                      The default template provided is sparkhistory-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                  sparkworkerconfig:
+                    description: Spark Worker ConfigMap. The name of a configmap template
+                      containing Spark Worker config files in hpe-config-compute.
+                      The default template provided is sparkhistory-cm. You can replace
+                      with your own
+                    maxLength: 253
+                    type: string
+                type: object
+              tenantservices:
+                description: Tenant Services. Tenant service pod info
+                properties:
+                  hivemetastore:
+                    description: Hive Metastore Tenant Service. Starts a Hive Metastore
+                      for all jobs launched in Tenant
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        minimum: 0
+                        type: integer
+                      externaldbserver:
+                        description: External DB Server Location. Location of the
+                          external database. Default is empty.
+                        maxLength: 253
+                        type: string
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the pod will be allowed to consume for logs,
+                          coredumps, and container images before pod is not allowed
+                          to write more data. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                      useexternaldb:
+                        description: Use External DB. Whether Hive Metastore should
+                          use an external database instead of Derby. Default if not
+                          provided is False or use Derby.
+                        type: boolean
+                    type: object
+                  livy:
+                    description: Livy Server.
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        maximum: 1
+                        minimum: 0
+                        type: integer
+                      deimage:
+                        description: Driver/Executor Image Name. The full name of
+                          the image used for the pod's container. This overrides the
+                          base image tag. Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      hivesitesource:
+                        description: ConfigMap name with hive-site.xml to use with
+                          Spark Applications.
+                        maxLength: 253
+                        type: string
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the pod will be allowed to consume for logs,
+                          coredumps, and container images before pod is not allowed
+                          to write more data. Default if not provided is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sessionrecovery:
+                        description: Livy Session Recovery configuration.
+                        properties:
+                          kind:
+                            description: Kind of Livy Session Recovery.
+                            enum:
+                            - pvc
+                            - zookeeper
+                            - disabled
+                            type: string
+                          pvcname:
+                            description: Name of PVC to use with Filesystem Session
+                              Recovery.
+                            maxLength: 63
+                            type: string
+                        type: object
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                    type: object
+                  sparkhs:
+                    description: Tenant Spark History Tenant Service. Starts a Spark
+                      History Server for Spark Jobs launched in Tenant
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        minimum: 0
+                        type: integer
+                      eventlogstorage:
+                        description: Spark HS event log storage configuration
+                        properties:
+                          kind:
+                            description: Kind of SparkHS event logs storage
+                            enum:
+                            - pvc
+                            - maprfs
+                            type: string
+                          pvcname:
+                            description: PVC name to use
+                            maxLength: 63
+                            type: string
+                        type: object
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the pod will be allowed to consume for logs,
+                          coredumps, and container images before pod is not allowed
+                          to write more data. Default if not provided is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                    type: object
+                  sparkstandalone:
+                    description: Standalone Spark tenant cluster. Starts a Long lived
+                      Spark cluster.
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        minimum: 0
+                        type: integer
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the pod will be allowed to consume for logs,
+                          coredumps, and container images before pod is not allowed
+                          to write more data. Default if not provided is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      mastercount:
+                        description: Master Count. The number of instances of the
+                          master that should be started at Tenant creation. Default
+                          if not provided is 0, unless a worker count is specified
+                          and the it is 1
+                        minimum: 0
+                        type: integer
+                      masterimage:
+                        description: Master Image Name. The full name of the image
+                          used for master containers. This overrides the base image
+                          tag. Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      masterlimitcpu:
+                        description: Master CPU Limit. The maximum cpu that the master
+                          pod will be allowed to consume in a time slice before it
+                          is left unscheduled until the next slice. Default if not
+                          provided is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      masterlimitdisk:
+                        description: Master Ephemeral Disk Limit. The maximum amount
+                          of OS diskspace that the master pod will be allowed to consume
+                          for logs, coredumps, and container images before pod is
+                          not allowed to write more data. Default if not provided
+                          is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      masterlimitmemory:
+                        description: Master Memory Limit. The maximum amount of RAM
+                          that the master pod will be allowed to consume before it
+                          is automatically OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      masterrequestcpu:
+                        description: Master CPU Requested. The amount of cpu that
+                          will be reserved on a node for the master pod in milli CPU
+                          units. Default if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      masterrequestdisk:
+                        description: Master Ephemeral Disk Requested. The amount of
+                          OS diskspace that will be reserved on a node for the master
+                          pod for logs, coredumps, and container images. Default if
+                          not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      masterrequestmemory:
+                        description: Master Memory Requested. The amount of RAM that
+                          will be reserved on the node for the master pod. Default
+                          if not provided is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      mastersshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests for the master pod.
+                          Setting this port will limit scalability. Default if not
+                          provided is to use no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                      uiproxycount:
+                        description: UI Proxy Count. The number of instances of the
+                          UI Proxy that should be started at Tenant creation. Default
+                          if not provided is 0, unless a worker count is specified
+                          and the it is 1
+                        minimum: 0
+                        type: integer
+                      uiproxyimage:
+                        description: UI Proxy Image Name. The full name of the image
+                          used for the ui proxy container. This overrides the base
+                          image tag. Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      uiproxylimitcpu:
+                        description: CPU Limit. The maximum cpu that the ui proxy
+                          pod will be allowed to consume in a time slice before it
+                          is left unscheduled until the next slice. Default if not
+                          provided is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      uiproxylimitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the ui proxy pod will be allowed to consume
+                          for logs, coredumps, and container images before pod is
+                          not allowed to write more data. Default if not provided
+                          is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      uiproxylimitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the ui proxy pod will be allowed to consume before it is
+                          automatically OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      uiproxyrequestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the ui proxy pod in milli CPU units.
+                          Default if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      uiproxyrequestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the ui proxy pod for
+                          logs, coredumps, and container images. Default if not provided
+                          is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      uiproxyrequestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the ui proxy pod. Default if
+                          not provided is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      uiproxysshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests for the ui proxy pod.
+                          Setting this port will limit scalability. Default if not
+                          provided is to use no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                    type: object
+                  sparkts:
+                    description: Tenant Spark Thrift Tenant Service. Starts a Spark
+                      Thrift Server for Spark Jobs launched in Tenant
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        minimum: 0
+                        type: integer
+                      hivesitesource:
+                        description: ConfigMap name with hive-site.xml to use with
+                          Spark Applications.
+                        maxLength: 253
+                        type: string
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Limit. The maximum amount of OS
+                          diskspace that the pod will be allowed to consume for logs,
+                          coredumps, and container images before pod is not allowed
+                          to write more data. Default if not provided is 20GB / +kubebuilder:validation:Pattern="^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$"
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 500m or .5 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 2Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                    type: object
+                  tenantcli:
+                    description: Tenant CLI. Starts a Tenant CLI for Tenant users
+                      to access via SSH.
+                    properties:
+                      count:
+                        description: Pod Count. The number of instances of this pod
+                          that should be started at Tenant creation. Default if not
+                          provided is 0
+                        minimum: 0
+                        type: integer
+                      image:
+                        description: Image Name. The full name of the image used for
+                          the pod's container. This overrides the base image tag.
+                          Default is to use the base image tag.
+                        maxLength: 128
+                        type: string
+                      limitcpu:
+                        description: CPU Limit. The maximum cpu that the pod will
+                          be allowed to consume in a time slice before it is left
+                          unscheduled until the next slice. Default if not provided
+                          is 1000m or 1 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      limitmemory:
+                        description: Memory Limit. The maximum amount of RAM that
+                          the pod will be allowed to consume before it is automatically
+                          OOMKilled. Default if not provided is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      loglevel:
+                        description: Log Level. Log Level for this Pod. Overrides
+                          Tenant level setting. Default if not provided is to use
+                          Tenant settings.
+                        enum:
+                        - ERROR
+                        - INFO
+                        - DEBUG
+                        type: string
+                      requestcpu:
+                        description: CPU Requested. The amount of cpu that will be
+                          reserved on a node for the pod in milli CPU units. Default
+                          if not provided is 200m or .2 CPU
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestdisk:
+                        description: Ephemeral Disk Requested. The amount of OS diskspace
+                          that will be reserved on a node for the pod for logs, coredumps,
+                          and container images. Default if not provided is 20GB
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      requestmemory:
+                        description: Memory Requested. The amount of RAM that will
+                          be reserved on the node for the pod. Default if not provided
+                          is 8Gi
+                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        type: string
+                      sshport:
+                        description: External SSH Port. The port on the host node
+                          used to handle external ssh requests. Setting this port
+                          will limit scalability. Default if not provided is to use
+                          no external SSH Port
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                    type: object
+                type: object
+              userlist:
+                description: User List. List of Users for Tenant
+                items:
+                  type: string
+                maxItems: 100
+                minItems: 0
+                type: array
+                x-kubernetes-list-type: set
+            required:
+            - baseimagetag
+            - clustername
+            - clustertype
+            - imageregistry
+            type: object
+          status:
+            description: TenantStatus defines the observed state of Tenant
+            properties:
+              hivemetastate:
+                description: State of the Hive Metastore
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              livystate:
+                description: State of the Livy Server
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              overallstate:
+                description: Current Overall State. Use this to read/store overall
+                  cluster state
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              sparkhsstate:
+                description: State of the Spark History Server
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              sparkstate:
+                description: State of the Spark Standalone Cluster
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              sparktsstate:
+                description: State of the Spark Thrift Server
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+              tenantclistate:
+                description: State of the Tenant CLI
+                properties:
+                  currentstate:
+                    description: Current State
+                    enum:
+                    - PENDING
+                    - READY
+                    - UNHEALTHY
+                    type: string
+                  message:
+                    description: Message
+                    type: string
+                  timestamp:
+                    description: Timestamp
+                    type: string
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

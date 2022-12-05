@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "tenant-validator.preDeleteHookName" . }}
+  namespace: {{ include "tenant-operator.namespace" . }}
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: hook-succeeded, hook-failed
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "tenant-validator.hpePrefix" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: pre-delete-container
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.validatorHookName }}:{{ .Values.image.validatorHookTag }}"
+          imagePullPolicy: Always
+          command: ['sh', /opt/tenantvalidator/tenantvalidator-uninstall.sh ]
+      restartPolicy: Never
