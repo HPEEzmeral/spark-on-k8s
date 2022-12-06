@@ -4,7 +4,7 @@ ns="${1:-ranger}"
 
 echo NameSpace: $ns
 
-echo helm uninstall ezsql -n $ns
+echo helm uninstall ranger -n $ns
 helm uninstall ranger -n $ns
 echo kubectl delete pvc --all -n $ns
 kubectl delete pvc --all -n $ns
