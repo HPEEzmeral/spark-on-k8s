@@ -10,7 +10,7 @@ helm dependency update ./spark-ts-chart
 helm install spark-ts ./spark-ts-chart -n sampletenant
 ```
 
-This will create the helm chart in the `sampletenant` namespace.  This will create Thrift Server with v3.2.0  
+This will create the helm chart in the `sampletenant` namespace.  This will create Thrift Server with v3.3.1  
 Please note: This assumes you are installing in an 'internal' or 'external' Tenant Namespace. Installing spark-ts chart in a non -tenant namespace can cause error because of missing configmaps and secrets. 
 
 To install thrift server V2.4.7 use the flags:  

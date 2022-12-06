@@ -9,15 +9,15 @@ replicaCount: 1
 image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
-  # -- Image Name for 3.2.0 version
-  imageName: spark-hs-3.2.0
+  # -- Image Name for 3.3.1 version
+  imageName: spark-hs-3.3.1
   # -- Image name for 2.4.7 version
   #  imageName: spark-hs-2.4.7
   # -- Image pull policy
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
-  # -- Image tag for 3.2.0 version
-  tag: "202206300317R"
+  # -- Image tag for 3.3.1 version
+  tag: "202212051132R"
   # -- Image tag for 2.4.7 version
   # tag: "202206300317R"
 
@@ -44,7 +44,7 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-3.2.0
+sparkVersion: spark-3.3.1
 ## spark version for 2.4.7
 #sparkVersion: spark-2.4.7
 

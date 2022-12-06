@@ -11,7 +11,7 @@ Params:
 - name: KUBERNETES_CONTAINER
   value: 'true'
 - name: LOG_LEVEL
-  value: INFO
+  value: ERROR
 - name: SECURE_CLUSTER
   valueFrom:
     configMapKeyRef:
