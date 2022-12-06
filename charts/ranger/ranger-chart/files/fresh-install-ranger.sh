@@ -15,6 +15,6 @@ echo tree /nfs/$ns
 tree /nfs/$ns
 
 echo helm install ranger ./ranger --namespace $ns --create-namespace --wait
-helm install ranger ./ranger --namespace $ns --create-namespace --wait
+helm install ranger ./ranger-chart --namespace $ns --create-namespace --wait
 echo kubectl get all -n $ns
 kubectl get all -n $ns

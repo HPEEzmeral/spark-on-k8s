@@ -38,4 +38,6 @@ spec:
         - name: ranger-conf
           configMap:
             name: ranger-property-file
+      imagePullSecrets:
+      - name: imagepull
 {{- end }}

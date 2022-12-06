@@ -26,7 +26,7 @@ data:
     
     #------------------------- DB CONFIG - BEGIN ----------------------------------
     # Uncomment the below if the DBA steps need to be run separately
-    #setup_mode=SeparateDBA
+    setup_mode=SeparateDBA
     
     PYTHON_COMMAND_INVOKER=python3
     
@@ -42,7 +42,7 @@ data:
     #SQL_CONNECTOR_JAR=/usr/share/java/postgresql.jar
     #SQL_CONNECTOR_JAR=/usr/share/java/sqljdbc4.jar
     #SQL_CONNECTOR_JAR=/opt/sqlanywhere17/java/sajdbc4.jar
-    SQL_CONNECTOR_JAR=/opt/mysql-connector-java-8.0.28.jar
+    SQL_CONNECTOR_JAR=/opt/mapr/lib/mysql-connector-java-8.0.20.jar
     
     
     #
