@@ -1,0 +1,3 @@
+1. Tenant Operator and Tenant Validator deployed.
+2. Components created by this helm chart will be using the Service Account {{ include "tenant-validator.hpePrefix" . }}
+and {{ include "tenant-operator.hpePrefix" . }}

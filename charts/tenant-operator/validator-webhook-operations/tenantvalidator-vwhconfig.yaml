@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: tenant-validator-validating-webhook-cfg
+  labels:
+    app: tenant-validator-app
+webhooks:
+  - name: tenant-validator-validating.hcp.hpe.com
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: tenant-validator-svc
+        namespace: hpe-system
+        path: /hcp/tenant/v1/validate
+      caBundle: {tenantvalidator-servercert-encoded}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: ["hcp.hpe.com"]
+        apiVersions: ["v1"]
+        resources: ["tenants"]
+    admissionReviewVersions: ["v1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: 20

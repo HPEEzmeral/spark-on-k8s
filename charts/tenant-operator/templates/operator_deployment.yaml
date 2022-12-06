@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenantoperator
+  namespace: {{ include "tenant-operator.namespace" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+  {{- include "tenant-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+    {{- include "tenant-operator.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "tenant-operator.hpePrefix" . }}
+      automountServiceAccountToken: {{ .Values.automountSAToken }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      tolerations:
+      {{- include "tenant-operator.tolerations" . | nindent 8 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+      {{- include "tenant-operator.podAntiAffinity.preferred" . | nindent 12 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.operatorImageName }}:{{ .Values.image.operatorTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          args:
+          {{- include "tenant-operator.args" . | nindent 12 }}
+          command:
+          {{- include "tenant-operator.commands" . | nindent 12 }}
+          env:
+          {{- include "tenant-operator.env" . | nindent 12 }}
