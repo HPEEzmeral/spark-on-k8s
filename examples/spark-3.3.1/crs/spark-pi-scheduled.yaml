@@ -22,7 +22,7 @@ spec:
     imagePullSecrets:
       - imagepull
     mainClass: org.apache.spark.examples.SparkPi
-    mainApplicationFile: "local:///opt/mapr/spark/spark-3.3.1/examples/jars/spark-examples_2.12-3.3.1.0-eep-900.jar"
+    mainApplicationFile: "local:///opt/mapr/spark/spark-3.3.1/examples/jars/spark-examples_2.12-3.3.1.0-eep-SNAPSHOT.jar"
     restartPolicy:
       type: Never
     driver:
