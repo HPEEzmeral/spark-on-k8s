@@ -18,12 +18,12 @@ apiVersion: "sparkoperator.hpe.com/v1beta2"
 kind: SparkApplication
 metadata:
   name: spark-pi-secure
-  namespace: sparktest
-spec:
+  namespace: sampletenant
+#spec:
   sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
-    spark.mapr.user.secret: mapr-user-secret
+    #spark.mapr.user.secret: mapr-user-secret
     # Note: You do not need to specify a spark.eventLog.dir
     #       it will be auto-generated with the pattern "maprfs:///apps/spark/<namespace>"
     #spark.eventLog.dir: "maprfs:///apps/spark/sampletenant"
