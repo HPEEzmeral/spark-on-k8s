@@ -41,13 +41,43 @@ dataStore:
       nodeport: 32114
 
 ranger:
-  #fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-ranger"
   fullname: "{{ .Release.Namespace }}-ranger"
-  containerImage: gcr.io/mapr-252711/ranger-admin-2.3.0:202212070120R # DEV image which contains 2.3.0.0.202212030449-1 build
+  containerImage: gcr.io/mapr-252711/ranger-admin-2.3.0:202212130652R
   pullPolicy: Always
   listenPort: 6080
   nodePort: 30004
   # PLEASE NOTE :: Password should be minimum 8 characters with min one alphabet and one numeric.
-  # TODO: Use secret in real usage
-  console_password: Admin@123
+  # TODO: Use secret https://jira-pro.its.hpecorp.net:8443/browse/EZAF-234
+  console_password: &ranger_internal_passwords Admin@123
+  user_authentication:
+    # UNIX | LDAP
+    auth_method: UNIX
+    # If you use auth method as LDAP, provide below properties
+    # Related documentation is https://docs-datafabric.mip.storage.hpecorp.net/71/Ranger/Configure_LDAP_AD_for_Ranger.html
+    ldap_url: ldap://node2:389
+    ldap_bind_dn: cn=admin,dc=cluster,dc=com
+    ldap_bind_password: mapr
+    ldap_groupSearchBase: dc=cluster,dc=com
+    ldap_userDNpattern: cn={0},ou=People,dc=cluster,dc=com
+    ldap_base_dn: dc=cluster,dc=com
 
+usersync:
+  deploymentEnabled: true
+  fullname: "{{ .Release.Namespace }}-usersync"
+  containerImage: gcr.io/mapr-252711/ranger-usersync-2.3.0:202212130652R
+  pullPolicy: Always
+  listenPort: 5151
+  nodePort: 30005
+  usersync_password: *ranger_internal_passwords
+  rangerAdminURL: "http://ranger-ranger:6080"
+  sync_source:
+    # unix | ldap
+    sync_method: unix
+    # If you use sync method as ldap, provide below properties
+    # Related documentation is https://docs-datafabric.mip.storage.hpecorp.net/71/Ranger/Configure_LDAP_AD_for_Ranger.html
+    ldap_url: ldap://node2:389
+    ldap_bind_dn: cn=admin,dc=cluster,dc=com
+    ldap_bind_password: mapr
+    ldap_search_base: dc=cluster,dc=com
+    sync_group_search_enabled: true
+    sync_group_user_map_sync_enabled: true

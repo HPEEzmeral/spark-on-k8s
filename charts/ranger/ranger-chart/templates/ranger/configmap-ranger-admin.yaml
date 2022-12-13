@@ -189,7 +189,7 @@ data:
     # ** The installation of ranger-unix-ugsync package can be installed after the policymanager installation is finished.
     #
     #LDAP|ACTIVE_DIRECTORY|UNIX|NONE
-    authentication_method=UNIX
+    authentication_method={{ .ranger.user_authentication.auth_method }}
     remoteLoginEnabled=true
     authServiceHostName=localhost
     authServicePort=5151
@@ -213,14 +213,14 @@ data:
     #xa_ldap_referral=follow|ignore
     #xa_ldap_userSearchFilter=(uid={0})
     
-    xa_ldap_url=
-    xa_ldap_userDNpattern=
-    xa_ldap_groupSearchBase=
+    xa_ldap_url={{ .ranger.user_authentication.ldap_url }}
+    xa_ldap_userDNpattern={{ .ranger.user_authentication.ldap_userDNpattern }}
+    xa_ldap_groupSearchBase={{ .ranger.user_authentication.ldap_groupSearchBase }}
     xa_ldap_groupSearchFilter=
     xa_ldap_groupRoleAttribute=
-    xa_ldap_base_dn=
-    xa_ldap_bind_dn=
-    xa_ldap_bind_password=
+    xa_ldap_base_dn={{ .ranger.user_authentication.ldap_base_dn }}
+    xa_ldap_bind_dn={{ .ranger.user_authentication.ldap_bind_dn }}
+    xa_ldap_bind_password={{ .ranger.user_authentication.ldap_bind_password }}
     xa_ldap_referral=
     xa_ldap_userSearchFilter=
     ####ACTIVE_DIRECTORY settings - Required only if have selected AD authentication ####
