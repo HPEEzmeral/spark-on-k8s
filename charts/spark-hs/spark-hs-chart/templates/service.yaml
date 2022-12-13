@@ -13,7 +13,12 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{-  if  or  ( not .Values.tenantIsUnsecure) (.Values.useCustomSSL)  }}
+    {{- if not .Values.sparkSsl.enable }}
+    - name: http-sparkhs
+      port: {{ .Values.ports.httpPort }}
+      targetPort: {{ .Values.ports.httpPort }}
+      protocol: TCP
+    {{- else if or ( not .Values.tenantIsUnsecure) (.Values.useCustomSSL) }}
     - name: https-sparkhs
       port: {{ .Values.ports.httpsPort }}
       targetPort: {{ .Values.ports.httpsPort }}

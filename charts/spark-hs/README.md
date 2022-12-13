@@ -65,6 +65,17 @@ sparkExtraConfigs: |
 ### Viewing the UI
 After the chart is successfully installed, a message would be printed out to the console with details about how to access the UI.
 
+### Disabling internal SSL for history server
+By default, spark history SSL settings depend on the underlying DF security settings. In the DF is secure - SSL will be 
+enabled implicitly. To disable SSL, put the following values to the values.yaml file:
+```yaml
+sparkExtraConfigs: |
+  spark.ssl.historyServer.enabled           false
+
+sparkSsl:
+  enable: false
+```
+
 ## Uninstalling the Chart
 Uninstall spark history server deployment named "spark-hs" from 'sampletenant' tenant
 ```
