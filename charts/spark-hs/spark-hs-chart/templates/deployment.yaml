@@ -23,7 +23,14 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      {{ if .Values.istio.enable }}
+      annotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      {{ end }}
       labels:
+      {{ if .Values.istio.enable }}
+        sidecar.istio.io/inject: "true"
+      {{ end }}
       {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
     spec:
       subdomain: {{ $componentName }}-svc
