@@ -136,5 +136,9 @@ sparkSsl:
   sslSecretName: "spark-hs-ssl-secret"
   secretMountPath: /var/spark
 
+istio:
+  # Whether to enable istio sidecar injection on spark-hs pods
+  enable: false
+
 # Space separated Java options for Spark HS (Will be added to SPARK_HISTORY_OPTS in spark-env.sh)
 #HSJavaOpts: -Dx=y
