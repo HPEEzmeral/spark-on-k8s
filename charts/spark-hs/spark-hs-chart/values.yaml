@@ -131,6 +131,7 @@ sparkExtraConfigs: |
 
 # Alpha feature
 sparkSsl:
+  enable: true
   useCustomKeystore: false
   sslSecretName: "spark-hs-ssl-secret"
   secretMountPath: /var/spark
