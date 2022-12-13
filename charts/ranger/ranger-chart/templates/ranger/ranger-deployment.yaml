@@ -6,7 +6,6 @@ metadata:
   name: {{ tpl .fullname $ }}
   labels:
     app: ranger-admin-server
-  #namespace: ranger
 spec:
   replicas: 1
   selector:

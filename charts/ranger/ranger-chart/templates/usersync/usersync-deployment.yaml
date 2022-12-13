@@ -1,0 +1,38 @@
+{{- with .Values.usersync }}
+{{- if .deploymentEnabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ tpl .fullname $ }}
+  labels:
+    app: ranger-usersync-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ranger-usersync-service
+  template:
+    metadata:
+      labels:
+        app: ranger-usersync-service
+    spec:
+      containers:
+        - name: ranger-usersync-service
+          image: {{ .containerImage }}
+          imagePullPolicy: {{ .pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .listenPort }}
+              protocol: TCP
+          volumeMounts:
+            - name: usersync-conf
+              mountPath: /opt/mapr/ranger/ranger-2.3.0/ranger-usersync/install.properties
+              subPath: install.properties
+      volumes:
+        - name: usersync-conf
+          configMap:
+            name: usersync-property-file
+      imagePullSecrets:
+        - name: imagepull
+{{- end }}
+{{- end }}
