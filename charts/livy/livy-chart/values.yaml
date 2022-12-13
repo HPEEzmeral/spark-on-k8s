@@ -131,3 +131,6 @@ extraConfigs:
     # livy.keystore = /var/livy/ssl_keystore
     # livy.keystore.password = examplepass
     # livy.key-password = examplepass
+
+istio:
+  enable: false

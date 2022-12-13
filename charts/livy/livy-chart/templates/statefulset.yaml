@@ -15,7 +15,14 @@ spec:
   serviceName: {{ include "livy-chart.serviceName" . }}
   template:
     metadata:
+      {{ if .Values.istio.enable }}
+      annotations:
+        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
+      {{ end }}
       labels:
+      {{ if .Values.istio.enable }}
+        sidecar.istio.io/inject: "true"
+      {{ end }}
       {{- include "livy-chart.labels" . | nindent 8 }}
     spec:
       subdomain: livy-svc
