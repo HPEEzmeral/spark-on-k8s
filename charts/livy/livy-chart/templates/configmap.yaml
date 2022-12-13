@@ -42,6 +42,8 @@ data:
     {{- else }}
     livy.ssl.enable = false
     {{- end }}
+    livy.server.kubernetes.createUserSecret = true
+    livy.server.kubernetes.userSecretPattern = {{ include "livy-chart.userSecretPattern" . }}
 
   post-startup.sh: |
     #!/usr/bin/env bash

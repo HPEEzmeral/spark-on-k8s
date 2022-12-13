@@ -34,7 +34,7 @@ Define Livy version
 Create chart name and version as used by the chart label.
 */}}
 {{- define "livy-chart.chart" -}}
-{{- printf "%s-%s" .Release.Name  .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Release.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -113,7 +113,7 @@ Create the name of the configmap
 Returns the name for livy service
 */}}
 {{- define "livy-chart.serviceName" -}}
-{{- printf "%s-svc" .Release.Name  | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-svc" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -207,4 +207,12 @@ returns volumeClaimTemplates for StatefulSet
 {{- if and ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcTemplate ) -}}
 - {{- toYaml .Values.sessionRecovery.pvcTemplate | nindent 2 }}
 {{- end }}
+{{- end }}
+
+{{/*
+Returns the pattern of user secret to generate by Livy server.
+Used as value of "livy.server.kubernetes.userSecretPattern" option of livy.conf.
+*/}}
+{{- define "livy-chart.userSecretPattern" -}}
+{{- printf "%s-user-secret-%%s" .Release.Name -}}
 {{- end }}
