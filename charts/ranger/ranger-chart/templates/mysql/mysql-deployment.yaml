@@ -54,7 +54,8 @@ spec:
         app: {{ .label }}
     spec:
       securityContext:
-        runAsUser: 999
+        # UID must be 5000 (mapr) to work well with DF
+        runAsUser: 5000
         #runAsGroup: 0
         fsGroup: 0            
         #runAsNonRoot: true
