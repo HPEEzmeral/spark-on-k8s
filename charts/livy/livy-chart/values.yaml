@@ -16,9 +16,9 @@ image:
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.3.1:202212121322R
+deImage: spark-3.3.1:202212141145R
 #for livy-0.7.0/spark-2.4.7
-#deImage: spark-2.4.7:202212121322R
+#deImage: spark-2.4.7:202212141145R
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -115,7 +115,7 @@ sparkHistoryServer:
 # Alpha feature
 # Configure HTTPS for the Livy UI.
 livySsl:
-  enable: false
+  enable: true
   # Leave the two following options blank to use tenant SSL Keystore.
   # Alternatively, to use a custom keystore, configure the following options and corresponding options in livy.conf.
   sslSecretName: ""
