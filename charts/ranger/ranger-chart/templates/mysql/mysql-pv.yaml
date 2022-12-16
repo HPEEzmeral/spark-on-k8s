@@ -1,3 +1,4 @@
+{{ if eq $.Values.dataStore.embeddedMysql true }}
 {{- with .Values.dataStore.storage }}
 {{ if eq .isNfs true }}
 
@@ -37,3 +38,4 @@ spec:
       storage: {{ .size }}
 
 {{- end }}
+{{ end }}

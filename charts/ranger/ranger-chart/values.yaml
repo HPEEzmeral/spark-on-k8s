@@ -10,6 +10,11 @@ kind:
   services: svc
 
 dataStore:
+  # a) Set this to true if you want ranger chart to deploy its own MySQL DB
+  # and leave dataStore.service.clusterIp.fullName as "mysql"
+  # b) Set this to false and provide MySQL server ip in dataStore.service.clusterIp.fullName
+  # if you want to use external MySQL
+  embeddedMysql: true
   fullname: "{{ .Release.Namespace }}-{{ .Values.kind.deployment }}-mysql"
   containerImage: mysql:5.7
   pullPolicy: Always
@@ -29,7 +34,7 @@ dataStore:
   # Default configuration would be DF, assuming your DF cluster name is cluster.qa.lab
   # NOTE: with NFS case your data won't be cleaned up after uninstalling. WIth DF case it will be
   storage:
-    isNfs: true
+    isNfs: false
     serverIp: 16.0.13.105
     pvFullname: "{{ .Release.Namespace }}-{{ .Values.kind.persistentVolumes }}-mysql"
     pvcFullname: "{{ .Release.Namespace }}-{{ .Values.kind.persistentVolumeClaim }}-mysql"
@@ -41,6 +46,7 @@ dataStore:
 
   service:
     clusterIp:
+      # If embeddedMysql is false please provide mysql server ip
       fullName: mysql
 
     nodePort:
