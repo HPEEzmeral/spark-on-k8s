@@ -11,7 +11,7 @@ image:
   imageName: livy-0.7.0
   # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202212141145R"
+  tag: "202212160615R"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -125,7 +125,7 @@ livySsl:
 
 # Alpha feature
 # Data provided in "extraConfigs" will be added to configuration files through a K8S secret.
-# Availale files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
+# Available files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
 extraConfigs:
   livy.conf: |
     # livy.keystore = /var/livy/ssl_keystore

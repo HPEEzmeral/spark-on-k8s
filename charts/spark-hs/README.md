@@ -76,6 +76,22 @@ sparkSsl:
   enable: false
 ```
 
+### Configuring spark HS with external OAuth proxy
+Spark History Server can be configured to work behind OAuth proxy server. The proxy is responsible for user authentication,
+and sends only the username down to the history server. For this setup, there are two things to be configured:
+1. Spark HS should know that it runs behind the proxy
+2. Authentication filter should be configured to use appropriate auth handler
+
+Given that the proxy server runs at 'https://spark-hs.proxy.com' and the proxy sends username in 'X-USERNAME' header,
+configuration in values.yaml will be:
+```yaml
+sparkExtraConfigs: |
+  spark.ui.proxyRedirectUri	https://spark-hs.proxy.com
+  spark.ui.filters org.apache.hadoop.security.authentication.server.AuthenticationFilter
+  spark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.param.type org.apache.spark.ui.filters.ProxyAuthenticationHandler
+  spark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.param.userheader X-USERNAME
+```
+
 ## Uninstalling the Chart
 Uninstall spark history server deployment named "spark-hs" from 'sampletenant' tenant
 ```

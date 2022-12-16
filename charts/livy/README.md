@@ -244,3 +244,15 @@ To start multiple Livy instances, you can change the value of `replicaCount` fie
 Note that Livy is a stateful application. Therefore, your Livy clients would need to choose which Livy instance they would use. Alternatively, you can configure cluster's gateway to automatically connect each client to their Livy instance.
 
 To achieve better high availability it's recommended to enable the Session Recovery feature in `values.yaml`.
+
+### Configuring livy server with external OAuth proxy
+Livy Server can be configured to work behind OAuth proxy server. The proxy is responsible for user authentication,
+and sends only the username down to the livy server through a custom HTTP header.
+Assuming that the custom header name is 'X-USERNAME', add the following change to values.yaml:
+```yaml
+extraConfigs:
+  livy.conf: |
+    livy.server.auth.multiauth.class = org.apache.hadoop.security.authentication.server.AuthenticationFilter
+    livy.server.auth.multiauth.param.type = org.apache.spark.ui.filters.ProxyAuthenticationHandler
+    livy.server.auth.multiauth.param.userheader = X-USERNAME
+```
