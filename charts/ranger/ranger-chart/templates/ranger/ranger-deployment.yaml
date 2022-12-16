@@ -20,7 +20,10 @@ spec:
       - name: mysql-init
         image: busybox:1.31
         imagePullPolicy: Always
-        command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z mysql 3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
+        env:
+          - name: MYSQL_HOST
+            value: {{ $.Values.dataStore.service.clusterIp.fullName }}
+        command: ['sh', '-c', 'echo -e "Checking for the availability of MySQL Server deployment"; while ! nc -z ${MYSQL_HOST}  3306; do sleep 1; printf "-"; done; echo -e "  >> MySQL DB Server has started";']
       containers:
         - name: ranger-admin-server
           image: {{ .containerImage }}
