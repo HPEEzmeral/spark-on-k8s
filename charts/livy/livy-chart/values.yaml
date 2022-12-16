@@ -11,7 +11,7 @@ image:
   imageName: livy-0.7.0
   # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202212121322R"
+  tag: "202212160615R"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -115,7 +115,7 @@ sparkHistoryServer:
 # Alpha feature
 # Configure HTTPS for the Livy UI.
 livySsl:
-  enable: true
+  enable: false
   # Leave the two following options blank to use tenant SSL Keystore.
   # Alternatively, to use a custom keystore, configure the following options and corresponding options in livy.conf.
   sslSecretName: ""
@@ -125,7 +125,7 @@ livySsl:
 
 # Alpha feature
 # Data provided in "extraConfigs" will be added to configuration files through a K8S secret.
-# Availale files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
+# Available files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
 extraConfigs:
   livy.conf: |
     # livy.keystore = /var/livy/ssl_keystore
