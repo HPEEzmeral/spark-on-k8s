@@ -1,5 +1,5 @@
 {{- with .Values.usersync }}
-
+{{- if .deploymentEnabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,5 +14,5 @@ spec:
       nodePort: {{ .nodePort }}
   selector:
     app: ranger-usersync-service
-
+{{- end }}
 {{- end }}
