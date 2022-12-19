@@ -30,8 +30,8 @@ spec:
               subPath: install.properties
       volumes:
         - name: usersync-conf
-          configMap:
-            name: usersync-property-file
+          secret:
+            secretName: usersync-property-file
       imagePullSecrets:
         - name: imagepull
 {{- end }}

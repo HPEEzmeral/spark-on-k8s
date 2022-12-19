@@ -64,14 +64,12 @@ spec:
       - name: mysql-cnt
         image: {{ .containerImage }}
         env:
-          # TODO: Use secret in real usage
         - name: MYSQL_ROOT_PASSWORD
           value: {{ .rootPasswd }}
         - name: MYSQL_DATABASE
           value: {{ .dbname }}
         - name: MYSQL_USER
           value: {{ .user }}
-          # TODO: Use secret in real usage
         - name: MYSQL_PASSWORD
           value: {{ .passwd }}
         ports:
