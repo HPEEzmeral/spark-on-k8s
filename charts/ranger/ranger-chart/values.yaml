@@ -63,15 +63,19 @@ ranger:
   console_password: &ranger_internal_passwords Admin@123
   user_authentication:
     # UNIX | LDAP
-    auth_method: UNIX
+    auth_method: LDAP
     # If you use auth method as LDAP, provide below properties
     # Related documentation is https://docs-datafabric.mip.storage.hpecorp.net/71/Ranger/Configure_LDAP_AD_for_Ranger.html
-    ldap_url: ldap://node2:389
-    ldap_bind_dn: cn=admin,dc=cluster,dc=com
-    ldap_bind_password: mapr
-    ldap_groupSearchBase: dc=cluster,dc=com
-    ldap_userDNpattern: cn={0},ou=People,dc=cluster,dc=com
-    ldap_base_dn: dc=cluster,dc=com
+    ldap_url: ldaps://example.ldap.com:636
+    ldap_bind_dn: cn=manager,dc=example,dc=com
+    ldap_bind_password: "changeit"
+    ldap_groupSearchBase: dc=example,dc=com
+    ldap_userDNpattern: cn={0},ou=People,dc=example,dc=com
+    ldap_base_dn: dc=example,dc=com
+  ssl:
+    use_custom_truststore: false
+    truststore_password: "changeit"
+    truststore_secret_name: admin-truststore
 
 usersync:
   deploymentEnabled: true
@@ -84,12 +88,19 @@ usersync:
   rangerAdminURL: "http://ranger-ranger:6080"
   sync_source:
     # unix | ldap
-    sync_method: unix
+    sync_method: ldap
     # If you use sync method as ldap, provide below properties
     # Related documentation is https://docs-datafabric.mip.storage.hpecorp.net/71/Ranger/Configure_LDAP_AD_for_Ranger.html
-    ldap_url: ldap://node2:389
-    ldap_bind_dn: cn=admin,dc=cluster,dc=com
-    ldap_bind_password: mapr
-    ldap_search_base: dc=cluster,dc=com
+    ldap_url: ldaps://example.ldap.com:636
+    ldap_bind_dn: cn=manager,dc=example,dc=com
+    ldap_bind_password: "changeit"
+    ldap_search_base: dc=example,dc=com
     sync_group_search_enabled: true
     sync_group_user_map_sync_enabled: true
+    sync_group_search_base: ou=Group,dc=example,dc=com
+    sync_group_object_class: top
+    sync_group_member_attribute_name: memberUid
+  ssl:
+    use_custom_truststore: false
+    truststore_password: "changeit"
+    truststore_secret_name: ugsync-truststore

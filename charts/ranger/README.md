@@ -75,3 +75,35 @@ and run this script to start fresh installation:
 ```agsl
 ./ranger-chart/files/fresh-install-ranger.sh
 ```
+## Using custom truststores
+You might want to make ranger use certificates provided by you from
+your custom truststore. For example, to securely communicate with LDAPS server. To do that, you should perform these steps:
+1. Prepare your server's certificate. You may also use this command to retrieve certificate if you know server address:
+```agsl
+echo | openssl s_client -connect example.com:636 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > ./ranger-chart/files/ssl/certs/ldap.crt
+```
+2. Create truststores for admin and usersync and import the certificate there, f.e.:
+```agsl
+keytool -importcert -file ./ranger-chart/files/ssl/certs/ldap.crt -keystore ./ranger-chart/files/ssl/ks/ugsync_truststore.jks -alias "ldap-CA" -storepass ${UGSYNC_TRUSTSTORE_PASS}  -noprompt
+keytool -importcert -file ./ranger-chart/files/ssl/certs/ldap.crt -keystore ./ranger-chart/files/ssl/ks/admin_truststore.jks -alias "ldap-CA" -storepass ${ADMIN_TRUSTSTORE_PASS} -noprompt
+```
+3. Create secrets in ranger's namespace with keys `ugsync_truststore.jks` for usersync and `admin_truststore.jks` for admin
+and put respective truststores there:
+```agsl
+kubectl -n $ns create secret generic ${UGSYNC_TRUSTSTORE_SECRET_NAME} --from-file=ugsync_truststore.jks=./ranger-chart/files/ssl/ks/ugsync_truststore.jks
+kubectl -n $ns create secret generic ${ADMIN_TRUSTSTORE_SECRET_NAME} --from-file=admin_truststore.jks=./ranger-chart/files/ssl/ks/admin_truststore.jks
+```
+4. Enable custom truststore flag and provide secret names and passwords for both admin and usersync:
+```agsl
+#admin
+  ssl:
+    use_custom_truststore: true
+    truststore_password: "adminpass"
+    truststore_secret_name: my-admin-truststore
+#usersync
+  ssl:
+    use_custom_truststore: true
+    truststore_password: "ugsyncpass"
+    truststore_secret_name: my-ugsync-truststore
+```
+**Note**: example of doing 1-3 steps can be found in `ranger-chart/files/refresh_ks.sh` script.

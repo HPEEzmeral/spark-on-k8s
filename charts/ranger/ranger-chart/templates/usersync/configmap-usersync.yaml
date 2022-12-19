@@ -74,8 +74,8 @@ stringData:
     AUTH_SSL_ENABLED=false
     AUTH_SSL_KEYSTORE_FILE=/etc/ranger/usersync/conf/cert/unixauthservice.jks
     AUTH_SSL_KEYSTORE_PASSWORD=UnIx529p
-    AUTH_SSL_TRUSTSTORE_FILE=
-    AUTH_SSL_TRUSTSTORE_PASSWORD=
+    AUTH_SSL_TRUSTSTORE_FILE={{ include "ranger-chart.truststore_dir" . }}/ugsync_truststore.jks
+    AUTH_SSL_TRUSTSTORE_PASSWORD={{ .usersync.ssl.truststore_password }}
     
     # ---------------------------------------------------------------
     # The following properties are relevant only if SYNC_SOURCE = ldap
@@ -185,7 +185,7 @@ stringData:
     # overrides value specified in SYNC_LDAP_SEARCH_BASE,  SYNC_LDAP_USER_SEARCH_BASE
     # if a value is not specified, takes the value of  SYNC_LDAP_SEARCH_BASE
     # if  SYNC_LDAP_SEARCH_BASE is also not specified, takes the value of SYNC_LDAP_USER_SEARCH_BASE
-    SYNC_GROUP_SEARCH_BASE=
+    SYNC_GROUP_SEARCH_BASE= {{ .usersync.sync_source.sync_group_search_base }}
     
     # search scope for the groups, only base, one and sub are supported values
     # please customize the value to suit your deployment
@@ -195,7 +195,7 @@ stringData:
     # objectclass to identify group entries
     # please customize the value to suit your deployment
     # default value: groupofnames
-    SYNC_GROUP_OBJECT_CLASS=
+    SYNC_GROUP_OBJECT_CLASS= {{ .usersync.sync_source.sync_group_object_class }}
     
     # optional additional filter constraining the groups selected for syncing
     # a sample value would be (dept=eng)
@@ -211,7 +211,7 @@ stringData:
     # attribute from group entry that is list of members
     # please customize the value to suit your deployment
     # default value: member
-    SYNC_GROUP_MEMBER_ATTRIBUTE_NAME=
+    SYNC_GROUP_MEMBER_ATTRIBUTE_NAME= {{ .usersync.sync_source.sync_group_member_attribute_name }}
     
     # do we want to use paged results control during ldapsearch for user entries
     # valid values: true, false
