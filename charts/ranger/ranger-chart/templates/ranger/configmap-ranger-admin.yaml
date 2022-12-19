@@ -67,8 +67,8 @@ stringData:
     db_ssl_auth_type=2-way
     javax_net_ssl_keyStore=
     javax_net_ssl_keyStorePassword=
-    javax_net_ssl_trustStore=
-    javax_net_ssl_trustStorePassword=
+    javax_net_ssl_trustStore={{ include "ranger-chart.truststore_dir" . }}/admin_truststore.jks
+    javax_net_ssl_trustStorePassword={{ .ranger.ssl.truststore_password }}
     javax_net_ssl_trustStore_type=jks
     javax_net_ssl_keyStore_type=jks
     

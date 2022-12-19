@@ -36,10 +36,20 @@ spec:
             - name: ranger-conf
               mountPath: /opt/mapr/ranger/ranger-2.3.0/ranger-admin/install.properties
               subPath: install.properties
+{{- if .ssl.use_custom_truststore }}
+            - name: admin-truststore
+              mountPath: {{ include "ranger-chart.truststore_dir" . }}/admin_truststore.jks
+              subPath: admin_truststore.jks
+{{- end }}
       volumes:
         - name: ranger-conf
           secret:
             secretName: ranger-property-file
+{{- if .ssl.use_custom_truststore }}
+        - name: admin-truststore
+          secret:
+            secretName: {{ .ssl.truststore_secret_name }}
+{{- end }}
       imagePullSecrets:
       - name: imagepull
 {{- end }}

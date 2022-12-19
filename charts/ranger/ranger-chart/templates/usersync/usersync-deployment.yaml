@@ -28,10 +28,20 @@ spec:
             - name: usersync-conf
               mountPath: /opt/mapr/ranger/ranger-2.3.0/ranger-usersync/install.properties
               subPath: install.properties
+{{- if .ssl.use_custom_truststore }}
+            - name: ugsync-truststore
+              mountPath: {{ include "ranger-chart.truststore_dir" . }}/ugsync_truststore.jks
+              subPath: ugsync_truststore.jks
+{{- end }}
       volumes:
         - name: usersync-conf
           secret:
             secretName: usersync-property-file
+{{- if .ssl.use_custom_truststore }}
+        - name: ugsync-truststore
+          secret:
+            secretName: {{ .ssl.truststore_secret_name }}
+{{- end }}
       imagePullSecrets:
         - name: imagepull
 {{- end }}
