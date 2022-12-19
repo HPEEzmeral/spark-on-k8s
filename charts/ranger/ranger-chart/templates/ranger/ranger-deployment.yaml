@@ -38,8 +38,8 @@ spec:
               subPath: install.properties
       volumes:
         - name: ranger-conf
-          configMap:
-            name: ranger-property-file
+          secret:
+            secretName: ranger-property-file
       imagePullSecrets:
       - name: imagepull
 {{- end }}

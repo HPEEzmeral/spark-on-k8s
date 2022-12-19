@@ -60,7 +60,6 @@ ranger:
   listenPort: 6080
   nodePort: 30004
   # PLEASE NOTE :: Password should be minimum 8 characters with min one alphabet and one numeric.
-  # TODO: Use secret https://jira-pro.its.hpecorp.net:8443/browse/EZAF-234
   console_password: &ranger_internal_passwords Admin@123
   user_authentication:
     # UNIX | LDAP

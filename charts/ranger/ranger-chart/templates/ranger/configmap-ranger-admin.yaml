@@ -1,9 +1,9 @@
 {{- with .Values }}
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: ranger-property-file
-data:
+stringData:
   install.properties: |
     # Licensed to the Apache Software Foundation (ASF) under one or more
     # contributor license agreements.  See the NOTICE file distributed with
