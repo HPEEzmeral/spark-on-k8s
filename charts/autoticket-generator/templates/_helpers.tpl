@@ -32,13 +32,13 @@ Selector labels
 app: autoticket-generator-app
 {{- end }}
 
-{{/*Create a tenant validator post install hook name
+{{/*Create a autoticket generator post install hook name
 */}}
 {{- define "autoticket-generator.postInstallHookName" -}}
 {{- printf "%s-%s" .Values.name "postinstall-hook" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{/*Create a tenant validator pre delete hook name
+{{/*Create a autoticket generator pre delete hook name
 */}}
 {{- define "autoticket-generator.preDeleteHookName" -}}
 {{- printf "%s-%s" .Values.name "predelete-hook" | trunc 63 | trimSuffix "-" }}
