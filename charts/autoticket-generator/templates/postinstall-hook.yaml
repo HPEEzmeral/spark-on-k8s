@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "autoticket-generator.postInstallHookName" . }}
+  namespace: {{ include "autoticket-generator.namespace" . }}
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded, hook-failed
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "autoticket-generator.hpePrefix" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: post-install-container
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.hookName }}:{{ .Values.image.hookTag }}"
+          imagePullPolicy: Always
+          command: ['sh', /opt/autoticket-generator/autoticket-generator-gencert.sh ]
+      restartPolicy: Never

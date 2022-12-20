@@ -1,0 +1,47 @@
+# Default values for autoticket-generator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  baseRepository: gcr.io/mapr-252711
+  pullPolicy: Always
+  imageName: autoticketgen-1.0.0
+  hookName: autoticket-generator-hook-1.0.0
+  tag: "202209131159P160"
+  hookTag: "202212191526"
+
+createDefaultPullSecret: true
+defaultPullSecret: imagepull
+imagePullSecrets:
+  - name: imagepull
+
+name: "autoticket-generator"
+# Overrides the default namespace <hpe-system> to deploy the tenant operator
+namespace: "hpe-system"
+
+rbac:
+  # -- Create and use `rbac` resources
+  create: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+
+automountSAToken: true
+priorityClassName: "hpe-critical"
+
+# resources -- Pod resource requests and limits
+resources:
+  requests:
+    memory: 1Gi
+    cpu: 500m
+
+#ports for validator service
+ports:
+  port: 443
+  targetPort: 8443
+

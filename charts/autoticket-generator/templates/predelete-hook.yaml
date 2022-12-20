@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "autoticket-generator.preDeleteHookName" . }}
+  namespace: {{ include "autoticket-generator.namespace" . }}
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: hook-succeeded, hook-failed
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "autoticket-generator.hpePrefix" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: pre-delete-container
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.hookName }}:{{ .Values.image.hookTag }}"
+          imagePullPolicy: Always
+          command: ['sh', /opt/autoticket-generator/autoticket-generator-uninstall.sh ]
+      restartPolicy: Never

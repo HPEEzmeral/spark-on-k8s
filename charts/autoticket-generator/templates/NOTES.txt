@@ -1,0 +1,2 @@
+1. Autoticket Generator deployed.
+2. Components created by this helm chart will be using the Service Account {{ include "autoticket-generator.hpePrefix" . }}

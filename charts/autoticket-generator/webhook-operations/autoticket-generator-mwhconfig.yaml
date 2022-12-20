@@ -1,0 +1,53 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: autoticket-generator-mutating-webhook-cfg
+  labels:
+    app: autoticket-generator-app
+webhooks:
+  - name: autoticket-generator.hcp.hpe.com
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: autoticket-generator-svc
+        namespace: hpe-system
+        path: /sparkapplication/v1beta2/mutate
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUQ4RENDQXRpZ0F3SUJBZ0lRSlE1dG96aDlMTjJjdEpOTHJ3cFRXekFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEl5TVRJeE9USXdNamN4TWxvWERUSXpNVEl4T1RJdwpNamN4TWxvd2dZVXhDekFKQmdOVkJBWVRBbFZUTVFzd0NRWURWUVFJRXdKRFR6RVZNQk1HQTFVRUJ4TU1SbTl5CmRDQkRiMnhzYVc1ek1SVXdFd1lEVlFRS0V3eHplWE4wWlcwNmJtOWtaWE14RERBS0JnTlZCQXNUQTBoRFVERXQKTUNzR0ExVUVBeE1rYzNsemRHVnRPbTV2WkdVNllYVjBiM1JwWTJ0bGRDMW5aVzVsY21GMGIzSXRjM1pqTUlJQgpJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBdncvanRHajlxY3hlOS9xWVdqTnlXUEh2CkZxMGk5anBDWmF1YWZ2MUVodVcwOG1pRFF2SWxzd0d2bnRuZlZ1WHM3RWF6QkMwWjM4cE16dEVCNFphblFwVVQKTStHaU1sSGZXUEdSUHIxT3VBRlVCTVVGaFo0aW1SekpxbUpMazFuT0c2Y1FwRXRpYStJVlR3cGhpaGZhNzNEVwpzSi85ME9yMEpIMkJCdHBBNzBpdVp3a0JkZ2lQeWdnVlc1Z3JkWnB2Z3VxZCtjU1hJUjBrZERxY1RXWjc3Z2tKCkZ1Z2VjeEdEV1NTTnVpUHlBaHpIWjhQblE3SEFyT0pyeGpmRytvcVZ1VzI1OTJPSXN4cXowSFMzOGJSUmFaaE4KcVZYaVFOVzVIUXB5WnJyQS82amUybFFxRDFRWE5WYUtWTmVWcFN0ckZnaytsRUlPUkdIQVBWTUorZ1EyMndJRApBUUFCbzRIS01JSEhNQTRHQTFVZER3RUIvd1FFQXdJRm9EQVRCZ05WSFNVRUREQUtCZ2dyQmdFRkJRY0RBVEFNCkJnTlZIUk1CQWY4RUFqQUFNQjhHQTFVZEl3UVlNQmFBRkxCaldyb2Z4bEw2aXRNQ0oyYVpVS01sdUZWM01IRUcKQTFVZEVRUnFNR2lDR0dGMWRHOTBhV05yWlhRdFoyVnVaWEpoZEc5eUxYTjJZNElqWVhWMGIzUnBZMnRsZEMxbgpaVzVsY21GMGIzSXRjM1pqTG1od1pTMXplWE4wWlcyQ0oyRjFkRzkwYVdOclpYUXRaMlZ1WlhKaGRHOXlMWE4yCll5NW9jR1V0YzNsemRHVnRMbk4yWXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUl3bjhEY3ZxSU41SFhrZ3EKT0VwNkp0d3dzZ0t2bytYV242MUdHK2c4UTZLeHY1Qk9BNEg5cUtDMjJIWUJzM1VMUjYwcTNQaHVnYmU1SjFaZwozcFU5VlU2enhtWVpDSC9acmp4dHJYQ1BMNmJoWGFsRWdDUytSNEtnbkRNOHNGbUlSM1Z2UkJrWVRaOE1rOUYyCnhmZUVHNmhxK05yVlh4aVl1Um81M2x2OHZSMXpvK3hkVmo3aWd5RW5uMmI2OFc4dTJxSEZZSklvazVBZGNUazAKUUZXSkdZQ2xlK2l0U2syUExOd1lmemVWWFhjRGVqSmkwckFRVWV4eUlBeTgwYmpRbzNpRU9mRXA4SCtBdTFrSgpQQVYrUzN4Wi90bFBjM01rZ0NrM285cS9RQjN1eUZrTkIreDFsSDBBZnMwTVg3dk1tZW5TZ2cwOGo0UEpDWExPCjBHT0hJUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: ["sparkoperator.hpe.com"]
+        apiVersions: ["v1beta2"]
+        resources: ["sparkapplications"]
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "sparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
+  - name: scheduled-autoticket-generator.hcp.hpe.com
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: autoticket-generator-svc
+        namespace: hpe-system
+        path: /scheduledsparkapplication/v1beta2/mutate
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUQ4RENDQXRpZ0F3SUJBZ0lRSlE1dG96aDlMTjJjdEpOTHJ3cFRXekFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEl5TVRJeE9USXdNamN4TWxvWERUSXpNVEl4T1RJdwpNamN4TWxvd2dZVXhDekFKQmdOVkJBWVRBbFZUTVFzd0NRWURWUVFJRXdKRFR6RVZNQk1HQTFVRUJ4TU1SbTl5CmRDQkRiMnhzYVc1ek1SVXdFd1lEVlFRS0V3eHplWE4wWlcwNmJtOWtaWE14RERBS0JnTlZCQXNUQTBoRFVERXQKTUNzR0ExVUVBeE1rYzNsemRHVnRPbTV2WkdVNllYVjBiM1JwWTJ0bGRDMW5aVzVsY21GMGIzSXRjM1pqTUlJQgpJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBdncvanRHajlxY3hlOS9xWVdqTnlXUEh2CkZxMGk5anBDWmF1YWZ2MUVodVcwOG1pRFF2SWxzd0d2bnRuZlZ1WHM3RWF6QkMwWjM4cE16dEVCNFphblFwVVQKTStHaU1sSGZXUEdSUHIxT3VBRlVCTVVGaFo0aW1SekpxbUpMazFuT0c2Y1FwRXRpYStJVlR3cGhpaGZhNzNEVwpzSi85ME9yMEpIMkJCdHBBNzBpdVp3a0JkZ2lQeWdnVlc1Z3JkWnB2Z3VxZCtjU1hJUjBrZERxY1RXWjc3Z2tKCkZ1Z2VjeEdEV1NTTnVpUHlBaHpIWjhQblE3SEFyT0pyeGpmRytvcVZ1VzI1OTJPSXN4cXowSFMzOGJSUmFaaE4KcVZYaVFOVzVIUXB5WnJyQS82amUybFFxRDFRWE5WYUtWTmVWcFN0ckZnaytsRUlPUkdIQVBWTUorZ1EyMndJRApBUUFCbzRIS01JSEhNQTRHQTFVZER3RUIvd1FFQXdJRm9EQVRCZ05WSFNVRUREQUtCZ2dyQmdFRkJRY0RBVEFNCkJnTlZIUk1CQWY4RUFqQUFNQjhHQTFVZEl3UVlNQmFBRkxCaldyb2Z4bEw2aXRNQ0oyYVpVS01sdUZWM01IRUcKQTFVZEVRUnFNR2lDR0dGMWRHOTBhV05yWlhRdFoyVnVaWEpoZEc5eUxYTjJZNElqWVhWMGIzUnBZMnRsZEMxbgpaVzVsY21GMGIzSXRjM1pqTG1od1pTMXplWE4wWlcyQ0oyRjFkRzkwYVdOclpYUXRaMlZ1WlhKaGRHOXlMWE4yCll5NW9jR1V0YzNsemRHVnRMbk4yWXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUl3bjhEY3ZxSU41SFhrZ3EKT0VwNkp0d3dzZ0t2bytYV242MUdHK2c4UTZLeHY1Qk9BNEg5cUtDMjJIWUJzM1VMUjYwcTNQaHVnYmU1SjFaZwozcFU5VlU2enhtWVpDSC9acmp4dHJYQ1BMNmJoWGFsRWdDUytSNEtnbkRNOHNGbUlSM1Z2UkJrWVRaOE1rOUYyCnhmZUVHNmhxK05yVlh4aVl1Um81M2x2OHZSMXpvK3hkVmo3aWd5RW5uMmI2OFc4dTJxSEZZSklvazVBZGNUazAKUUZXSkdZQ2xlK2l0U2syUExOd1lmemVWWFhjRGVqSmkwckFRVWV4eUlBeTgwYmpRbzNpRU9mRXA4SCtBdTFrSgpQQVYrUzN4Wi90bFBjM01rZ0NrM285cS9RQjN1eUZrTkIreDFsSDBBZnMwTVg3dk1tZW5TZ2cwOGo0UEpDWExPCjBHT0hJUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.hpe.com" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "scheduledsparkapplications" ]
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "scheduledsparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
