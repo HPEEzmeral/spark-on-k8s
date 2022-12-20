@@ -10,7 +10,7 @@ image:
   imageName: autoticketgen-1.0.0
   hookName: autoticket-generator-hook-1.0.0
   tag: "202209131159P160"
-  hookTag: "202212191526"
+  hookTag: "202212192029"
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull
