@@ -1,0 +1,46 @@
+{{- if .Values.autotix.enable -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "autoticket-generator.name" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+  {{- include "autoticket-generator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+    {{- include "autoticket-generator.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "autoticket-generator.hpePrefix" . }}
+      automountServiceAccountToken: {{ .Values.autotix.automountSAToken }}
+      priorityClassName: {{ .Values.autotix.priorityClassName }}
+      tolerations:
+      {{- include "autoticket-generator.tolerations" . | nindent 8 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+      {{- include "autoticket-generator.podAntiAffinity.preferred" . | nindent 12 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "autoticket-generator.name" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.autotixImageName}}:{{ .Values.image.autotixTag }}"
+          resources:
+          {{- toYaml .Values.autotix.resources | nindent 12 }}
+          env:
+          {{- include "autoticket-generator.env" . | nindent 12 }}
+          volumeMounts:
+      {{- include "autoticket-generator.volumesMounts" . | nindent 12 }}
+      volumes:
+  {{- include "autoticket-generator.volumes" . | nindent 8 }}
+  {{- end }}

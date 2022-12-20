@@ -1,0 +1,55 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: autoticket-generator-validating-webhook-cfg
+  labels:
+    app: autoticket-generator-app
+webhooks:
+  - name: autoticket-generator-validating.hcp.hpe.com
+    #not worth riskin failing the delete, we are tryin to clean up a secret
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        name: autoticket-generator-svc
+        namespace: {configure-namepsace}
+        path: /sparkapplication/v1beta2/validate
+      caBundle: {autoticket-servercert-encoded}
+    rules:
+      - operations: [ "DELETE" ]
+        apiGroups: ["sparkoperator.hpe.com"]
+        apiVersions: ["v1beta2"]
+        resources: ["sparkapplications"]
+      - operations: [ "DELETE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "sparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
+  - name: scheduled-autoticket-generator-validating.hcp.hpe.com
+    #not worth riskin failing the delete, we are tryin to clean up a secret
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        name: autoticket-generator-svc
+        namespace: {configure-namepsace}
+        path: /scheduledsparkapplication/v1beta2/validate
+      caBundle: {autoticket-servercert-encoded}
+    rules:
+      - operations: [ "DELETE" ]
+        apiGroups: ["sparkoperator.hpe.com"]
+        apiVersions: ["v1beta2"]
+        resources: ["scheduledsparkapplications"]
+      - operations: [ "DELETE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "scheduledsparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
