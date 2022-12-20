@@ -19,8 +19,8 @@ kind: SparkApplication
 metadata:
   name: spark-pi-secure
   namespace: sampletenant
-#spec:
-  sparkConf:
+spec:
+  #sparkConf:
     # Note: If you are executing the application as a K8 user that MapR can verify,
     #       you do not need to specify a spark.mapr.user.secret
     #spark.mapr.user.secret: mapr-user-secret
@@ -30,7 +30,7 @@ metadata:
   type: Scala
   sparkVersion: 3.3.1
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.3.1:202212051132R
+  image: gcr.io/mapr-252711/spark-3.3.1:202212141145R
   imagePullPolicy: Always
   imagePullSecrets:
   - imagepull
