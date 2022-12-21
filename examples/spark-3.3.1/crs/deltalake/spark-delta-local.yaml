@@ -21,7 +21,7 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: "gcr.io/mapr-252711/spark-3.3.1:202212141145R"
+  image: "gcr.io/mapr-252711/spark-3.3.1:202212201209R"
   imagePullPolicy: Always
   imagePullSecrets:
     - imagepull
