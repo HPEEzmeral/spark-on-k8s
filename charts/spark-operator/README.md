@@ -11,11 +11,11 @@ helm install -f spark-operator-chart/values.yaml spark-operator-compute ./spark-
 --set fullnameOverride=spark-operator-compute
 ```
 
-Autoticket generator webhook is installed by default in the given namespace.
+Autoticket generator webhook is not installed by default in the given namespace.
 
-To disable the installation of autoticket generator use the flag:
+To enable the installation of autoticket generator use the flag:
 
-`--set autotix.enable=false`
+`--set autotix.enable=true`
 
 This will create the helm chart in the `compute` namespace.  This will install Spark Operator version 3.1.2 as default </br>
 

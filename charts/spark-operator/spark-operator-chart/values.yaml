@@ -94,7 +94,7 @@ webhook:
 
 autotix:
   # -- Enable autoticket generator
-  enable: true
+  enable: false
   # -- String autoticket-generator name
   autotixName: "autoticket-generator"
   # -- ports for autoticket generator service
