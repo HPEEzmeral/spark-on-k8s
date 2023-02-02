@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: gcr.io/mapr-252711/apache-spark-hs-3.1.1
-  tag: "202108282015"
+  repository: gcr.io/mapr-252711/apache-spark-hs-3.3.1
+  tag: "202302021308-AJ"
   pullPolicy: IfNotPresent
 
 createDefaultPullSecret: true
@@ -16,11 +16,17 @@ nameOverride: ""
 fullnameOverride: ""
 service:
   type: NodePort
-#  nodePort: 32000
-  port:
-    number: 18080
-    name: http-historyport
-  annotations: {}
+
+
+#container ports
+ports:
+  sshPort: 22
+  httpPort: "18080"
+  httpsPort: "18480"
+
+progressDeadlineSeconds: 600
+
+revisionHistoryLimit: 10
 
 rbac:
   create: true
@@ -42,7 +48,6 @@ environment:
 # SPARK_DAEMON_CLASSPATH: ...
 # SPARK_PUBLIC_DNS: ...
 
-podAnnotations: {}
 
 resources:
   ## We usually recommend not to specify default resources and to leave this as a conscious

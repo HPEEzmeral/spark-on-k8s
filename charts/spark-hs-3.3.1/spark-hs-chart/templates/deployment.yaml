@@ -12,20 +12,23 @@ metadata:
     helm.sh/chart: {{ include "spark-hs-chart.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
        app.kubernetes.io/name: {{ include "spark-hs-chart.name" . }}
        app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- if .Values.podAnnotations }}
-      annotations:
-      {{ toYaml .Values.podAnnotations | indent 8 }}
-      {{- end }}
     spec:
       serviceAccountName: {{ include "spark-hs-chart.serviceAccountName" . }}
       imagePullSecrets:
@@ -64,13 +67,21 @@ spec:
             - configMapRef:
                 name: {{ include "spark-hs-chart.fullname" . }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: historyport
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /
-              port: historyport
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.ports.httpPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 30
           {{- if .Values.pvc.enablePVC }}
           volumeMounts:
             - name: sparkhs-eventlog-storage

@@ -80,10 +80,14 @@ fi
 
 if [[ "$enablePVC" == "true" ]]; then
     export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
-    -Dspark.history.fs.logDirectory=file:/mnt/$eventsDir";
+    -Dspark.eventLog.enabled=true \
+    -Dspark.eventLog.dir=file:$eventsDir \
+    -Dspark.history.fs.logDirectory=file:$eventsDir";
 else
     export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS \
+    -Dspark.eventLog.enabled=true \
+    -Dspark.eventLog.dir=file:$eventsDir \
     -Dspark.history.fs.logDirectory=$eventsDir";
 fi;
 
-exec /bin/bash -s -- /opt/spark/bin/spark-class org.apache.spark.deploy.history.HistoryServer
+exec /usr/bin/tini -s -- /opt/spark/bin/spark-class org.apache.spark.deploy.history.HistoryServer
