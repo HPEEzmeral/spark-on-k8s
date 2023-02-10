@@ -68,3 +68,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccounts.spark.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+The name of the PVC that would be used for spark.kubernetes.file.upload.path
+*/}}
+{{- define "livy.sparkFileUploadPvcName" -}}
+{{- default (printf "%s-spark-file-upload" (include "livy.fullname" .)) .Values.sparkFileUploadVolume.pvcname | trunc 63 | trimSuffix "-" }}
+{{- end }}

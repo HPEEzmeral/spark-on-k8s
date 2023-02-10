@@ -1,0 +1,12 @@
+{{- if .Values.sparkFileUploadVolume.createpvc }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "livy.sparkFileUploadPvcName" . }}
+spec:
+ accessModes:
+    - "ReadWriteMany"
+ resources:
+   requests:
+     storage: 512Mi
+{{- end }}
