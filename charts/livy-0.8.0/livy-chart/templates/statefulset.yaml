@@ -67,6 +67,8 @@ spec:
           volumeMounts:
             - name: configfiles
               mountPath: /opt/configfiles
+            - name: spark-file-upload
+              mountPath: /opt/spark-file-upload
             {{- if eq .Values.sessionrecovery.kind "pvc" }}
             - name: livy-sessionstore
               mountPath: /opt/livy/sessionstore
@@ -79,6 +81,9 @@ spec:
         - configMap:
             name: {{ include "livy.fullname" . }}
           name: configfiles
+        - persistentVolumeClaim:
+            claimName: {{ include "livy.sparkFileUploadPvcName" . }}
+          name: spark-file-upload
         {{- if eq .Values.sessionrecovery.kind "pvc" }}
         - persistentVolumeClaim:
             claimName: {{ .Values.sessionrecovery.pvcname }}
