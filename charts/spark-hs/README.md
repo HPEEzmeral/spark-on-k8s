@@ -92,6 +92,16 @@ sparkExtraConfigs: |
   spark.org.apache.hadoop.security.authentication.server.AuthenticationFilter.param.userheader X-USERNAME
 ```
 
+### Configuring spark HS with ACLs
+Spark History Server can be configured to work with ACLs. This feature needs to be enabled by spark.history.ui.acls.enable
+Admins can see details of all jobs. Other users can see just details of their applications.
+You also can change list of users who can see application details by setting spark.ui.view.acls when start Spark application. 
+```yaml
+sparkExtraConfigs: |
+  spark.history.ui.acls.enable true
+  spark.history.ui.admin.acls mapr
+```
+
 ## Uninstalling the Chart
 Uninstall spark history server deployment named "spark-hs" from 'sampletenant' tenant
 ```
