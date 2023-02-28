@@ -182,3 +182,5 @@ istio:
 ownerReference:
   overRide: false
   ownerReferences: {}
+
+customLabels:

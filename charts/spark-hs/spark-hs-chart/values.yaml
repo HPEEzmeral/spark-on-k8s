@@ -98,6 +98,9 @@ ownerReference:
   overRide: false
   ownerReferences: {}
 
+# Add custom labels to spark history server pod
+customLabels:
+
 eventlogstorage:
   kind: maprfs #supported types are pvc, maprfs and s3
   ##Uncomment these parameters for using s3 as events log storage
