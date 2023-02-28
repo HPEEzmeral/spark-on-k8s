@@ -49,4 +49,5 @@ ports:
   port: 443
   targetPort: 8443
 
+# Add custom labels to tenant operator and validator pods
 customLabels:
