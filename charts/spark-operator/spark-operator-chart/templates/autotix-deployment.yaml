@@ -16,6 +16,9 @@ spec:
   template:
     metadata:
       labels:
+        {{- with .Values.customLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     {{- include "autoticket-generator.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "autoticket-generator.hpePrefix" . }}

@@ -24,6 +24,9 @@ spec:
         sidecar.istio.io/inject: "true"
       {{ end }}
       {{- include "livy-chart.labels" . | nindent 8 }}
+      {{- with .Values.customLabels }}
+      {{ toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       subdomain: livy-svc
       affinity:

@@ -134,3 +134,6 @@ extraConfigs:
 
 istio:
   enable: false
+
+# Add custom labels to livy server pod
+customLabels:
