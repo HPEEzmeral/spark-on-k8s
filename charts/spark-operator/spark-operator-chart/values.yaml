@@ -106,6 +106,8 @@ autotix:
     requests:
       memory: 1Gi
       cpu: 500m
+  # add env variable to add labels for observability -- default is set to true
+  configureLabel: true
 
 metrics:
   # -- Enable prometheus metric scraping
