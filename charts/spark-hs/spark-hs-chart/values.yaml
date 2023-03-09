@@ -124,8 +124,8 @@ eventlogstorage:
 # Data provided in "sparkExtraConfigs" will be added to spark configuration through a K8S secret
 # Useful to pass secure config options to spark, e.g. S3 credentials or ACL configurations
 sparkExtraConfigs: |
-#  spark.history.ui.acls.enable true
-#  spark.history.ui.admin.acls mapr
+  spark.history.ui.acls.enable true
+  spark.history.ui.admin.acls mapr
 #  spark.ssl.historyServer.enabled           true
 #  spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
 #  spark.ssl.historyServer.keyStorePassword  examplepass
