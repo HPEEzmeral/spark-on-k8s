@@ -21,9 +21,9 @@ spec:
       {{- end }}
       containers:
       - name: post-install-container
-        image: "{{ .Values.image.baseRepository }}/{{ .Values.image.hookName }}:{{ .Values.image.hookTag }}"
+        image: "{{ .Values.image.baseRepository }}/{{ .Values.image.autotixImageName }}:{{ .Values.image.autotixTag }}"
         imagePullPolicy: IfNotPresent
-        command: ["/opt/autoticket-generator/autoticket-generator-gencert.sh", "{{ .Release.Namespace }}"]
+        command: ["/opt/autotix/deploy/autoticket-generator-gencert.sh", "{{ .Release.Namespace }}"]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
   {{ end }}

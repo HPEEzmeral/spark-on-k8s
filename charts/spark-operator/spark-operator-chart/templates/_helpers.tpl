@@ -183,6 +183,8 @@ return env for autoticket-generator container
 {{- define "autoticket-generator.env" -}}
 - name : LOG_LEVEL
   value: "info"
+- name : spark-app-configure-label
+  value: "{{ .Values.autotix.configureLabel }}"
 {{- end }}
 
 {{/*
