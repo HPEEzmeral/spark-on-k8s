@@ -1,0 +1,16 @@
+{{ if .Values.autotix.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "autoticket-generator.sparkLabelconfigMapName" . }}
+  labels:
+  {{- include "autoticket-generator.selectorLabels" . | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+    {{- end }}
+    {{- end }}
+data:
+    label_1: "hpe-ezua/app: spark"
+    lable_2: "hpe-ezua/type: app-service-user"
+  {{ end }}

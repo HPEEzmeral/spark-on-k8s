@@ -148,6 +148,12 @@ Create the name of the autoticket generator cleanup pod
     {{- printf "%s-autotix-cleanup" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*Create a autoticket generator configmap name
+*/}}
+{{- define "autoticket-generator.sparkLabelconfigMapName" -}}
+{{- printf "%s" .Values.autotix.sparkLabelConfigName  | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 {{/*Create a autoticket generator service name
 */}}
 {{- define "autoticket-generator.svcName" -}}
