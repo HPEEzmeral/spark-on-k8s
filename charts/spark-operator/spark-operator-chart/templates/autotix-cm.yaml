@@ -12,6 +12,5 @@ metadata:
     {{- end }}
 data:
   spark_app_labels.yaml: |
-    hpe-ezua/app: spark
-    hpe-ezua/type: app-service-user
+    {{- include "autoticket-generator.sparkLabels" . | nindent 4 }}
   {{ end }}
