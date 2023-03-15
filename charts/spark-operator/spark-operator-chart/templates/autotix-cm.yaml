@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "autoticket-generator.sparkLabelconfigMapName" . }}
+  name: {{ include "autoticket-generator.configMapName" . }}
   labels:
   {{- include "autoticket-generator.selectorLabels" . | nindent 4 }}
   {{- if .Values.ownerReference.overRide }}
@@ -11,6 +11,7 @@ metadata:
     {{- end }}
     {{- end }}
 data:
-    label_1: "hpe-ezua/app: spark"
-    lable_2: "hpe-ezua/type: app-service-user"
+  spark_app_labels.yaml: |
+    hpe-ezua/app: spark
+    hpe-ezua/type: app-service-user
   {{ end }}

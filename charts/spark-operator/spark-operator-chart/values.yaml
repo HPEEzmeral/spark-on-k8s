@@ -18,7 +18,7 @@ image:
   # -- Image name for autotix
   autotixImageName: autoticketgen-1.0.0
   # -- Image tag for autotix
-  autotixTag: "202303080925AJ"
+  autotixTag: "202303141935AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -93,8 +93,6 @@ autotix:
   enable: false
   # -- String autoticket-generator name
   autotixName: "autoticket-generator"
-  #spark label addition configmap name
-  sparkLabelConfigName : "sparklabels-cm"
   # -- ports for autoticket generator service
   port: 443
   targetPort: 8443
