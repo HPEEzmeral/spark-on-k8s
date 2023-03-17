@@ -221,6 +221,6 @@ return volumeMounts for autoticket-generator container
   mountPath:  /opt/validator/certs
   readOnly: true
 - name: autoticket-generator-cm
-  mountPath:  /opt/autotix
+  mountPath:  /opt/autotix/conf
   readOnly: true
 {{- end }}
