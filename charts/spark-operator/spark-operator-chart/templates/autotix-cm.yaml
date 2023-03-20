@@ -12,5 +12,5 @@ metadata:
     {{- end }}
 data:
   spark_app_labels.yaml: |
-    {{- include "autoticket-generator.sparkLabels" . | nindent 4 }}
+    {{- toYaml .Values.autotix.sparkAppLabels | nindent 4 }}
   {{ end }}

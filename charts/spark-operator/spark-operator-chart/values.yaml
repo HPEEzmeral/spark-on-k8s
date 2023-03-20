@@ -110,8 +110,8 @@ autotix:
   configureLabel: true
   # labels for observability
   sparkAppLabels:
-    hpeezuaApp: spark
-    hpeezuaType: app-service-user
+    "hpe-ezua/app": "spark"
+    "hpe-ezua/type": "app-service-user"
 
 metrics:
   # -- Enable prometheus metric scraping
