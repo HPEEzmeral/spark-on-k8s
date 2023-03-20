@@ -69,7 +69,9 @@ spec:
         - -enable-batch-scheduler={{ .Values.batchScheduler.enable }}
         {{- if .Values.metrics.enable }}
         - -enable-metrics=true
-        - -metrics-labels=app_type
+        {{- range .Values.metrics.labels }}
+        - -metrics-labels={{ . }}
+        {{- end }}
         - -metrics-port={{ .Values.metrics.port }}
         - -metrics-endpoint={{ .Values.metrics.endpoint }}
         - -metrics-prefix={{ .Values.metrics.prefix }}
