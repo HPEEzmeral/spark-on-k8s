@@ -18,7 +18,7 @@ image:
   # -- Image name for autotix
   autotixImageName: autoticketgen-1.0.0
   # -- Image tag for autotix
-  autotixTag: "202303080925AJ"
+  autotixTag: "202303162153AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -108,6 +108,10 @@ autotix:
       cpu: 500m
   # add env variable to add labels for observability -- default is set to true
   configureLabel: true
+  # labels for observability
+  sparkAppLabels:
+    #"hpe-ezua/app": "spark"
+    #"hpe-ezua/type": "app-service-user"
 
 metrics:
   # -- Enable prometheus metric scraping

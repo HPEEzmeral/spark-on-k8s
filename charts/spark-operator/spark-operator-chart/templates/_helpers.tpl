@@ -148,6 +148,12 @@ Create the name of the autoticket generator cleanup pod
     {{- printf "%s-autotix-cleanup" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*Create a autoticket generator configmap name
+*/}}
+{{- define "autoticket-generator.configMapName" -}}
+{{- printf "%s-%s" .Values.autotix.autotixName "cm"  | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 {{/*Create a autoticket generator service name
 */}}
 {{- define "autoticket-generator.svcName" -}}
@@ -194,6 +200,9 @@ return volume for autoticket-generator container
 - name: autoticket-generator-certs
   secret:
     secretName: autoticket-generator-certs
+- name: autoticket-generator-cm
+  configMap:
+    name: {{ include "autoticket-generator.configMapName" . }}
 {{- end }}
 
 {{/*
@@ -202,5 +211,8 @@ return volumeMounts for autoticket-generator container
 {{- define "autoticket-generator.volumesMounts" -}}
 - name: autoticket-generator-certs
   mountPath:  /opt/validator/certs
+  readOnly: true
+- name: autoticket-generator-cm
+  mountPath:  /opt/autotix/conf
   readOnly: true
 {{- end }}
