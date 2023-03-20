@@ -108,6 +108,10 @@ autotix:
       cpu: 500m
   # add env variable to add labels for observability -- default is set to true
   configureLabel: true
+  # labels for observability
+  sparkAppLabels:
+    hpeezuaApp: spark
+    hpeezuaType: app-service-user
 
 metrics:
   # -- Enable prometheus metric scraping

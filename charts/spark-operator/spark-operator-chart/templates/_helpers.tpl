@@ -187,8 +187,8 @@ return podAntiAffinity for autoticket generator components
 return labels for autotix-cm to be added to spark jobs
 */}}
 {{- define "autoticket-generator.sparkLabels" -}}
-hpe-ezua/app: spark
-hpe-ezua/type: app-service-user
+hpe-ezua/app: {{ .Values.autotix.sparkAppLabels.hpeezuaApp }}
+hpe-ezua/type: {{ .Values.autotix.sparkAppLabels.hpeezuaType }}
 {{- end }}
 
 {{/*
