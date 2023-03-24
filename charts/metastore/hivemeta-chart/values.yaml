@@ -17,7 +17,7 @@ image:
   tag: "202301161621R"
 
 # -- Whether to create a default pull secret
-createDefaultPullSecret: true
+createDefaultPullSecret: false
 # -- Default pull secret name to be created, update it in imagePullSecrets's name
 defaultPullSecret: imagepull-hivemeta
 

@@ -21,7 +21,7 @@ deImage: spark-3.3.1:202301161621R
 #deImage: spark-2.4.7:202301161621R
 
 # -- Whether to create a default pull secret
-createDefaultPullSecret: true
+createDefaultPullSecret: false
 # -- Default pull secret name to be created, update it in imagePullSecrets's name
 defaultPullSecret: imagepull-livy
 
