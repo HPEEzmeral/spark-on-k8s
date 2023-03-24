@@ -38,12 +38,10 @@ spec:
           {{-  include "common.podAntiAffinity.preferred" (dict "componentName" ( include "spark-ts-chart.deploymentName" . ) ) | nindent 12 }}
       tolerations:
       {{- include "common.tolerations" (dict "componentName" ( include "spark-ts-chart.deploymentName" . ) "namespace" .Release.Namespace ) | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- if .Values.createImagetPullSecret }}
-        - name: {{ .Values.imagePullSecretsName }}
-        {{ else }}
-        - name: {{ .Values.defaultPullSecret }}
-        {{- end }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "spark-ts-chart.serviceAccountName" . }}
       restartPolicy: {{ .Values.restartPolicy }}
       priorityClassName: "hpe-tenant-service"

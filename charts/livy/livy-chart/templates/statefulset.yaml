@@ -40,11 +40,9 @@ spec:
           {{- include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}
       tolerations:
       {{- include "common.tolerations" (dict "componentName" ( include "livy-chart.name" . ) "namespace" .Release.Namespace ) | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- if .Values.createImagetPullSecret }}
-        - name: {{ .Values.imagePullSecretsName }}
-        {{ else }}
-        - name: {{ .Values.defaultPullSecret }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "livy-chart.serviceAccountName" . }}
       restartPolicy: {{ .Values.restartPolicy }}

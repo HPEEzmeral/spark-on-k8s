@@ -21,10 +21,14 @@ image:
   # -- Image pull policy
   pullPolicy: Always
 
-# -- Image pull secrets
-imagePullSecretsName: imagepull-spark-ts
-createImagetPullSecret: false
-defaultPullSecret: imagepull
+# -- Whether to create a default pull secret
+createDefaultPullSecret: true
+# -- Default pull secret name to be created, update it in imagePullSecrets's name
+defaultPullSecret: imagepull-spark-ts
+
+# -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
+imagePullSecrets:
+  - name: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
