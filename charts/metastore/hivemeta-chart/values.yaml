@@ -17,8 +17,9 @@ image:
   tag: "202301161621R"
 
 # -- Image pull secrets
-imagePullSecrets:
-  - name: imagepull
+imagePullSecretsName: imagepull-hivemeta
+createImagetPullSecret: false
+defaultPullSecret: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
@@ -28,9 +29,6 @@ fullnameOverride: ""
 
 # -- restart policy
 restartPolicy: "Always"
-
-createDefaultPullSecret: false
-defaultPullSecret: imagepull
 
 hiveSecret: "hivemeta-secret"
 mysqlDB: false

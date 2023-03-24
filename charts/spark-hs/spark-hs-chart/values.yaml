@@ -22,10 +22,8 @@ image:
   # tag: "202301161621R"
 
 # -- Image pull secrets
-imagePullSecrets:
-  - name: imagepull
-
-createDefaultPullSecret: false
+imagePullSecretsName: imagepull-spark-hs
+createImagetPullSecret: false
 defaultPullSecret: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)

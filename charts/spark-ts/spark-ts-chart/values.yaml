@@ -22,8 +22,9 @@ image:
   pullPolicy: Always
 
 # -- Image pull secrets
-imagePullSecrets:
-  - name: imagepull
+imagePullSecretsName: imagepull-spark-ts
+createImagetPullSecret: false
+defaultPullSecret: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
@@ -47,9 +48,6 @@ sparkVersion: spark-3.3.1
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
-
-createDefaultPullSecret: false
-defaultPullSecret: imagepull
 
 #HPE tenant namespace service account
 serviceAccount:

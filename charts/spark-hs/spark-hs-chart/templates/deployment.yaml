@@ -48,9 +48,11 @@ spec:
           {{-  include "common.podAntiAffinity.preferred" (dict "componentName" $componentName ) | nindent 12 }}
       tolerations:
       {{- include "common.tolerations" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-      {{- toYaml . | nindent 8 }}
+        {{- if .Values.createImagetPullSecret }}
+        - name: {{ .Values.imagePullSecretsName }}
+        {{ else }}
+        - name: {{ .Values.defaultPullSecret }}
       {{- end }}
       serviceAccountName: {{ include "spark-hs-chart.serviceAccountName" . }}
       restartPolicy: {{ .Values.restartPolicy }}

@@ -21,10 +21,8 @@ deImage: spark-3.3.1:202301161621R
 #deImage: spark-2.4.7:202301161621R
 
 # -- Image pull secrets
-imagePullSecrets:
-  - name: imagepull
-
-createDefaultPullSecret: false
+imagePullSecretsName: imagepull-livy
+createImagetPullSecret: false
 defaultPullSecret: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
