@@ -20,12 +20,14 @@ deImage: spark-3.3.1:202301161621R
 #for livy-0.7.0/spark-2.4.7
 #deImage: spark-2.4.7:202301161621R
 
-# -- Image pull secrets
+# -- Whether to create a default pull secret
+createDefaultPullSecret: false
+# -- Default pull secret name to be created, update it in imagePullSecrets's name
+defaultPullSecret: imagepull-livy
+
+# -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
 imagePullSecrets:
   - name: imagepull
-
-createDefaultPullSecret: false
-defaultPullSecret: imagepull
 
 # -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""

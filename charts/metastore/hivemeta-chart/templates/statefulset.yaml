@@ -37,7 +37,7 @@ spec:
       {{- include "common.tolerations" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-  {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "hivemeta-chart.serviceAccountName" . | nindent 8}}
       restartPolicy: {{ .Values.restartPolicy }}

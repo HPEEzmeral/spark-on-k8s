@@ -1,4 +1,4 @@
-{{ if ( and ( .Values.createDefaultPullSecret)  ( not ( lookup "v1" "Secret" .Values.namespace .Values.defaultPullSecret )) )  }}
+{{ if .Values.createDefaultPullSecret }}
 apiVersion: v1
 kind: Secret
 metadata:

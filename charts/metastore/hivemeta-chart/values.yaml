@@ -16,7 +16,12 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "202301161621R"
 
-# -- Image pull secrets
+# -- Whether to create a default pull secret
+createDefaultPullSecret: false
+# -- Default pull secret name to be created, update it in imagePullSecrets's name
+defaultPullSecret: imagepull-hivemeta
+
+# -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
 imagePullSecrets:
   - name: imagepull
 
@@ -28,9 +33,6 @@ fullnameOverride: ""
 
 # -- restart policy
 restartPolicy: "Always"
-
-createDefaultPullSecret: false
-defaultPullSecret: imagepull
 
 hiveSecret: "hivemeta-secret"
 mysqlDB: false

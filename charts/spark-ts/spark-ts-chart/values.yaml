@@ -21,7 +21,12 @@ image:
   # -- Image pull policy
   pullPolicy: Always
 
-# -- Image pull secrets
+# -- Whether to create a default pull secret
+createDefaultPullSecret: false
+# -- Default pull secret name to be created, update it in imagePullSecrets's name
+defaultPullSecret: imagepull-spark-ts
+
+# -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
 imagePullSecrets:
   - name: imagepull
 
@@ -47,9 +52,6 @@ sparkVersion: spark-3.3.1
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
-
-createDefaultPullSecret: false
-defaultPullSecret: imagepull
 
 #HPE tenant namespace service account
 serviceAccount:
