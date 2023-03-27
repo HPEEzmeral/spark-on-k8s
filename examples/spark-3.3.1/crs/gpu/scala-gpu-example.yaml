@@ -23,7 +23,7 @@ spec:
   type: Scala
   sparkVersion: 3.3.1
   mode: cluster
-  image: gcr.io/mapr-252711/spark-gpu-3.3.1:202301161621R
+  image: gcr.io/mapr-252711/spark-gpu-3.3.1:202303230208R
   imagePullPolicy: Always
   mainApplicationFile: /path/to/examples/jar/file
   mainClass: com.hpe.examples.spark.sql.SqlOnGpuExample

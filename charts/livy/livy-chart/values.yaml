@@ -16,9 +16,9 @@ image:
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.3.1:202301161621R
+deImage: spark-3.3.1:202303230208R
 #for livy-0.7.0/spark-2.4.7
-#deImage: spark-2.4.7:202301161621R
+#deImage: spark-2.4.7:202303230208R
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false

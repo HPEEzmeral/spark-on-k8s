@@ -30,7 +30,7 @@ spec:
   type: Scala
   sparkVersion: 3.3.1
   mode: cluster
-  image: gcr.io/mapr-252711/spark-3.3.1:202301161621R
+  image: gcr.io/mapr-252711/spark-3.3.1:202303230208R
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.streaming.QueueStream
   mainApplicationFile: "local:///opt/mapr/spark/spark-3.3.1/examples/jars/spark-examples_2.12-3.3.1.0-eep-910.jar"
