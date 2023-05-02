@@ -16,14 +16,14 @@ image:
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.3.1:202303230208R
+deImage: spark-3.3.1:202304252229AN
 #for livy-0.7.0/spark-2.4.7
-#deImage: spark-2.4.7:202303230208R
+#deImage: spark-2.4.7:202304252229AN
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
 # -- Default pull secret name to be created, update it in imagePullSecrets's name
-defaultPullSecret: imagepull-livy
+defaultPullSecret: imagepull
 
 # -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
 imagePullSecrets:
@@ -134,8 +134,16 @@ extraConfigs:
     # livy.keystore.password = examplepass
     # livy.key-password = examplepass
 
+# istio-related settings
 istio:
+  # Whether to enable istio sidecar injection on livy server pod
   enable: false
+  # Istio virtual service settings
+  virtualService:
+    create: false
+    endpoint: ""
+    istioGateway: ""
+    prefix: /
 
 # Add custom labels to livy server pod
 customLabels:

@@ -191,6 +191,8 @@ return env for autoticket-generator container
   value: "info"
 - name : spark-app-configure-label
   value: "{{ .Values.autotix.configureLabel }}"
+- name: SET_SPARK_USERNAME
+  value: "{{ .Values.autotix.autoSetSparkUserNameEnvs }}"
 {{- end }}
 
 {{/*

@@ -1,0 +1,21 @@
+{{ if .Values.istio.virtualService.create }}
+{{ $componentName := printf "%s-svc" .Chart.Name }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Release.Name }}-vs
+spec:
+  gateways:
+    - {{ .Values.istio.virtualService.istioGateway }}
+  hosts:
+    - {{ .Values.istio.virtualService.endpoint | required "\nValid .Values.ezua.virtualService.endpoint is required !" }}
+  http:
+    - match:
+        - uri:
+            prefix: {{ .Values.istio.virtualService.prefix }}
+      route:
+        - destination:
+            host: {{ $componentName }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.ports.httpPort }}
+  {{ end }}
