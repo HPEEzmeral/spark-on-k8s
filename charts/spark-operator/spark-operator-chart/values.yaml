@@ -108,6 +108,8 @@ autotix:
       cpu: 500m
   # add env variable to add labels for observability -- default is set to true
   configureLabel: true
+  # enable auto-setting 'SPARK_USER' env variables by autotix webhook
+  autoSetSparkUserNameEnvs: true
   # labels for observability
   sparkAppLabels:
     #"hpe-ezua/app": "spark"

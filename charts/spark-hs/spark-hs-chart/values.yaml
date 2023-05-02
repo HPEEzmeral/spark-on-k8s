@@ -22,7 +22,7 @@ image:
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
 # -- Default pull secret name to be created, update it in imagePullSecrets's name
-defaultPullSecret: imagepull-spark-hs
+defaultPullSecret: imagepull
 
 # -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
 imagePullSecrets:
@@ -133,6 +133,9 @@ sparkExtraConfigs: |
 #  spark.ssl.historyServer.protocol          TLSv1.2
 #  spark.ssl.historyServer.keyStoreType      PKCS12
 
+# Space separated Java options for Spark HS (Will be added to SPARK_HISTORY_OPTS in spark-env.sh)
+#HSJavaOpts: -Dx=y
+
 # Alpha feature
 sparkSsl:
   enable: true
@@ -140,9 +143,18 @@ sparkSsl:
   sslSecretName: "spark-hs-ssl-secret"
   secretMountPath: /var/spark
 
+# istio-related settings
 istio:
   # Whether to enable istio sidecar injection on spark-hs pods
   enable: false
-
-# Space separated Java options for Spark HS (Will be added to SPARK_HISTORY_OPTS in spark-env.sh)
-#HSJavaOpts: -Dx=y
+  # Istio virtual service settings
+  virtualService:
+    create: false
+    endpoint: ""
+    istioGateway: ""
+    prefix: /
+  # Istio authorization policy settings.
+  # If enabled - an authpolicy with 'action':'CUSTOM' will be created for virtualService.endpoint
+  authPolicy:
+    create: false
+    provider: ""
