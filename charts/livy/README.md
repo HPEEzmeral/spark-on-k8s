@@ -29,20 +29,20 @@ To install the helm chart in tenant type 'none' Namespace use the flag:
 ## Uninstalling the Chart
 `helm uninstall livy -n sampletenant`
 
-Please note that this won't delete the PVC in case you are using it. PVC will have to be manually deleted.
+Note: If you are using PVC, running the `helm uninstall` command won't delete the PVC. You must manually delete the PVC.
 
 ## Configuring Livy
 
-`extraConfigs` section of the `values.yaml` allows to set custom options for the `livy.conf`, `livy-client.conf` and `spark-defaults.conf`.  
+Set the custom options for the `livy.conf`, `livy-client.conf` and `spark-defaults.conf` file in the `extraConfigs` section of the `values.yaml` file.  
 Content of this section would be mounted into the Livy as a K8s Secret.  
 The content of `livy.conf`, `livy-client.conf` and `spark-defaults.conf` subsections of `extraConfigs` section would be appended to the corresponding configuration files.
 
 ### Using custom keystore
 To use a custom keystore to enable HTTPS for the Livy UI, you'll need to manually create a secret with that keystore file in the tenant namespace.
-The secret should have a keystore file stored under a particular key, e.g. "ssl_keystore".
-Livy SSL configuration options can be securely passed to Livy using the `extraConfigs` section, 
-as shown in the example below. Assuming that the secret name is "livy-ssl-secret", the keystore key name in secret is 
-"ssl_keystore" and passwords are "examplepass" update values.yaml like this:
+
+Livy SSL configuration options can be securely passed to Livy using the `extraConfigs` section.  
+For example: If the secret name is `livy-ssl-secret`, the keystore key name in the secret is `ssl_keystore` and the password is `examplepass`, update `values.yaml` like this:
+
 ```yaml
 livySsl:
   enable: true
@@ -58,8 +58,8 @@ extraConfigs:
 
 ### Integration with Spark History Server
 
-To enable integration with Spark History Server, set the `integrate` option of the `sparkHistoryServer` section to `true` and configure the Event Log Directory.  
-Event Log Directory can be either in PVC or in MapR-FS.
+To enable integration with Spark History Server, set the `integrate` option of the `sparkHistoryServer` section to `true` and configure the event log directory.  
+Event log directory can be either in PVC or in MapR-FS.
 
 #### Using PVC as storage of Event Log
 
@@ -77,7 +77,7 @@ sparkHistoryServer:
 
 #### Using MapR-FS as storage of Event Log
 
-To configure the integration of Livy Spark Sessions with Spark History Server using MapR-FS as storage for Event Log, you need to specify a location of Event Log Directory in MapR-FS with `eventsDir` option of the `sparkHistoryServer` section.  
+To configure the integration of Livy Spark Sessions with Spark History Server using MapR-FS as storage for Event Log, you need to specify a location of event log directory in MapR-FS with `eventsDir` option of the `sparkHistoryServer` section.  
 Also, the value of `pvcName` option should remain empty.
 
 Example:
@@ -241,9 +241,9 @@ curl -ks \
 
 To start multiple Livy instances, you can change the value of `replicaCount` field in the `values.yaml`.
 
-Note that Livy is a stateful application. Therefore, your Livy clients would need to choose which Livy instance they would use. Alternatively, you can configure cluster's gateway to automatically connect each client to their Livy instance.
+Note: Livy is a stateful application. Therefore, Livy clients must choose the Livy instance to use. Alternatively, you can configure the cluster's gateway to connect each client to their Livy instance automatically.
 
-To achieve better high availability it's recommended to enable the Session Recovery feature in `values.yaml`.
+To achieve better high availability it is recommended to enable the session recovery feature in `values.yaml`.
 
 ### Configuring livy server with external OAuth proxy
 Livy Server can be configured to work behind OAuth proxy server. The proxy is responsible for user authentication,
