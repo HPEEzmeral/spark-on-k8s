@@ -10,9 +10,7 @@ image:
   pullPolicy: Always
   operatorTag: "202204141412P151"
   validatorImageName: tenantvalidator-1.0.0
-  validatorHookName: tenantvalidator-hook-1.0.0
-  validatorTag: "202204141412P151"
-  validatorHookTag: "202212041027"
+  validatorTag: "202305041918AJ"
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull

@@ -27,13 +27,13 @@ return name for validator
 {{/*Create a tenant validator post install hook name
 */}}
 {{- define "tenant-validator.postInstallHookName" -}}
-{{- printf "%s-%s" .Values.tenantValidatorName "postinstall-hook" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Values.tenantValidatorName "init" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*Create a tenant validator pre delete hook name
 */}}
 {{- define "tenant-validator.preDeleteHookName" -}}
-{{- printf "%s-%s" .Values.tenantValidatorName "predelete-hook" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Values.tenantValidatorName "cleanup" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*Create a tenant validator name with prefix hpe service account
