@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "tenant-validator.postInstallHookName" . }}
+  name: {{ include "tenant-validator.preDeleteHookName" . }}
   namespace: {{ include "tenant-operator.namespace" . }}
   annotations:
-    helm.sh/hook: post-install
+    helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded, hook-failed
 spec:
   template:
@@ -15,8 +15,8 @@ spec:
       {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: post-install-container
-          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.validatorHookName }}:{{ .Values.image.validatorHookTag }}"
+        - name: pre-delete-container
+          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.validatorImageName }}:{{ .Values.image.validatorTag }}"
           imagePullPolicy: Always
-          command: ['sh', /opt/tenantvalidator/tenantvalidator-gencert.sh ]
+          command: ["/opt/validator/deploy/tenantvalidator-uninstall.sh"]
       restartPolicy: Never
