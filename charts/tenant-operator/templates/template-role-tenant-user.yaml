@@ -1,0 +1,36 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tenant-userrole
+  namespace: hpe-secure
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["create", "get", "update", "delete", "patch", "list"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes", "persistentvolumeclaims"]
+    verbs: ["create", "get", "update", "delete", "patch", "list"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["create", "get", "update", "delete", "patch", "list"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["statefulsets", "deployments", "daemonsets"]
+    verbs: ["create", "get", "update", "delete", "patch", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["create", "get", "update", "delete", "patch", "list"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "update", "delete", "patch"]
+  - apiGroups: ["sparkoperator.hpe.com"]
+    resources: ["sparkapplications",  "sparkapplications/status", "scheduledsparkapplications", "scheduledsparkapplications/status"]
+    verbs: ["*"]
+  - apiGroups: ["sparkoperator.k8s.io"]
+    resources: ["sparkapplications",  "sparkapplications/status", "scheduledsparkapplications", "scheduledsparkapplications/status"]
+    verbs: ["*"]
