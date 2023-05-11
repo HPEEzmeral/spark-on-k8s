@@ -17,6 +17,6 @@ spec:
       containers:
         - name: post-install-container
           image: "{{ .Values.image.baseRepository }}/{{ .Values.image.validatorImageName }}:{{ .Values.image.validatorTag }}"
-          imagePullPolicy: Always
-          command: ["/opt/validator/deploy/tenantvalidator-gencert.sh"]
-      restartPolicy: Never
+          imagePullPolicy: IfNotPresent
+          command: ["/opt/validator/deploy/tenantvalidator-gencert.sh", "{{ .Release.Namespace }}"]
+      restartPolicy: OnFailure

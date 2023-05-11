@@ -79,11 +79,11 @@ rules:
   - apiGroups: ["hcp.hpe.com"]
     resources: ["*"]
     verbs: ["*"]
-  - apiGroups: ["certificates.k8s.io"]
-    resources: ["*"]
-    verbs: ["*"]
   - apiGroups: ["admissionregistration.k8s.io"]
-    resources: ["*"]
+    resources: ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
+    verbs:  ["create", "update", "delete", "get", "patch", "list", "watch"]
+  - apiGroups: ["certificates.k8s.io"]
+    resources: ["certificatesigningrequests", "certificatesigningrequests/approval", "signers"]
     verbs: ["*"]
 
 ---
@@ -95,7 +95,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "tenant-validator.hpePrefix" . }}
-    namespace: hpe-system
+    namespace: {{ include "tenant-operator.namespace" . }}
 roleRef:
   kind: ClusterRole
   name: {{ include "tenant-validator.hpePrefix" . }}

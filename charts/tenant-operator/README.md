@@ -3,14 +3,12 @@
 ### Installing the Chart
 
 #### Install command
-```sh
-helm install tenant-operator tenant-operator/
+```
+helm install tenant-operator tenant-operator/ -n <namespace>
 ```
 
-#### NOTE: This will create the helm chart in the `default` namespace.
 The chart installation will create Tenant operator and tenant validator webhook.
-All the resources defined in the chart are created in `hpe-system` namespace.
-
+All the resources defined in the chart are created in <namespace> namespace.
 
 ## Uninstalling the Chart
-`helm delete tenant-operator`
+`helm delete tenant-operator -n <namespace>`
