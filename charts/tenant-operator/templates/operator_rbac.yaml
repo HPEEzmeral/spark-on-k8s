@@ -95,7 +95,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "tenant-operator.hpePrefix" . }}
-    namespace: {{ include "tenant-operator.namespace" . }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: {{ include "tenant-operator.hpePrefix" . }}
