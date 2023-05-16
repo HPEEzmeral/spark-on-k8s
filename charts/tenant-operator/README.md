@@ -4,7 +4,7 @@
 
 #### Install command
 ```
-helm install tenant-operator tenant-operator/ -n <namespace>
+helm install tenant-operator tenant-operator/ -n <namespace> --create-namespace
 ```
 
 The chart installation will create Tenant operator and tenant validator webhook.

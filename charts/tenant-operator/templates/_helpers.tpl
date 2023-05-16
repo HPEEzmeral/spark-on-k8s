@@ -46,7 +46,7 @@ return name for validator
 return namespace where the tenant operator and validator must be deployed
 */}}
 {{- define "tenant-operator.namespace" -}}
-{{- default "hpe-system" .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- printf "%s" .Release.Namespace | trunc 63 | trimSuffix "-" }}
 {{- end}}
 
 {{/*
