@@ -10,7 +10,7 @@ image:
   pullPolicy: Always
   operatorTag: "202204141412P151"
   validatorImageName: tenantvalidator-1.0.0
-  validatorTag: "202305041918AJ"
+  validatorTag: "202305160914AJ"
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull
@@ -18,8 +18,6 @@ imagePullSecrets:
   - name: imagepull
 
 nameOverride: "hpe-tenantoperator"
-# Overrides the default namespace <hpe-system> to deploy the tenant operator
-namespace: ""
 
 tenantValidatorName: "tenant-validator"
 

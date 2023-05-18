@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "tenant-validator.postInstallHookName" . }}
-  namespace: {{ include "tenant-operator.namespace" . }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-delete-policy: hook-succeeded, hook-failed
@@ -17,6 +17,6 @@ spec:
       containers:
         - name: post-install-container
           image: "{{ .Values.image.baseRepository }}/{{ .Values.image.validatorImageName }}:{{ .Values.image.validatorTag }}"
-          imagePullPolicy: Always
-          command: ["/opt/validator/deploy/tenantvalidator-gencert.sh"]
-      restartPolicy: Never
+          imagePullPolicy: IfNotPresent
+          command: ["/opt/validator/deploy/tenantvalidator-gencert.sh", "{{ .Release.Namespace }}"]
+      restartPolicy: OnFailure

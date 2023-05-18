@@ -43,13 +43,6 @@ return name for validator
 {{- end }}
 
 {{/*
-return namespace where the tenant operator and validator must be deployed
-*/}}
-{{- define "tenant-operator.namespace" -}}
-{{- default "hpe-system" .Values.namespace | trunc 63 | trimSuffix "-" }}
-{{- end}}
-
-{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "tenant-operator.chart" -}}
