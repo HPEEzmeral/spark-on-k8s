@@ -1,0 +1,27 @@
+{{ if .Values.istio.authPolicy.create }}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Release.Name }}-auth-policy
+spec:
+  action: CUSTOM
+  provider:
+    name: oauth2-proxy
+  rules:
+    - to:
+        - operation:
+            hosts:
+              - {{ .Values.istio.virtualService.endpoint | required "Virtual service must be set if auth policy creation is enabled" }}
+              - {{ include "livy-chart.serviceName" . | indent 16 }}
+      when:
+        - key: request.headers[Authorization]
+          notValues:
+            - "Basic*"
+            - "Bearer*"
+        - key: request.headers[Cookie]
+          notValues:
+            - "hadoop-auth*"
+  selector:
+    matchLabels:
+      {{- include "livy-chart.labels" . | nindent 6 }}
+{{ end }}
