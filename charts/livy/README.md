@@ -29,7 +29,7 @@ To install the helm chart in tenant type 'none' Namespace use the flag:
 ## Uninstalling the Chart
 `helm uninstall livy -n sampletenant`
 
-Note: If you are using PVC, running the `helm uninstall` command won't delete the PVC. You must manually delete the PVC.
+**Note:** If you are using PVC, running the `helm uninstall` command won't delete the PVC. You must manually delete the PVC.
 
 ## Configuring Livy
 
@@ -241,7 +241,7 @@ curl -ks \
 
 To start multiple Livy instances, you can change the value of `replicaCount` field in the `values.yaml`.
 
-Note: Livy is a stateful application. Therefore, Livy clients must choose the Livy instance to use. Alternatively, you can configure the cluster's gateway to connect each client to their Livy instance automatically.
+**Note:** Livy is a stateful application. Therefore, Livy clients must choose the Livy instance to use. Alternatively, you can configure the cluster's gateway to connect each client to their Livy instance automatically.
 
 To achieve better high availability it is recommended to enable the session recovery feature in `values.yaml`.
 
