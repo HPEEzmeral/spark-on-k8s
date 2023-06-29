@@ -33,7 +33,7 @@ spec:
   image: gcr.io/mapr-252711/spark-3.3.1:202304252229AN
   imagePullPolicy: Always
   mainClass: org.apache.spark.examples.sql.hive.SparkHiveExample
-  mainApplicationFile: "local:///opt/mapr/spark/spark-3.3.1/examples/jars/spark-examples_2.12-3.3.1.0-eep-910.jar"
+  mainApplicationFile: "local:///opt/mapr/spark/spark-3.3.1/examples/jars/spark-examples_2.12-3.3.1.2-eep-910.jar"
   restartPolicy:
     type: Never
   imagePullSecrets:
