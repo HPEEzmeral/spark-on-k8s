@@ -188,7 +188,9 @@ return env for autoticket-generator container
 */}}
 {{- define "autoticket-generator.env" -}}
 - name : LOG_LEVEL
-  value: "info"
+  value: "debug"
+- name : AUDIT_LOGS_ENABLED
+  value: "{{ .Values.autotix.auditLoggingEnable }}"
 - name : spark-app-configure-label
   value: "{{ .Values.autotix.configureLabel }}"
 - name: SET_SPARK_USERNAME
