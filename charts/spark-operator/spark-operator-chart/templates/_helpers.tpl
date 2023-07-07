@@ -191,6 +191,8 @@ return env for autoticket-generator container
   value: "info"
 - name : AUDIT_LOGS_ENABLED
   value: "{{ .Values.autotix.auditLoggingEnable }}"
+- name : AUDITING_URL_PREFIX
+  value: "{{ .Values.autotix.auditLoggingURL }}"
 - name : spark-app-configure-label
   value: "{{ .Values.autotix.configureLabel }}"
 - name: SET_SPARK_USERNAME

@@ -110,6 +110,8 @@ autotix:
   configureLabel: true
   # add env variable to enable audit Logging
   auditLoggingEnable: false
+  # add env variable for auditLogging URL
+  auditLoggingURL: "http://ua-monitor-svc.monitoring.svc.cluster.local:3333/monitoring/v1/audit"
   # enable auto-setting 'SPARK_USER' env variables by autotix webhook
   autoSetSparkUserNameEnvs: true
   # labels for observability
