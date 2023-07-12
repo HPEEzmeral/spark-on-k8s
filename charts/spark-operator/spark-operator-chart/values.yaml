@@ -18,7 +18,7 @@ image:
   # -- Image name for autotix
   autotixImageName: autoticketgen-1.0.0
   # -- Image tag for autotix
-  autotixTag: "202307061845AJ"
+  autotixTag: "202307111537AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -111,7 +111,8 @@ autotix:
   # add env variable to enable audit Logging
   auditLoggingEnable: false
   # add env variable for auditLogging URL
-  auditLoggingURL: "http://ua-monitor-svc.monitoring.svc.cluster.local:3333/monitoring/v1/audit"
+  #auditLoggingURL: "http://ua-monitor-svc.monitoring.svc.cluster.local:3333/monitoring/v1/audit"
+  auditLoggingURL: ""
   # enable auto-setting 'SPARK_USER' env variables by autotix webhook
   autoSetSparkUserNameEnvs: true
   # labels for observability
