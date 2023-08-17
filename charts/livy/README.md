@@ -256,3 +256,33 @@ extraConfigs:
     livy.server.auth.multiauth.param.type = org.apache.spark.ui.filters.ProxyAuthenticationHandler
     livy.server.auth.multiauth.param.userheader = X-USERNAME
 ```
+
+### Metrics
+
+Compared to Apache Livy, this Livy build has the option to enable metrics during the creation of Livy Session.  
+Metrics can be enabled by adding the `"enableMetrics": true` session option in the REST call, like this:
+```bash
+curl -ks \
+    -u user:password \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{
+        "kind": "spark"
+        , "enableMetrics": true
+    }' \
+    "https://${NODE_IP}:${NODE_PORT}/sessions" | jq
+```
+It will create a Prometheus sink at the `/metrics` endpoint of Applications Spark UI and add corresponding Kubernetes annotations for Prometheus to discover the metrics of the session.
+
+Alternatively, this can be enabled by default for all sessions by adding the following configuration in the `values.yaml`:
+```yaml
+extraConfigs:
+  livy.conf: |
+    spark.metrics.conf.driver.source.jvm.class org.apache.spark.metrics.source.JvmSource
+    spark.metrics.conf.executor.source.jvm.class org.apache.spark.metrics.source.JvmSource
+    spark.metrics.conf.*.sink.prometheusServlet.class org.apache.spark.metrics.sink.PrometheusServlet
+    spark.metrics.conf.*.sink.prometheusServlet.path /metrics
+    spark.kubernetes.driver.annotation.prometheus.io/scrape true
+    spark.kubernetes.driver.annotation.prometheus.io/port 4040
+    spark.kubernetes.driver.annotation.prometheus.io/path /metrics
+```
