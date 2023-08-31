@@ -143,12 +143,12 @@ spec:
                       cpu:
                         description: CPU Limit. All pods running in this Tenant including
                           Tenant Services cannot exceed this threshold
-                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        pattern: ^$|^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
                         type: string
                       memory:
                         description: Memory Limit.  All pods running in Tenant including
                           Tenant Services cannot exceed this threshold
-                        pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+                        pattern: ^$|^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
                         type: string
                     required:
                     - cpu
