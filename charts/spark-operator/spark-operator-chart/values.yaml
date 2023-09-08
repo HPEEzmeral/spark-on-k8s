@@ -119,6 +119,7 @@ autotix:
   sparkAppLabels:
     #"hpe-ezua/app": "spark"
     #"hpe-ezua/type": "app-service-user"
+    #"sidecar.istio.io/inject": false
 
 metrics:
   # -- Enable prometheus metric scraping
