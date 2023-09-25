@@ -120,6 +120,8 @@ autotix:
     #"hpe-ezua/app": "spark"
     #"hpe-ezua/type": "app-service-user"
     #"sidecar.istio.io/inject": false
+  # add env variable to disable spark app rbac
+  sparkAppRBACEnable: false
 
 metrics:
   # -- Enable prometheus metric scraping

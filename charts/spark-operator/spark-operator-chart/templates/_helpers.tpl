@@ -197,6 +197,8 @@ return env for autoticket-generator container
   value: "{{ .Values.autotix.configureLabel }}"
 - name: SET_SPARK_USERNAME
   value: "{{ .Values.autotix.autoSetSparkUserNameEnvs }}"
+- name: SPARK_APP_RBAC_ENABLED
+  value: "{{ .Values.autotix.sparkAppRBACEnable }}"
 {{- end }}
 
 {{/*
