@@ -16,9 +16,9 @@ image:
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Image name for autotix
-  autotixImageName: autoticketgen-1.0.0
+  autotixImageName: autoticketgen-2.0.0
   # -- Image tag for autotix
-  autotixTag: "202307181305AJ"
+  autotixTag: "202309260811AJ"
 
 # -- Image pull secrets
 imagePullSecrets:
