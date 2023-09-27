@@ -4,7 +4,7 @@ kind: Job
 metadata:
   name: {{ include "spark-operator.autotixCleanUpName" . }}
   annotations:
-    "helm.sh/hook": pre-delete
+    "helm.sh/hook": pre-delete, pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
   {{- if .Values.ownerReference.overRide }}
   {{- with  .Values.ownerReference.ownerReferences }}
@@ -26,7 +26,7 @@ spec:
       - name: pre-delete-container
         image: "{{ .Values.image.baseRepository }}/{{ .Values.image.autotixImageName }}:{{ .Values.image.autotixTag }}"
         imagePullPolicy: IfNotPresent
-        command: ["/opt/autotix/deploy/autoticket-generator-uninstall.sh", "{{ .Release.Namespace }}"]
+        command: ["/opt/autotix/deploy/autoticket-generator-uninstall.sh", "{{ .Release.Namespace }}", {{ include "spark-operator.autotixInitName" . }}]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
   {{ end }}
