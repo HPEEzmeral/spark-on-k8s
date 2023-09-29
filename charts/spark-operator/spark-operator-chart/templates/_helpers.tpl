@@ -161,14 +161,6 @@ Create the name of the autoticket generator cleanup pod
 {{- end }}
 
 {{/*
-return tolerations for autoticket generator components
-*/}}
-{{- define "autoticket-generator.tolerations" -}}
-- key: node-role.kubernetes.io/master
-  operator: Exists
-{{- end }}
-
-{{/*
 return podAntiAffinity for autoticket generator components
 */}}
 {{- define "autoticket-generator.podAntiAffinity.preferred" -}}

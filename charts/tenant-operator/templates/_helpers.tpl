@@ -64,14 +64,6 @@ app: tenant-validator-app
 {{- end }}
 
 {{/*
-return tolerations for tenant components
-*/}}
-{{- define "tenant-operator.tolerations" -}}
-- key: node-role.kubernetes.io/master
-  operator: Exists
-{{- end }}
-
-{{/*
 return podAntiAffinity for tenant components
 */}}
 {{- define "tenant-operator.podAntiAffinity.preferred" -}}
