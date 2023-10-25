@@ -161,14 +161,6 @@ Create the name of the autoticket generator cleanup pod
 {{- end }}
 
 {{/*
-return tolerations for autoticket generator components
-*/}}
-{{- define "autoticket-generator.tolerations" -}}
-- key: node-role.kubernetes.io/master
-  operator: Exists
-{{- end }}
-
-{{/*
 return podAntiAffinity for autoticket generator components
 */}}
 {{- define "autoticket-generator.podAntiAffinity.preferred" -}}
@@ -189,12 +181,19 @@ return env for autoticket-generator container
 {{- define "autoticket-generator.env" -}}
 - name : LOG_LEVEL
   value: "info"
+{{ if not (kindIs "invalid" .Values.autotix.auditLoggingEnable) }}
 - name : AUDIT_LOGS_ENABLED
   value: "{{ .Values.autotix.auditLoggingEnable }}"
+{{- end -}}
+{{ if not (kindIs "invalid" .Values.autotix.auditLoggingURL) }}
 - name : AUDITING_URL_PREFIX
   value: "{{ .Values.autotix.auditLoggingURL }}"
+{{- end -}}
+{{ if not (kindIs "invalid" .Values.autotix.configureLabel) }}
 - name : spark-app-configure-label
   value: "{{ .Values.autotix.configureLabel }}"
+{{- end -}}
+{{ if not (kindIs "invalid" .Values.autotix.autoSetSparkUserNameEnvs) }}
 - name: SET_SPARK_USERNAME
   value: "{{ .Values.autotix.autoSetSparkUserNameEnvs }}"
 - name: SPARK_APP_RBAC_ENABLED

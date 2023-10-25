@@ -19,8 +19,6 @@ spec:
       serviceAccountName: {{ include "tenant-validator.hpePrefix" . }}
       automountServiceAccountToken: {{ .Values.automountSAToken }}
       priorityClassName: {{ .Values.priorityClassName }}
-      tolerations:
-      {{- include "tenant-operator.tolerations" . | nindent 8 }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

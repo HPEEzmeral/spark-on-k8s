@@ -11,6 +11,6 @@ metadata:
     {{- end }}
     {{- end }}
 data:
-  spark_app_labels.yaml: |
-    {{- toYaml .Values.autotix.sparkAppLabels | nindent 4 }}
+  configuration.yaml: |
+    {{- toYaml .Values.autotix.configuration | nindent 4 }}
   {{ end }}
