@@ -127,7 +127,7 @@ autotix:
     auditing:
       enabled: false
 #      url: "https://home.auditing-server.com:1234"
-    sparkRbacs:
+    sparkRbac:
       enabled: false
 
 metrics:
