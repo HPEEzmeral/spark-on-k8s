@@ -59,11 +59,11 @@ rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
   create: false
 
-podSecurityContext: 
-  privileged: true
-
+podSecurityContext: {}
+  
 
 securityContext: {}
+  privileged: true
   # capabilities:
   #   drop:
   #   - ALL
