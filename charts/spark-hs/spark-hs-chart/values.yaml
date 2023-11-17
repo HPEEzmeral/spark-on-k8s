@@ -82,6 +82,10 @@ ports:
   httpPort: "18080"
   httpsPort: "18480"
 
+securityContext:
+  # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
+  privileged: true
+
 # resources -- Pod resource requests and limits
 resources:
    limits:

@@ -60,9 +60,9 @@ rbac:
   create: false
 
 podSecurityContext: {}
-  
 
-securityContext: {}
+securityContext:
+  # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
   privileged: true
   # capabilities:
   #   drop:
