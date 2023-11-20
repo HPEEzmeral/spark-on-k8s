@@ -94,7 +94,7 @@ spec:
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
-          {{- include "common.securityContext" . | nindent 12 }}
+          {{- toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:
             {{- if .Values.sparkSsl.useCustomKeystore }}
             - name: spark-ssl-secrets

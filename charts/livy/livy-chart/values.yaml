@@ -64,12 +64,6 @@ podSecurityContext: {}
 securityContext:
   # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
   privileged: true
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 #container ports
 ports:
