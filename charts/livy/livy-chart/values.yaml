@@ -61,13 +61,15 @@ rbac:
 
 podSecurityContext: {}
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  capabilities:
+    add:
+     - SYS_NICE
+     - SYS_RESOURCE
+  runAsGroup: 5000
+  runAsUser: 5000
+  # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
+  privileged: true
 
 #container ports
 ports:
