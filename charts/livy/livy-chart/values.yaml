@@ -8,10 +8,10 @@ image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
   # -- Image Name
-  imageName: livy-0.7.0
+  imageName: livy-0.8.0
   # imageName: livy-0.7.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202307260618R"
+  tag: "202311231143R"
   # -- Image pull policy
   pullPolicy: Always
 
