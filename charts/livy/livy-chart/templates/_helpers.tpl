@@ -27,7 +27,7 @@ If release name contains chart name it will be used as a full name.
 Define Livy version
 */}}
 {{- define "livy-chart.livyVersion" -}}
-0.7.0
+0.8.0
 {{- end }}
 
 {{/*
@@ -52,10 +52,10 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Evaluates component name based on component type
 */}}
 {{- define "livy-chart.componentName" -}}
-{{ if eq .Values.image.imageName "livy-0.7.0" }}
-{{- print "livy-070" -}}
+{{ if eq .Values.image.imageName "livy-0.8.0" }}
+{{- print "livy-080" -}}
 {{ else }}
-{{- print "livy-070-247" -}}
+{{- print "livy-080-247" -}}
 {{- end }}
 {{- end }}
 
@@ -135,7 +135,7 @@ Returns the full DeImage
 */}}
 {{- define "livy-chart.fullDeImage" -}}
 {{- if not .Values.deImage }}
-{{ .Values.image.baseRepository }}/spark-2.4.7:202210110658R
+{{ .Values.image.baseRepository }}/spark-3.4.1:202309070600R
 {{- else -}}
 {{ .Values.image.baseRepository }}/{{ .Values.deImage }}
 {{- end }}
