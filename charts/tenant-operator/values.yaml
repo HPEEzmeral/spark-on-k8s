@@ -10,7 +10,7 @@ image:
   pullPolicy: Always
   operatorTag: "202310061227MG"
   validatorImageName: tenantvalidator-1.0.0
-  validatorTag: "202312071630AJ"
+  validatorTag: "202312082039AJ"
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull
