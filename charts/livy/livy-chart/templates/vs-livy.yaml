@@ -5,7 +5,7 @@ metadata:
   name: {{ .Release.Name }}-vs
 spec:
   hosts:
-    - {{ .Values.istio.virtualService.endpoint | required "\nValid .Values.ezua.virtualService.endpoint is required !" }}
+    - {{ .Values.istio.virtualService.endpoint | required "\nValid .Values.istio.virtualService.endpoint is required !" }}
   gateways:
     - {{ .Values.istio.virtualService.istioGateway }}
   http:
