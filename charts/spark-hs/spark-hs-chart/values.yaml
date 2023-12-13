@@ -44,7 +44,7 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-3.3.1
+sparkVersion: spark-3.5.0
 ## spark version for 2.4.7
 #sparkVersion: spark-2.4.7
 
