@@ -12,10 +12,10 @@ helm dependency update ./spark-hs-chart
 helm install spark-hs ./spark-hs-chart -n sampletenant
 ```
 
-This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with v3.5.0.
+This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with Spark 3.
 
-To install spark history server V2.4.7 use the flags:  
-`--set image.imageName=spark-hs-2.4.7 --set image.tag=202307030517R --set sparkVersion=spark-2.4.7`
+To install spark history server v2.4.7 use the flags:  
+`--set image.imageName=spark-hs-2.4.7 --set image.tag=202312050400R --set sparkVersion=spark-2.4.7`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
@@ -95,7 +95,7 @@ sparkExtraConfigs: |
 ### Configuring spark HS with ACLs
 Spark History Server can be configured to work with ACLs. This feature needs to be enabled by spark.history.ui.acls.enable
 Admins can see details of all jobs. Other users can see just details of their applications.
-You also can change list of users who can see application details by setting spark.ui.view.acls when start Spark application. 
+You also can change list of users who can see application details by setting spark.ui.view.acls when start Spark application.
 ```yaml
 sparkExtraConfigs: |
   spark.history.ui.acls.enable true
