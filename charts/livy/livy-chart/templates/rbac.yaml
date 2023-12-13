@@ -1,7 +1,7 @@
 ---
 {{- if .Values.rbac.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: {{ include "livy-chart.roleName" . }}
   {{- if .Values.ownerReference.overRide }}
@@ -18,6 +18,7 @@ rules:
     - configmaps
     - pods
     - services
+    - secrets
   verbs:
     - "*"
 {{- end }}
@@ -25,7 +26,7 @@ rules:
 ---
 {{- if and .Values.rbac.create .Values.serviceAccount.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: {{ include "livy-chart.roleBindingName" . }}
   {{- if .Values.ownerReference.overRide }}
@@ -37,9 +38,10 @@ metadata:
   {{- include "livy-chart.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: {{ include "livy-chart.roleName" . }}
 subjects:
 - name: {{ include "livy-chart.serviceAccountName" . }}
   kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
 {{- end }}

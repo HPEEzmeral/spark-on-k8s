@@ -95,7 +95,7 @@ Return ports
 Create the name of the service account to use
 */}}
 {{- define "livy-chart.serviceAccountName" -}}
-{{- if ( and ( not .Values.serviceAccount.create ) ( not ( empty .Values.serviceAccount.name)) ) -}}
+{{- if ( and ( .Values.serviceAccount.create ) ( not ( empty .Values.serviceAccount.name)) ) -}}
     {{- .Values.serviceAccount.name }}
 {{- else -}}
     hpe-{{ .Release.Namespace }}

@@ -47,17 +47,17 @@ tenantIsUnsecure: false
 serviceAccount:
   # Specifies whether a service account should be created
   # Default Service account is hpe-{{ ReleaseNamespace }}, which is created by Tenant operator.
-  create: false
+  create: true
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use. Please only use the tenant Service Account
   # This name is used only when create ServiceAccount option is set to true.
-  name: ""
+  name: "livy-server-sa"
 
 #Create RBAC for the Service Account
 rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
-  create: false
+  create: true
 
 podSecurityContext: {}
 
@@ -135,6 +135,9 @@ extraConfigs:
     # livy.keystore = /var/livy/ssl_keystore
     # livy.keystore.password = examplepass
     # livy.key-password = examplepass
+  spark-defaults.conf: |
+    spark.kubernetes.driver.label.sidecar.istio.io/inject=false
+    spark.kubernetes.executor.label.sidecar.istio.io/inject=false
 
 # istio-related settings
 istio:
