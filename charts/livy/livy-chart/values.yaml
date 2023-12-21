@@ -11,7 +11,7 @@ image:
   imageName: livy-0.8.0
   # imageName: livy-0.8.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202312050400R"
+  tag: "202312150949R"
   # -- Image pull policy
   pullPolicy: Always
 
