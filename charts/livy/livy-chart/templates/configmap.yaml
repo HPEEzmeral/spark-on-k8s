@@ -45,6 +45,18 @@ data:
     livy.server.kubernetes.createUserSecret = true
     livy.server.kubernetes.userSecretPattern = {{ include "livy-chart.userSecretPattern" . }}
     livy.rsc.client.get-driver-ip-from-connection = false
+    {{- if .Values.autosetNamespace.enable }}
+    livy.server.kubernetes.namespacePattern = {{ .Values.autosetNamespace.namespacePattern }}
+    livy.server.kubernetes.driverSaPattern = {{ .Values.autosetNamespace.driverSaPattern }}
+    livy.server.kubernetes.executorSaPattern = {{ .Values.autosetNamespace.executorSaPattern }}
+    {{- end }}
+
+  spark-blacklist.conf: |
+    {{- if .Values.autosetNamespace.enable }}
+    spark.kubernetes.namespace
+    spark.kubernetes.authenticate.driver.serviceAccountName
+    spark.kubernetes.authenticate.driver.serviceAccountName
+    {{- end }}
 
   post-startup.sh: |
     #!/usr/bin/env bash
