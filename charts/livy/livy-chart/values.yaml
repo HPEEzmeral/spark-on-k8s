@@ -11,7 +11,7 @@ image:
   imageName: livy-0.8.0
   # imageName: livy-0.8.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202312150949R"
+  tag: "202312291113R"
   # -- Image pull policy
   pullPolicy: Always
 
@@ -58,6 +58,14 @@ serviceAccount:
 rbac:
   #RBAC is created only when this flag is true and ServiceAccount.create is also true
   create: true
+
+# Bind user to session owner
+# Use '%s' placeholder to be replaced with the session owner.
+autosetNamespace:
+  enable: true
+  namespacePattern: "%s"
+  driverSaPattern: "hpe-%s"
+  executorSaPattern: "hpe-%s"
 
 podSecurityContext: {}
 
