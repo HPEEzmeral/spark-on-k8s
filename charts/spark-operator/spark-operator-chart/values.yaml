@@ -12,13 +12,13 @@ image:
   # -- Image Name
   imageName: spark-operator-1.3.8
   # -- Image tag
-  tag: "1.3.8.3-hpe"
+  tag: "1.3.8.4-hpe"
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Image name for autotix
-  autotixImageName: autoticketgen-2.0.0
+  autotixImageName: autoticketgen-2.0.1
   # -- Image tag for autotix
-  autotixTag: "202309260811AN"
+  autotixTag: "202401040919ID"
 
 # -- Image pull secrets
 imagePullSecrets:
