@@ -15,7 +15,7 @@ helm install spark-hs ./spark-hs-chart -n sampletenant
 This will create the helm chart in the `sampletenant` namespace.  This will create Spark history server with Spark 3.
 
 To install spark history server v2.4.7 use the flags:  
-`--set image.imageName=spark-hs-2.4.7 --set image.tag=202312050400R --set sparkVersion=spark-2.4.7`
+`--set image.imageName=spark-hs-2.4.7 --set image.tag=202401050731R --set sparkVersion=spark-2.4.7`
 
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
