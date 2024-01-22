@@ -9,7 +9,7 @@ return name for operator
 return name for validator
 */}}
 {{- define "tenant-validator.name" -}}
-{{- printf "%s" "tenant-validator" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s" "tenantvalidator" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*Create a tenant operator name with prefix hpe

@@ -4,8 +4,8 @@ metadata:
   name: {{ include "tenant-validator.preDeleteHookName" . }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    helm.sh/hook: pre-delete
-    helm.sh/hook-delete-policy: hook-succeeded, hook-failed
+    helm.sh/hook: pre-delete, pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
 spec:
   template:
     spec:

@@ -3,9 +3,6 @@ kind: Job
 metadata:
   name: {{ include "tenant-validator.postInstallHookName" . }}
   namespace: {{ .Release.Namespace }}
-  annotations:
-    helm.sh/hook: post-install
-    helm.sh/hook-delete-policy: hook-succeeded, hook-failed
 spec:
   template:
     spec:
