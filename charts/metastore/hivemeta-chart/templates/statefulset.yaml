@@ -22,6 +22,7 @@ spec:
     metadata:
       labels:
       {{- include "common.labels" (dict "componentName" $componentName "namespace" .Release.Namespace ) | nindent 8 }}
+        hpecp.hpe.com/dtap: hadoop2
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:

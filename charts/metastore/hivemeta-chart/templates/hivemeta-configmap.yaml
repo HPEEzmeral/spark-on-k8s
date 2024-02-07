@@ -286,6 +286,10 @@ data:
     <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
     <configuration>
     <property>
+    <name>hive.aux.jars.path</name>
+    <value>file:///opt/bdfs/bluedata-dtap.jar</value>
+    </property>
+    <property>
     <name>hive.metastore.uris</name>
     <value>thrift://localhost:9083</value>
     </property>
@@ -293,6 +297,18 @@ data:
     <name>javax.jdo.option.ConnectionURL</name>
     <value>jdbc:derby:;databaseName=/opt/mapr/hive/hive-2.3/metastore_db;create=true</value>
     <description>JDBC connect string for a JDBC metastore</description>
+    </property>
+    <property>
+    <name>fs.dtap.impl</name>
+    <value>com.bluedata.hadoop.bdfs.Bdfs</value>
+    </property>
+    <property>
+    <name>fs.AbstractFileSystem.dtap.impl</name>
+    <value>com.bluedata.hadoop.bdfs.BdAbstractFS</value>
+    </property>
+    <property>
+    <name>fs.dtap.impl.disable.cache</name>
+    <value>false</value>
     </property>
     </configuration>
 
@@ -720,7 +736,7 @@ data:
   pre-startup.sh: |
     #!/usr/bin/env bash
 
-  hive-env.sh.template: |
+  hive-env.sh: |
     # Licensed to the Apache Software Foundation (ASF) under one
     # or more contributor license agreements.  See the NOTICE file
     # distributed with this work for additional information
@@ -774,7 +790,7 @@ data:
     # export HIVE_CONF_DIR=
 
     # Folder containing extra libraries required for hive compilation/execution can be controlled by:
-    # export HIVE_AUX_JARS_PATH=
+    export HIVE_AUX_JARS_PATH=/opt/bdfs/bluedata-dtap.jar
 
     # Split hives logs from one file hive.log to two separate files USER-metastore-NODE.log and
     # USER-hiveserver2-NODE.log. This help to avoid the case when some logs could be missed due to competitive access to the log file.
