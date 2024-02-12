@@ -125,7 +125,7 @@ eventlogstorage:
 #  ## If set to "-", storageClass: "", which disables dynamic provisioning
 #  ## If undefined (the default) or set to null, no storageClass spec is set. Default storageClass will be used.
 ## storageClass: "-"
-#  storageSize: 5Gi
+#  storageSize: 8Gi
 #  ## Add specs related to PV volume plugin to create a PV for the PVC. If volumePluginSpec is
 #  ## not set any available PV would be used for the PVC
 ##  volumePluginSpec: {}
@@ -136,6 +136,12 @@ eventlogstorage:
 sparkExtraConfigs: |
   spark.history.ui.acls.enable true
   spark.history.ui.admin.acls mapr
+  spark.history.fs.cleaner.enabled true
+  spark.history.fs.cleaner.maxAge 12h
+  spark.history.fs.cleaner.interval 6h
+  spark.eventLog.rolling.enabled true
+  spark.eventLog.rolling.maxFileSize 64m
+  spark.history.fs.eventLog.rolling.maxFilesToRetain 2
 #  spark.ssl.historyServer.enabled           true
 #  spark.ssl.historyServer.keyStore          /var/spark/ssl_keystore
 #  spark.ssl.historyServer.keyStorePassword  examplepass
