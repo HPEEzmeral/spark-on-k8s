@@ -125,7 +125,7 @@ eventlogstorage:
 #  ## If set to "-", storageClass: "", which disables dynamic provisioning
 #  ## If undefined (the default) or set to null, no storageClass spec is set. Default storageClass will be used.
 ## storageClass: "-"
-#  storageSize: 5Gi
+#  storageSize: 8Gi
 #  ## Add specs related to PV volume plugin to create a PV for the PVC. If volumePluginSpec is
 #  ## not set any available PV would be used for the PVC
 ##  volumePluginSpec: {}
