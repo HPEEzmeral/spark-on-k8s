@@ -11,14 +11,14 @@ image:
   imageName: livy-0.8.0
   # imageName: livy-0.8.0-2.4.7
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202401202202R"
+  tag: "202402090859R"
   # -- Image pull policy
   pullPolicy: Always
 
 #default spark image for spark applications created with livy
-deImage: spark-3.5.0:202401202202R
+deImage: spark-3.5.0:202402090859R
 #for livy-0.8.0/spark-2.4.7
-#deImage: spark-2.4.7:202401202202R
+#deImage: spark-2.4.7:202402090859R
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
