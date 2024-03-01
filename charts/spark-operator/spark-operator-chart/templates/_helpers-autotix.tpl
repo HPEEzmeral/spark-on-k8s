@@ -22,6 +22,20 @@ app: autoticket-generator-app
 {{- end }}
 
 {{/*
+Create a autoticket generator CertManager Certificate
+*/}}
+{{- define "autoticket-generator.certManagerCertificate" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "cert" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a autoticket generator CertManager Issuer
+*/}}
+{{- define "autoticket-generator.certManagerIssuer" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "selfsigned-issuer" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Create a autoticket generator configmap name
 */}}
 {{- define "autoticket-generator.configMapName" -}}
@@ -44,6 +58,34 @@ Create a autoticket generator service name
 */}}
 {{- define "autoticket-generator.svcName" -}}
 {{- printf "%s-%s" (include "autoticket-generator.name" .) "svc" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a autoticket generator MutatingWebhook
+*/}}
+{{- define "autoticket-generator.webhookMutatingName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "validating" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a autoticket generator MutatingWebhookConfiguration
+*/}}
+{{- define "autoticket-generator.webhookMutatingConfigurationName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.webhookMutatingName" .) "cfg" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a autoticket generator ValidatingWebhook
+*/}}
+{{- define "autoticket-generator.webhookValidatingName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "validating" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a autoticket generator ValidatingWebhookConfiguration
+*/}}
+{{- define "autoticket-generator.webhookValidatingConfigurationName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.webhookValidatingName" .) "cfg" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -89,9 +131,9 @@ Return env for autoticket-generator container
 Return volume for autoticket-generator container
 */}}
 {{- define "autoticket-generator.volumes" -}}
-- name: autoticket-generator-certs
+- name: autoticket-generator-cert
   secret:
-    secretName: autoticket-generator-certs
+    secretName: autoticket-generator-cert
 - name: autoticket-generator-cm
   configMap:
     name: {{ include "autoticket-generator.configMapName" . }}
@@ -101,8 +143,8 @@ Return volume for autoticket-generator container
 Return volumeMounts for autoticket-generator container
 */}}
 {{- define "autoticket-generator.volumesMounts" -}}
-- name: autoticket-generator-certs
-  mountPath: /opt/validator/certs
+- name: autoticket-generator-cert
+  mountPath: /tmp/k8s-webhook-server/serving-certs
   readOnly: true
 - name: autoticket-generator-cm
   mountPath: /opt/autotix/conf
