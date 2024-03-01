@@ -11,7 +11,7 @@ Auto ticket generator name
 Create a autoticket generator name with prefix hpe
 */}}
 {{- define "autoticket-generator.hpePrefix" -}}
-{{- printf "%s-%s" "hpe" .Values.autotix.autotixName  | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" "hpe" (include "autoticket-generator.name" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -19,6 +19,13 @@ Selector labels for autoticket generator
 */}}
 {{- define "autoticket-generator.selectorLabels" -}}
 app: autoticket-generator-app
+{{- end }}
+
+{{/*
+Create a autoticket generator configmap name
+*/}}
+{{- define "autoticket-generator.configMapName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "cm" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -33,17 +40,10 @@ Create the name of the service account to be used by autoticket generator
 {{- end -}}
 
 {{/*
-Create a autoticket generator configmap name
-*/}}
-{{- define "autoticket-generator.configMapName" -}}
-{{- printf "%s-%s" .Values.autotix.autotixName "cm"  | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
 Create a autoticket generator service name
 */}}
 {{- define "autoticket-generator.svcName" -}}
-{{- printf "%s-%s" .Values.autotix.autotixName "svc" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "svc" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -102,9 +102,9 @@ Return volumeMounts for autoticket-generator container
 */}}
 {{- define "autoticket-generator.volumesMounts" -}}
 - name: autoticket-generator-certs
-  mountPath:  /opt/validator/certs
+  mountPath: /opt/validator/certs
   readOnly: true
 - name: autoticket-generator-cm
-  mountPath:  /opt/autotix/conf
+  mountPath: /opt/autotix/conf
   readOnly: true
 {{- end }}
