@@ -1,20 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create the name of the autotix Init pod
-*/}}
-{{- define "autoticket-generator.autotixInitName" -}}
-    {{- printf "%s-autotix-init" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
-Create the name of the autoticket generator cleanup pod
-*/}}
-{{- define "autoticket-generator.autotixCleanUpName" -}}
-    {{- printf "%s-autotix-cleanup" .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{/*
 Auto ticket generator name
 */}}
 {{- define "autoticket-generator.name" -}}
