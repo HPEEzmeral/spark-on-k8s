@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "spark-operator.autotixCleanUpName" . }}
+  name: {{ include "autoticket-generator.autotixCleanUpName" . }}
   annotations:
     "helm.sh/hook": pre-delete, pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -14,9 +14,9 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ include "spark-operator.autotixCleanUpName" . }}
+      name: {{ include "autoticket-generator.autotixCleanUpName" . }}
     spec:
-      serviceAccountName: {{ include "autotix.serviceAccountName" . }}
+      serviceAccountName: {{ include "autoticket-generator.serviceAccountName" . }}
       restartPolicy: OnFailure
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -26,7 +26,7 @@ spec:
       - name: pre-delete-container
         image: "{{ .Values.image.baseRepository }}/{{ .Values.image.autotixImageName }}:{{ .Values.image.autotixTag }}"
         imagePullPolicy: IfNotPresent
-        command: ["/opt/autotix/deploy/autoticket-generator-uninstall.sh", "{{ .Release.Namespace }}", {{ include "spark-operator.autotixInitName" . }}]
+        command: ["/opt/autotix/deploy/autoticket-generator-uninstall.sh", "{{ .Release.Namespace }}", {{ include "autoticket-generator.autotixInitName" . }}]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
   {{ end }}
