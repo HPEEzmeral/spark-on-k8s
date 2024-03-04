@@ -20,7 +20,6 @@ webhooks:
         name: {{ include "autoticket-generator.svcName" . }}
         namespace: {{ .Release.Namespace }}
         path: /sparkapplication/v1beta2/validate
-      caBundle: {autoticket-servercert-encoded}
     rules:
       - operations: [ "DELETE" ]
         apiGroups: ["sparkoperator.hpe.com"]
@@ -52,7 +51,6 @@ webhooks:
         name: {{ include "autoticket-generator.svcName" . }}
         namespace: {{ .Release.Namespace }}
         path: /scheduledsparkapplication/v1beta2/validate
-      caBundle: {autoticket-servercert-encoded}
     rules:
       - operations: [ "DELETE" ]
         apiGroups: ["sparkoperator.hpe.com"]
