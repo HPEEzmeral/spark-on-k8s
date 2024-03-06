@@ -36,6 +36,13 @@ Create a autoticket generator CertManager Issuer
 {{- end }}
 
 {{/*
+Create the name of the autoticket generator cleanup pod
+*/}}
+{{- define "autoticket-generator.autotixCleanUpName" -}}
+{{- printf "%s-%s" (include "autoticket-generator.name" .) "autotix-cleanup" | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Create a autoticket generator configmap name
 */}}
 {{- define "autoticket-generator.configMapName" -}}

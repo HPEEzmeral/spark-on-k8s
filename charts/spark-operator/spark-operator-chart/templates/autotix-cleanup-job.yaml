@@ -1,0 +1,53 @@
+{{ if .Values.autotix.enable }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "autoticket-generator.autotixCleanUpName" . }}
+  annotations:
+    "helm.sh/hook": pre-delete, pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+  labels:
+  {{- include "autoticket-generator.selectorLabels" . | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+    {{- end }}
+    {{- end }}
+spec:
+  template:
+    metadata:
+      name: {{ include "autoticket-generator.autotixCleanUpName" . }}
+      {{- if .Values.istio.enabled }}
+      annotations:
+        "sidecar.istio.io/inject": "false"
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "autoticket-generator.serviceAccountName" . }}
+      restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: pre-delete-container
+        image: "{{ .Values.image.baseRepository }}/{{ .Values.image.autotixImageName }}:{{ .Values.image.autotixTag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        command:
+        - "/bin/sh"
+        - "-cx"
+        - |
+          AUTH="Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+
+          curl -ik -X DELETE -H "$AUTH" -H "Accept: application/json" -H "Content-Type: application/json" \
+            https://kubernetes.default.svc/api/v1/namespaces/{{ .Release.Namespace }}/secrets/autoticket-generator-certs
+
+          curl -ik -X DELETE -H "$AUTH" -H "Accept: application/json" -H "Content-Type: application/json" \
+            https://kubernetes.default.svc/apis/admissionregistration.k8s.io/v1/mutatingwebhookconfigurations/autoticket-generator-mutating-webhook-cfg
+
+          curl -ik -X DELETE -H "$AUTH" -H "Accept: application/json" -H "Content-Type: application/json" \
+            https://kubernetes.default.svc/apis/admissionregistration.k8s.io/v1/validatingwebhookconfigurations/autoticket-generator-validating-webhook-cfg
+  {{ end }}
