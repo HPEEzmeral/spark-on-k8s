@@ -10,6 +10,7 @@ This chart bootstraps a [Kubernetes Operator for Apache Spark](https://github.co
 
 - Helm >= 3
 - Kubernetes >= 1.13
+- cert-manager >= 1.10
 
 ## Previous Helm Chart
 
