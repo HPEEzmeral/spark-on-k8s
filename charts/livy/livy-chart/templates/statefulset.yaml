@@ -77,6 +77,8 @@ spec:
             - name: livy-certs
               mountPath: /opt/livy/certs
             {{- end }}
+            - name: livy-jars
+              mountPath: /opt/spark-file-upload
       volumes:
         - configMap:
             name: {{ include "livy.fullname" . }}
@@ -87,6 +89,9 @@ spec:
         {{- if eq .Values.sessionrecovery.kind "pvc" }}
         - persistentVolumeClaim:
             claimName: {{ .Values.sessionrecovery.pvcname }}
+          name: livy-jars
+        - persistentVolumeClaim:
+            claimName: livy-jars-pvc
           name: livy-sessionstore
         {{- end }}
         {{- if .Values.security.https }}

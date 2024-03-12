@@ -1,51 +1,85 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "livy.fullname" . }}
+  name: {{ include "livy-chart.configmapName" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with  .Values.ownerReference.ownerReferences }}
+  {{- with .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
   labels:
-    {{- include "livy.labels" . | nindent 4 }}
+  {{- include "livy-chart.labels" . | nindent 4 }}
 data:
-  livy.conf: |
-    livy.spark.master = k8s://https://kubernetes.default.svc.cluster.local:443
-    livy.spark.deploy-mode = cluster
-    livy.server.kubernetes.allowedNamespaces = {{ .Release.Namespace }}
-    livy.server.kubernetes.defaultNamespace = {{ .Release.Namespace }}
-    {{ if eq .Values.sessionrecovery.kind "pvc" }}
-    livy.server.recovery.mode = recovery
-    livy.server.recovery.state-store = filesystem
-    livy.server.recovery.state-store.url = file:///opt/livy/sessionstore
-    {{ end }}
-    {{ if .Values.security.https }}
-    livy.keystore = /opt/livy/certs/ssl_keystore
-    livy.keystore.password = password123
-    {{ end }}
   livy-client.conf: |
+    # Environment variables here would be replaced by its values
     livy.rsc.server.connect.timeout = 600s
     livy.rsc.client.connect.timeout = 600s
+  livy.conf: |
+    # Environment variables here would be replaced by its values
+    livy.repl.enable-hive-context = true
+    {{- if eq .Values.sessionRecovery.kind "zookeeper" }}
+    livy.server.recovery.mode = recovery
+    livy.server.recovery.state-store = zookeeper
+    livy.server.recovery.state-store.url = ${MAPR_ZK_QUORUM}
+    livy.server.recovery.zk-state-store.key-prefix = livy/${POD_NAMESPACE}-${HOSTNAME}
+    {{- else if eq .Values.sessionRecovery.kind "pvc" }}
+    livy.server.recovery.mode = recovery
+    livy.server.recovery.state-store = filesystem
+    livy.server.recovery.state-store.url = file:///opt/mapr/livy/livy-{{ include "livy-chart.livyVersion" . }}/session-store
+    {{- else }}
+    livy.server.recovery.mode = off
+    {{- end }}
+    {{- if .Values.livySsl.enable }}
+      {{- if and .Values.livySsl.sslSecretName .Values.livySsl.secretMountPath }}
+    livy.ssl.enable = true
+      {{- else }}
+    livy.ssl.enable = auto
+      {{- end }}
+    {{- else }}
+    livy.ssl.enable = false
+    {{- end }}
+    livy.server.kubernetes.createUserSecret = true
+    livy.server.kubernetes.userSecretPattern = {{ include "livy-chart.userSecretPattern" . }}
+    livy.rsc.client.get-driver-ip-from-connection = false
+    {{- if .Values.autosetNamespace.enable }}
+    livy.server.kubernetes.namespacePattern = {{ .Values.autosetNamespace.namespacePattern }}
+    livy.server.kubernetes.driverSaPattern = {{ .Values.autosetNamespace.driverSaPattern }}
+    livy.server.kubernetes.executorSaPattern = {{ .Values.autosetNamespace.executorSaPattern }}
+    livy.server.kubernetes.fileUploadVolume.create = true
+    livy.server.kubernetes.fileUploadVolume.sourcePvc = livy-jars-pvc
+    {{- end }}
   spark-blacklist.conf: |
-    # Disallow overriding the master and the deploy mode.
-    spark.master
-    spark.submit.deployMode
-    
-    # Don't allow users to override the RSC timeout.
-    livy.rsc.server.idle-timeout
-  livy-env.sh: |
-    #
+    {{- if .Values.autosetNamespace.enable }}
+    spark.kubernetes.namespace
+    spark.kubernetes.authenticate.driver.serviceAccountName
+    spark.kubernetes.authenticate.driver.serviceAccountName
+    {{- end }}
+  post-startup.sh: |
+    #!/usr/bin/env bash
+  pre-startup.sh: |
+    #!/usr/bin/env bash
   spark-defaults.conf: |
-    spark.kubernetes.namespace {{ .Release.Namespace }}
-    spark.kubernetes.authenticate.driver.serviceAccountName {{ include "livy.sparkServiceAccountName" . }}
-    spark.pyspark.python python3
-
-    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.options.claimName {{ include "livy.sparkFileUploadPvcName" . }}
+    # Environment variables here would be replaced by its values
+    spark.kubernetes.container.image.pullSecrets imagepull
+    spark.kubernetes.container.image.pullPolicy IfNotPresent
+    spark.kubernetes.driver.request.cores 1
+    spark.kubernetes.driver.limit.cores 1
+    spark.kubernetes.executor.request.cores 1
+    spark.kubernetes.executor.limit.cores 1
+    spark.kubernetes.container.image {{ include "livy-chart.fullDeImage" . }}
+    {{- if .Values.sparkHistoryServer.integrate }}
+    {{- if .Values.sparkHistoryServer.pvcName }}
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.sparkhs-eventlog-storage.options.claimName {{ .Values.sparkHistoryServer.pvcName }}
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.sparkhs-eventlog-storage.mount.path {{ .Values.sparkHistoryServer.eventsDir }}
+    {{- end }}
+    spark.eventLog.dir {{ .Values.sparkHistoryServer.eventsDir }}
+    spark.eventLog.enabled true
+    {{- else }}
+    spark.eventLog.enabled false
+    {{- end }}
+    spark.ssl.enabled false
+    spark.kubernetes.file.upload.path file:///opt/spark-file-upload
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.options.claimName livy-jars-pvc
     spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.path /opt/spark-file-upload
     spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.readOnly true
-    spark.kubernetes.file.upload.path file:///opt/spark-file-upload
     
-  spark-env.sh: |
-    #
-
