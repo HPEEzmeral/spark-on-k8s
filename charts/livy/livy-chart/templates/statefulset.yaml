@@ -1,81 +1,113 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "livy-chart.name" . }}
+  name: {{ include "livy.fullname" . }}
   {{- if .Values.ownerReference.overRide }}
-  {{- with .Values.ownerReference.ownerReferences }}
+  {{- with  .Values.ownerReference.ownerReferences }}
   ownerReferences: {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}
+  labels:
+    {{- include "livy.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "livy.fullname" . }}-http
   selector:
     matchLabels:
-    {{- include "livy-chart.selectorLabels" . | nindent 6 }}
-  serviceName: {{ include "livy-chart.serviceName" . }}
+      {{- include "livy.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{ if .Values.istio.enable }}
+      {{- with .Values.podAnnotations }}
       annotations:
-        proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
-      {{ end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-      {{ if .Values.istio.enable }}
-        sidecar.istio.io/inject: "true"
-      {{ end }}
-      {{- include "livy-chart.labels" . | nindent 8 }}
-      {{- with .Values.customLabels }}
-      {{ toYaml . | nindent 8 }}
-      {{- end }}
+        {{- include "livy.selectorLabels" . | nindent 8 }}
     spec:
-      subdomain: livy-svc
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          {{- include "common.nodeAffinity.preferred" . | nindent 12 }}
-          requiredDuringSchedulingIgnoredDuringExecution:
-          {{- include "common.nodeAffinity.required" . | nindent 12 }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          {{- include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}
-      tolerations:
-      {{- include "common.tolerations" (dict "componentName" ( include "livy-chart.name" . ) "namespace" .Release.Namespace ) | nindent 8 }}
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "livy-chart.serviceAccountName" . }}
-      restartPolicy: {{ .Values.restartPolicy }}
-      priorityClassName: "hpe-tenant-service"
-      initContainers: []
-      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      serviceAccountName: {{ include "livy.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
-          args:
-          {{- include "common.args" . | nindent 12 }}
-          command:
-          {{- include "common.commands" . | nindent 12 }}
-          env:
-          {{- include "livy-chart.env" . | nindent 12 }}
-          image: "{{ .Values.image.baseRepository }}/{{ .Values.image.imageName }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          {{- include "livy-chart.ports" . | nindent 12 }}
+            - name: http
+              containerPort: 8998
+              protocol: TCP
           livenessProbe:
-          {{- include "common.probe.liveness" . | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - "-c"
+                - |
+                  {{- if .Values.security.https }}
+                  url="https://localhost:8998/metrics/ping"
+                  {{- else }}
+                  url="http://localhost:8998/metrics/ping"
+                  {{- end }}
+                  http_code=$(curl -k -s -o /dev/null -w '%{http_code}' "$url")
+                  test "$http_code" -eq 200 || test "$http_code" -eq 401
           readinessProbe:
-          {{- include "common.probe.readiness" . | nindent 12 }}
-          lifecycle:
-          {{- include "common.probe.lifecycle" . | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - "-c"
+                - |
+                  {{- if .Values.security.https }}
+                  url="https://localhost:8998/metrics/ping"
+                  {{- else }}
+                  url="http://localhost:8998/metrics/ping"
+                  {{- end }}
+                  http_code=$(curl -k -s -o /dev/null -w '%{http_code}' "$url")
+                  test "$http_code" -eq 200 || test "$http_code" -eq 401
           resources:
-          {{- toYaml .Values.resources | nindent 12 }}
-          securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.env }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}
           volumeMounts:
-          {{- include "livy-chart.volumeMounts" . | nindent 12 }}
+            - name: configfiles
+              mountPath: /opt/configfiles
+            - name: spark-file-upload
+              mountPath: /opt/spark-file-upload
+            {{- if eq .Values.sessionrecovery.kind "pvc" }}
+            - name: livy-sessionstore
+              mountPath: /opt/livy/sessionstore
+            {{- end }}
+            {{- if .Values.security.https }}
+            - name: livy-certs
+              mountPath: /opt/livy/certs
+            {{- end }}
       volumes:
-      {{- include "livy-chart.volumes" . | nindent 8 }}
-      securityContext:
-      {{- toYaml .Values.podSecurityContext | nindent 8 }}
-  volumeClaimTemplates:
-  {{- include "livy-chart.volumeClaimTemplates" . | nindent 4 }}
+        - configMap:
+            name: {{ include "livy.fullname" . }}
+          name: configfiles
+        - persistentVolumeClaim:
+            claimName: {{ include "livy.sparkFileUploadPvcName" . }}
+          name: spark-file-upload
+        {{- if eq .Values.sessionrecovery.kind "pvc" }}
+        - persistentVolumeClaim:
+            claimName: {{ .Values.sessionrecovery.pvcname }}
+          name: livy-sessionstore
+        {{- end }}
+        {{- if .Values.security.https }}
+        - secret:
+            secretName: {{ include "livy.fullname" . }}-certs
+          name: livy-certs
+        {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

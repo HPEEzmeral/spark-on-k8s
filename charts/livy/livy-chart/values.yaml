@@ -1,165 +1,88 @@
-# Default values for livy-chart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
 image:
-  # -- Image repository
-  baseRepository: gcr.io/mapr-252711
-  # -- Image Name
-  imageName: livy-0.8.0
-  # imageName: livy-0.8.0-2.4.7
-  # -- Overrides the image tag whose default is the chart appVersion.
-  tag: "202401202202R"
-  # -- Image pull policy
+  repository: gcr.io/mapr-252711/apache-livy-0.8.0-pre
   pullPolicy: Always
+  tag: "202109152017"
 
-#default spark image for spark applications created with livy
-deImage: spark-3.5.0:202401202202R
-#for livy-0.8.0/spark-2.4.7
-#deImage: spark-2.4.7:202401202202R
+imagePullSecrets:
+   - name: imagepull
 
-# -- Whether to create a default pull secret
-createDefaultPullSecret: false
-# -- Default pull secret name to be created, update it in imagePullSecrets's name
+createDefaultPullSecret: true
+
 defaultPullSecret: imagepull
 
-# -- Image pull secrets, name set to imagepull, change here if chart is creating defaultPullSecret
-imagePullSecrets:
-  - name: imagepull
-
-# -- String to partially override `spark-operator.fullname` template (will maintain the release name)
 nameOverride: ""
-
-# -- String to override release name
 fullnameOverride: ""
 
-# -- restart policy
-restartPolicy: "Always"
+serviceAccounts:
+  livy:
+    create: true
+    annotations: {}
+    name: ""
+  spark:
+    # ServiceAccount for Spark Applications
+    create: true
+    annotations: {}
+    name: ""
 
-automountServiceAccountToken: true
-
-#HPE tenant namespace info
-tenantIsUnsecure: false
-
-#HPE tenant namespace service account
-serviceAccount:
-  # Specifies whether a service account should be created
-  # Default Service account is hpe-{{ ReleaseNamespace }}, which is created by Tenant operator.
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use. Please only use the tenant Service Account
-  # This name is used only when create ServiceAccount option is set to true.
-  name: "livy-server-sa"
-
-#Create RBAC for the Service Account
-rbac:
-  #RBAC is created only when this flag is true and ServiceAccount.create is also true
-  create: true
-
-# Bind user to session owner
-# Use '%s' placeholder to be replaced with the session owner.
-autosetNamespace:
-  enable: true
-  namespacePattern: "%s"
-  driverSaPattern: "hpe-%s"
-  executorSaPattern: "hpe-%s"
-
-podSecurityContext: {}
-
-securityContext:
-  capabilities:
-    add:
-     - SYS_NICE
-     - SYS_RESOURCE
-  runAsGroup: 5000
-  runAsUser: 5000
-  # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
-  privileged: true
-
-#container ports
-ports:
-  sshPort: 22
-  livyHttpPort: 8998
-  livyInternalPortStart: 10000
-  livyInternalPortEnd: 10010
-
-# resources -- Pod resource requests and limits
-resources:
-  limits:
-    cpu: 8000m
-    memory: 8Gi
-    ephemeral-storage: 30Gi
-  requests:
-    cpu: 2000m
-    memory: 8Gi
-    ephemeral-storage: 30Gi
-
-#owner Reference
 ownerReference:
   overRide: false
   ownerReferences: {}
 
-sessionRecovery:
-  ##supported sessionRecovery Kind: disabled, pvc
+rbac:
+  create: true
+
+podAnnotations: {}
+
+service:
+  type: NodePort
+  port: 8998
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Configuration of Livy Session Recovery
+sessionrecovery:
   kind: disabled
-  ##use this option to configure volumeClaimTemplate for kind pvc
-  pvcTemplate:
-    metadata:
-      name: livy-sessionstore
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi
+# sessionrecovery:
+#   kind: pvc
+#   pvcname: <pvcname>
 
-# Config map created by hive metastore. Used to connect livy with metastore
-hiveSiteSource: ""
+security:
+  https: true
 
-sparkHistoryServer:
-  integrate: false
-  pvcName: ""
-  eventsDir: "maprfs:///apps/spark/sampletenant"
+env:
+  - name: SPARK_CONF_spark_kubernetes_container_image
+    value: gcr.io/mapr-252711/apache-spark-livy-3.1.1:202109152017
+    # Other available images:
+    # gcr.io/mapr-252711/apache-spark-py-livy-3.1.1:202109152017
+    # gcr.io/mapr-252711/apache-spark-r-livy-3.1.1:202109152017
+  - name: SPARK_CONF_spark_kubernetes_container_image_pullPolicy
+    value: Always
+  - name: SPARK_CONF_spark_kubernetes_container_image_pullSecrets
+    value: imagepull
+  - name: SPARK_CONF_spark_kubernetes_driver_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_driver_limit_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_request_cores
+    value: "1"
+  - name: SPARK_CONF_spark_kubernetes_executor_limit_cores
+    value: "1"
 
-# Alpha feature
-# Configure HTTPS for the Livy UI.
-livySsl:
-  enable: true
-  # Leave the two following options blank to use tenant SSL Keystore.
-  # Alternatively, to use a custom keystore, configure the following options and corresponding options in livy.conf.
-  sslSecretName: ""
-  secretMountPath: ""
-  # sslSecretName: "livy-ssl-secret"
-  # secretMountPath: /var/livy
+# Livy needs to have shared volume to upload its JARs into Spark Appication pods
+sparkFileUploadVolume:
+  createpvc: true
+  # Leave the following propery empty to generate PVC name automatically
+  pvcname: ""
 
-# Alpha feature
-# Data provided in "extraConfigs" will be added to configuration files through a K8S secret.
-# Available files to configure: livy.conf, livy-client.conf and spark-defaults.conf.
-extraConfigs:
-  livy.conf: |
-    # livy.keystore = /var/livy/ssl_keystore
-    # livy.keystore.password = examplepass
-    # livy.key-password = examplepass
-  spark-defaults.conf: |
-    spark.kubernetes.driver.label.sidecar.istio.io/inject=false
-    spark.kubernetes.executor.label.sidecar.istio.io/inject=false
-
-# istio-related settings
-istio:
-  # Whether to enable istio sidecar injection on livy server pod
-  enable: false
-  # Istio virtual service settings
-  virtualService:
-    create: false
-    endpoint: ""
-    istioGateway: ""
-    prefix: /
-  # If enabled - an authpolicy for oauth2-proxy with 'action':'CUSTOM' will be created
-  authPolicy:
-    create: false
-
-# Add custom labels to livy server pod
-customLabels:
