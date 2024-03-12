@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "livy.fullname" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with  .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+    {{- include "livy.labels" . | nindent 4 }}
+data:
+  livy.conf: |
+    livy.spark.master = k8s://https://kubernetes.default.svc.cluster.local:443
+    livy.spark.deploy-mode = cluster
+    livy.server.kubernetes.allowedNamespaces = {{ .Release.Namespace }}
+    livy.server.kubernetes.defaultNamespace = {{ .Release.Namespace }}
+    {{ if eq .Values.sessionrecovery.kind "pvc" }}
+    livy.server.recovery.mode = recovery
+    livy.server.recovery.state-store = filesystem
+    livy.server.recovery.state-store.url = file:///opt/livy/sessionstore
+    {{ end }}
+    {{ if .Values.security.https }}
+    livy.keystore = /opt/livy/certs/ssl_keystore
+    livy.keystore.password = password123
+    {{ end }}
+  livy-client.conf: |
+    livy.rsc.server.connect.timeout = 600s
+    livy.rsc.client.connect.timeout = 600s
+  spark-blacklist.conf: |
+    # Disallow overriding the master and the deploy mode.
+    spark.master
+    spark.submit.deployMode
+    
+    # Don't allow users to override the RSC timeout.
+    livy.rsc.server.idle-timeout
+  livy-env.sh: |
+    #
+  spark-defaults.conf: |
+    spark.kubernetes.namespace {{ .Release.Namespace }}
+    spark.kubernetes.authenticate.driver.serviceAccountName {{ include "livy.sparkServiceAccountName" . }}
+    spark.pyspark.python python3
+
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.options.claimName {{ include "livy.sparkFileUploadPvcName" . }}
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.path /opt/spark-file-upload
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.readOnly true
+    spark.kubernetes.file.upload.path file:///opt/spark-file-upload
+    
+  spark-env.sh: |
+    #
+
