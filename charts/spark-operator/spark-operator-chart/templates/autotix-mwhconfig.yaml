@@ -1,0 +1,58 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "autoticket-generator.webhookValidatingConfigurationName" . }}
+  labels:
+  {{- include "autoticket-generator.selectorLabels" . | nindent 4 }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "autoticket-generator.certManagerCertificate" . }}
+webhooks:
+  - name: {{ include "autoticket-generator.webhookValidatingName" . }}.hcp.hpe.com
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: {{ include "autoticket-generator.svcName" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /sparkapplication/v1beta2/mutate
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: ["sparkoperator.hpe.com"]
+        apiVersions: ["v1beta2"]
+        resources: ["sparkapplications"]
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "sparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
+  - name: {{ include "autoticket-generator.webhookValidatingName" . }}-scheduled.hcp.hpe.com
+    failurePolicy: Fail
+    clientConfig:
+      service:
+        name: {{ include "autoticket-generator.svcName" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /scheduledsparkapplication/v1beta2/mutate
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.hpe.com" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "scheduledsparkapplications" ]
+      - operations: [ "CREATE" ]
+        apiGroups: [ "sparkoperator.k8s.io" ]
+        apiVersions: [ "v1beta2" ]
+        resources: [ "scheduledsparkapplications" ]
+    timeoutSeconds: 20
+    sideEffects: NoneOnDryRun
+    admissionReviewVersions: ["v1"]
+    namespaceSelector:
+      matchLabels:
+        hpe.com/namespacetype: Tenant
