@@ -21,6 +21,13 @@ rules:
     - secrets
   verbs:
     - "*"
+- apiGroups:
+    - ""
+  resources:
+    - namespaces
+  verbs:
+    - get
+    - list
 {{- end }}
 
 ---
