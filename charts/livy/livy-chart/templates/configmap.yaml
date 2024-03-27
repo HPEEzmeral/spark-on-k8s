@@ -18,9 +18,6 @@ data:
   livy.conf: |
     # Environment variables here would be replaced by its values
     livy.repl.enable-hive-context = true
-    livy.repl.jars = local:///opt/mapr/livy/repl-jars/commons-codec,local:///opt/mapr/livy/repl-jars/livy-core_2.12.jar,local:///opt/mapr/livy/repl-jars/livy-repl_2.12.jar
-    livy.rsc.jars = local:///opt/mapr/livy/rsc-jars/livy-api.jar,local:///opt/mapr/livy/rsc-jars/livy-rsc.jar,local:///opt/mapr/livy/rsc-jars/minlog.jar,local:///opt/mapr/livy/rsc-jars/netty-all.jar,local:///opt/mapr/livy/rsc-jars/objenesis.jar,local:///opt/mapr/livy/rsc-jars/reflectasm.jar
-    livy.rsc.pyspark.archives = local:///opt/mapr/spark/pyspark-archives/pyspark.zip,local:///opt/mapr/spark/pyspark-archives/py4j-src.zip
     {{- if eq .Values.sessionRecovery.kind "zookeeper" }}
     livy.server.recovery.mode = recovery
     livy.server.recovery.state-store = zookeeper
@@ -49,6 +46,8 @@ data:
     livy.server.kubernetes.namespacePattern = {{ .Values.autosetNamespace.namespacePattern }}
     livy.server.kubernetes.driverSaPattern = {{ .Values.autosetNamespace.driverSaPattern }}
     livy.server.kubernetes.executorSaPattern = {{ .Values.autosetNamespace.executorSaPattern }}
+    livy.server.kubernetes.fileUploadVolume.create = true
+    livy.server.kubernetes.fileUploadVolume.sourcePvc = livy-jars-pvc
     {{- end }}
 
   spark-blacklist.conf: |
@@ -85,3 +84,7 @@ data:
     {{- end }}
 
     spark.ssl.enabled false
+    spark.kubernetes.file.upload.path file:///opt/spark-file-upload
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.options.claimName livy-jars-pvc
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.path /opt/spark-file-upload
+    spark.kubernetes.driver.volumes.persistentVolumeClaim.spark-file-upload-volume.mount.readOnly true

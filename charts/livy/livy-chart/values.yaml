@@ -161,5 +161,10 @@ istio:
   authPolicy:
     create: false
 
+# Livy needs to have shared volume to upload its JARs into Spark Appication pods
+sparkFileUploadVolume:
+  createpvc: true
+  # Leave the following propery empty to generate PVC name automatically
+  pvcname: ""
 # Add custom labels to livy server pod
 customLabels:

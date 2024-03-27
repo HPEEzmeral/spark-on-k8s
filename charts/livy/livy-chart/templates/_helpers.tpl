@@ -216,3 +216,10 @@ Used as value of "livy.server.kubernetes.userSecretPattern" option of livy.conf.
 {{- define "livy-chart.userSecretPattern" -}}
 {{- printf "%s-user-secret-%%s" .Release.Name -}}
 {{- end }}
+
+{{/*
+The name of the PVC that would be used for spark.kubernetes.file.upload.path
+*/}}
+{{- define "livy.sparkFileUploadPvcName" -}}
+{{- default (printf "%s-spark-file-upload" (include "livy.fullname" .)) .Values.sparkFileUploadVolume.pvcname | trunc 63 | trimSuffix "-" }}
+{{- end }}

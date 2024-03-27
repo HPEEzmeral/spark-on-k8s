@@ -73,8 +73,13 @@ spec:
           {{- toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:
           {{- include "livy-chart.volumeMounts" . | nindent 12 }}
+          - name: livy-jars
+              mountPath: /opt/spark-file-upload
       volumes:
       {{- include "livy-chart.volumes" . | nindent 8 }}
+      name: livy-jars
+        - persistentVolumeClaim:
+            claimName: livy-jars-pvc
       securityContext:
       {{- toYaml .Values.podSecurityContext | nindent 8 }}
   volumeClaimTemplates:
