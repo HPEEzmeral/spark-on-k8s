@@ -17,7 +17,7 @@ image:
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
   # -- Image tag
-  tag: "202403200236R"
+  tag: "202404051113R"
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
