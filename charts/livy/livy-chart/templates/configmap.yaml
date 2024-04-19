@@ -49,6 +49,10 @@ data:
     livy.server.kubernetes.namespacePattern = {{ .Values.autosetNamespace.namespacePattern }}
     livy.server.kubernetes.driverSaPattern = {{ .Values.autosetNamespace.driverSaPattern }}
     livy.server.kubernetes.executorSaPattern = {{ .Values.autosetNamespace.executorSaPattern }}
+    {{- else }}
+    livy.server.kubernetes.namespacePattern = {{ .Release.Namespace }}
+    livy.server.kubernetes.driverSaPattern = {{ include "livy-chart.serviceAccountName" . }}
+    livy.server.kubernetes.executorSaPattern = {{{ include "livy-chart.serviceAccountName" . }}
     {{- end }}
 
   spark-blacklist.conf: |

@@ -62,7 +62,7 @@ rbac:
 # Bind user to session owner
 # Use '%s' placeholder to be replaced with the session owner.
 autosetNamespace:
-  enable: true
+  enable: false
   namespacePattern: "%s"
   driverSaPattern: "hpe-%s"
   executorSaPattern: "hpe-%s"
