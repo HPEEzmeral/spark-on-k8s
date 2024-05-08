@@ -11,13 +11,11 @@ image:
   baseRepository: gcr.io/mapr-252711
   # -- Image Name for 3.5.0 version
   imageName: spark-hs-3.5.0
-  # -- Image name for 2.4.7 version
-  #  imageName: spark-hs-2.4.7
   # -- Image pull policy
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
   # -- Image tag
-  tag: "202404110049R"
+  tag: "202405030824R"
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
@@ -45,8 +43,6 @@ revisionHistoryLimit: 10
 
 #sparkVersion for the applications
 sparkVersion: spark-3.5.0
-## spark version for 2.4.7
-#sparkVersion: spark-2.4.7
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
