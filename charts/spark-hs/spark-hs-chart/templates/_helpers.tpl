@@ -110,12 +110,19 @@ Returns a PV name
 Returns a list of extra spark conf items
 */}}
 {{- define "spark-hs-chart.extraConfigs" -}}
-    {{ .Values.sparkExtraConfigs }}
-    {{- if not (empty .Values.eventlogstorage.s3AccessKey) }}
-    {{ printf "spark.hadoop.fs.s3a.access.key %s" .Values.eventlogstorage.s3AccessKey | nindent 0 }}
-    {{- end }}
-    {{- if not (empty .Values.eventlogstorage.s3SecretKey) }}
-    {{ printf "spark.hadoop.fs.s3a.secret.key %s" .Values.eventlogstorage.s3SecretKey | nindent 0 }}
-    {{- end }}
-    {{ println }}
+{{- if not (and .Values.sparkExtraConfigs .Values.eventlogstorage.s3AccessKey .Values.eventlogstorage.s3SecretKey) -}}
+# No sparkExtraConfigs specified
+{{ end }}
+
+{{- if .Values.sparkExtraConfigs -}}
+{{ .Values.sparkExtraConfigs }}
+{{ end }}
+
+{{- if .Values.eventlogstorage.s3AccessKey -}}
+spark.hadoop.fs.s3a.access.key {{ .Values.eventlogstorage.s3AccessKey }}
+{{ end }}
+
+{{- if .Values.eventlogstorage.s3SecretKey -}}
+spark.hadoop.fs.s3a.secret.key {{ .Values.eventlogstorage.s3SecretKey }}
+{{ end }}
 {{- end }}
