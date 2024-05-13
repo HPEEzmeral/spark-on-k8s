@@ -146,6 +146,7 @@ extraConfigs:
   spark-defaults.conf: |
     spark.kubernetes.driver.label.sidecar.istio.io/inject=false
     spark.kubernetes.executor.label.sidecar.istio.io/inject=false
+    # spark.sql.warehouse.dir maprfs:///apps/spark/spark-warehouse
 
 # istio-related settings
 istio:
