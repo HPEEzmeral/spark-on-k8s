@@ -89,3 +89,9 @@ data:
     {{- end }}
 
     spark.ssl.enabled false
+
+    {{- if .Values.tenantIsUnsecure }}
+    spark.hadoop.fs.default.name file:///
+    {{- else }}
+    spark.sql.warehouse.dir maprfs:///apps/spark/spark-warehouse
+    {{- end }}
