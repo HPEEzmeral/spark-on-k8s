@@ -2,7 +2,7 @@ apiVersion: v2
 name: sparkts
 description: A Helm chart for Spark Thrift Server
 type: application
-version: 0.2.2
+version: 0.4.0
 appVersion: "3.3.1.0"
 dependencies:
   - name: common
