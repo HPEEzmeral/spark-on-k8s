@@ -115,6 +115,7 @@ autotix:
   #auditLoggingURL: "http://ua-monitor-svc.monitoring.svc.cluster.local:3333/monitoring/v1/audit"
 #  auditLoggingURL: ""
   # enable auto-setting 'SPARK_USER' env variables by autotix webhook
+  # sssd values - nativesssd (using AD/LDAP), uaconfigmap (without AD/LDAP)
   autoSetSparkUserNameEnvs: true
   # labels for observability
   configuration:
@@ -127,6 +128,8 @@ autotix:
     auditing:
       enabled: false
 #      url: "https://home.auditing-server.com:1234"
+    sssd:
+      value: nativesssd
 
 metrics:
   # -- Enable prometheus metric scraping
