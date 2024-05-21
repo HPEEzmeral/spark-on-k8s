@@ -78,7 +78,9 @@ Volume mounts for containers
 */}}
 {{- define "spark-client.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{ include "sssd.volumeMounts" . }}
 {{ if .Values.datafabric.fullIntegrationEnabled }}
     {{- include "common.security.volumeMounts" . }}
+    {{- include "sssd.security.volumeMounts" . }}
 {{- end -}}
 {{- end }}

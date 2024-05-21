@@ -201,8 +201,10 @@ return volume for containers
 {{- define "hivemeta-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "hivemeta-chart.getConfigMapName" . )
 "componentName" ( include "hivemeta-chart.getComponentName" . )) }}
+{{ include "sssd.volumes" . }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
+{{ include "sssd.security.volumes" . }}
 {{- end }}
 {{- end }}
 
@@ -211,8 +213,10 @@ return volume mounts for containers
 */}}
 {{- define "hivemeta-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{ include "sssd.volumeMounts" . }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumeMounts" . }}
+{{ include "sssd.security.volumeMounts" . }}
 {{- end }}
 - name: logs
   mountPath: "/opt/mapr/hive/hive-{{ .Chart.AppVersion }}/logs"
