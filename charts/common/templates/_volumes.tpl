@@ -38,14 +38,17 @@ Params:
     defaultMode: 420
     name: ldapclient-cm
   name: ldap-cm
-- name: sssd-secrets
-  secret:
-    defaultMode: 420
-    secretName: sssd
 - name: ssh-secrets
   secret:
     defaultMode: 420
     secretName: ssh
+{{- end }}
+
+{{- define "sssd.volumes" -}}
+- name: sssd-secrets
+  secret:
+    defaultMode: 420
+    secretName: sssd
 {{- end }}
 
 {{- define "common.security.volumes" -}}
@@ -57,6 +60,9 @@ Params:
   secret:
     defaultMode: 420
     secretName: server
+{{- end }}
+
+{{- define "sssd.security.volumes" -}}
 - name: ldapcert-secret
   secret:
     defaultMode: 420

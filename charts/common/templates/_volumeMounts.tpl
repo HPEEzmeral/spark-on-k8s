@@ -16,10 +16,13 @@ Returns standard volume mounts
   name: status-cm
 - mountPath: "/opt/mapr/kubernetes/ldap-cm"
   name: ldap-cm
-- mountPath: "/opt/mapr/kubernetes/sssd-secrets"
-  name: sssd-secrets
 - mountPath: "/opt/mapr/kubernetes/ssh-secrets"
   name: ssh-secrets
+{{- end }}
+
+{{- define "sssd.volumeMounts" -}}
+- mountPath: "/opt/mapr/kubernetes/sssd-secrets"
+  name: sssd-secrets
 {{- end }}
 
 {{- define "common.security.volumeMounts" -}}
@@ -27,6 +30,9 @@ Returns standard volume mounts
   name: client-secrets
 - mountPath: "/opt/mapr/kubernetes/server-secrets"
   name: server-secrets
+{{- end }}
+
+{{- define "sssd.security.volumeMounts" -}}
 - mountPath: /opt/mapr/kubernetes/ldapcert-secrets
   name: ldapcert-secret
 {{- end }}
