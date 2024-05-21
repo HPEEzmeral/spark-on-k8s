@@ -80,8 +80,10 @@ return volume mounts for containers
 */}}
 {{- define "spark-ts-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{ include "sssd.volumeMounts" . }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumeMounts" . }}
+{{ include "sssd.security.volumeMounts" . }}
 {{- end }}
 - name: logs
   mountPath: "/opt/mapr/spark/{{ .Values.sparkVersion }}/logs"
@@ -92,8 +94,10 @@ return volumes
 */}}
 {{- define "spark-ts-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "spark-ts-chart.conifgmapName" . ) "componentName" ( include "spark-ts-chart.deploymentName" . )) }}
+{{ include "sssd.volumes" . }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
+{{ include "sssd.security.volumes" . }}
 {{- end }}
 {{- end }}
 
