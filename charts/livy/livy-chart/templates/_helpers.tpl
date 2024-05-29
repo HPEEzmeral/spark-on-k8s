@@ -161,8 +161,14 @@ return volume mounts for containers
 */}}
 {{- define "livy-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
+{{- if .Values.nativeSSSD }}
+{{ include "sssd.volumeMounts" . }}
+{{- end }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumeMounts" . }}
+{{- if .Values.nativeSSSD }}
+{{ include "sssd.security.volumeMounts" . }}
+{{- end }}
 {{- end }}
 {{- if eq .Values.sessionRecovery.kind "pvc" }}
 - name: livy-sessionstore
@@ -183,8 +189,14 @@ returns volumes for StatefulSet
 */}}
 {{- define "livy-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . ) "componentName" .Chart.Name ) }}
+{{- if .Values.nativeSSSD }}
+{{ include "sssd.volumes" . }}
+{{- end }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}
+{{- if .Values.nativeSSSD }}
+{{ include "sssd.security.volumes" . }}
+{{- end }}
 {{- end }}
 {{- if and .Values.livySsl.enable .Values.livySsl.sslSecretName }}
 - name: livy-secret-ssl

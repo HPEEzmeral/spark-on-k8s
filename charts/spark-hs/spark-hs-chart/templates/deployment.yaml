@@ -106,16 +106,28 @@ spec:
           {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
           {{- include "spark-hs-chart.pvcVolumeMount" . | nindent 12 }}
           {{- end }}
+          {{- if .Values.nativeSSSD }}
+          {{- include "sssd.volumeMounts" . | nindent 12 }}
+          {{- end }}
           {{- if not .Values.tenantIsUnsecure }}
           {{- include "common.security.volumeMounts" . | nindent 12 }}
+          {{- if .Values.nativeSSSD }}
+          {{- include "sssd.security.volumeMounts" . | nindent 12 }}
+          {{- end }}
           {{- end }}
       volumes:
       {{- include "common.volumes" (dict "configmapName" $configmapName "componentName" $componentName) | nindent 8 }}
       {{- if ( eq .Values.eventlogstorage.kind "pvc") }}
       {{- include "spark-hs-chart.pvcVolume" . | nindent 8 }}
       {{- end }}
+      {{- if .Values.nativeSSSD }}
+      {{- include "sssd.volumes" . | nindent 8 }}
+      {{- end }}
       {{- if not .Values.tenantIsUnsecure }}
       {{- include "common.security.volumes" . | nindent 8 }}
+      {{- if .Values.nativeSSSD }}
+      {{- include "sssd.security.volumes" . | nindent 8 }}
+      {{- end }}
       {{- end }}
       {{- if .Values.sparkSsl.useCustomKeystore }}
         - name: spark-ssl-secrets

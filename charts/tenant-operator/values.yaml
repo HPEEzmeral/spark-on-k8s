@@ -8,9 +8,9 @@ image:
   baseRepository: gcr.io/mapr-252711
   operatorImageName: tenantoperator-1.0.0
   pullPolicy: Always
-  operatorTag: "202310061227MG"
+  operatorTag: "202405281057"
   validatorImageName: tenantvalidator-1.0.0
-  validatorTag: "202305160914AJ"
+  validatorTag: "202405281057"
 
 createDefaultPullSecret: true
 defaultPullSecret: imagepull

@@ -16,9 +16,9 @@ image:
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Image name for autotix
-  autotixImageName: autoticketgen-2.1.2
+  autotixImageName: autoticketgen-2.1.3
   # -- Image tag for autotix
-  autotixTag: "202404040654"
+  autotixTag: "202405281057"
 
 # -- Image pull secrets
 imagePullSecrets:
@@ -115,6 +115,7 @@ autotix:
   #auditLoggingURL: "http://ua-monitor-svc.monitoring.svc.cluster.local:3333/monitoring/v1/audit"
 #  auditLoggingURL: ""
   # enable auto-setting 'SPARK_USER' env variables by autotix webhook
+  # lookup_user_svc values - nativesssd (using AD/LDAP), uaconfigmap (without AD/LDAP)
   autoSetSparkUserNameEnvs: true
   # labels for observability
   configuration:
@@ -127,6 +128,8 @@ autotix:
     auditing:
       enabled: false
 #      url: "https://home.auditing-server.com:1234"
+    lookup_user_svc:
+      value: nativesssd
 
 metrics:
   # -- Enable prometheus metric scraping
