@@ -3,7 +3,7 @@ name: sparkhs
 description: A Helm chart for Spark History Server
 type: application
 version: 0.6.0
-appVersion: "3.5.0.4"
+appVersion: "3.5.1.0"
 dependencies:
   - name: common
     repository: "file://../../common/"

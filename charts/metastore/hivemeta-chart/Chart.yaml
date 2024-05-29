@@ -3,7 +3,7 @@ name: hivemeta
 description: A Helm chart for Hive Metastore
 type: application
 version: 0.4.0
-appVersion: "3.1.3.100"
+appVersion: "3.1.3.600"
 dependencies:
   - name: common
     repository: "file://../../common/"
