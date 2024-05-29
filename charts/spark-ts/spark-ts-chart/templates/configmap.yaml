@@ -33,7 +33,7 @@ data:
     {{- if .Values.tenantIsUnsecure }}
     spark.hadoop.fs.default.name file:///
     {{- else }}
-    spark.sql.warehouse.dir maprfs:///apps/{{ .Release.Namespace }}/spark-warehouse
+    spark.sql.warehouse.dir maprfs:///apps/spark/spark-warehouse
     {{- end }}
 
     # Fix for SPARK-7819
