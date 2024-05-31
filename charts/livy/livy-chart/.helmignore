@@ -21,3 +21,10 @@
 .idea/
 *.tmproj
 .vscode/
+
+# Ignore merge conflict artifacts
+*.orig
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*
