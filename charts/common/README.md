@@ -1,4 +1,4 @@
-# Common Chart for spark 2.4.7 components
+# Common Chart for Spark components
 
 ---
 

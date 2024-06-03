@@ -18,10 +18,6 @@ Please note:
 * If you are using PVC, the pvc should exist in the same namespace.
 * Integrations for Spark History server and metastore can be customized in the values.yaml file.
 
-### Install with spark-2.4.7 version
-To install Livy with spark-2.4.7 support use the flags:  
-`--set image.imageName=livy-0.8.0 --set image.tag=202404110049R --set deImage=spark-2.4.7:202404110049R`
-
 #### Installing in a non DF Tenant
 To install the helm chart in tenant type 'none' Namespace use the flag:  
 `--set tenantIsUnsecure=true`
