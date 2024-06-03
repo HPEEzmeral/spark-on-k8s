@@ -9,15 +9,11 @@ replicaCount: 1
 image:
   # -- Image repository
   baseRepository: gcr.io/mapr-252711
-  # -- Image Name for 3.3.1 version
-  imageName: spark-ts-3.3.1
-  # -- Image Name for 2.4.7 version
-#  imageName: spark-ts-2.4.7
-  # -- Image tag for 3.3.1 version
-  tag: "202301161621R"
-  # -- Image tag for 2.4.7 version
-#  tag: "202301161621R"
-  executorTag: 202301161621R
+  # -- Image Name for 3.5.1 version
+  imageName: spark-ts-3.5.1
+  # -- Image tag for 3.5.1 version
+  tag: "202405310615R"
+  executorTag: 202405310615R
   # -- Image pull policy
   pullPolicy: Always
 
@@ -46,9 +42,7 @@ progressDeadlineSeconds: 600
 revisionHistoryLimit: 10
 
 #sparkVersion for the applications
-sparkVersion: spark-3.3.1
-# spark version for 2.4.7
-#sparkVersion: spark-2.4.7
+sparkVersion: spark-3.5.1
 
 #HPE tenant namespace info
 tenantIsUnsecure: false
