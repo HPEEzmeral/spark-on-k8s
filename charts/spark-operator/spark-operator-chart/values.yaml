@@ -18,7 +18,7 @@ image:
   # -- Image name for autotix
   autotixImageName: autoticketgen-2.1.3
   # -- Image tag for autotix
-  autotixTag: "202405281057"
+  autotixTag: "202405281101"
 
 # -- Image pull secrets
 imagePullSecrets:
