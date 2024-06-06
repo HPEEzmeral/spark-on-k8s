@@ -109,6 +109,9 @@ spec:
           {{- if .Values.nativeSSSD }}
           {{- include "sssd.volumeMounts" . | nindent 12 }}
           {{- end }}
+          {{- if .Values.ssh.enable }}
+          {{- include "ssh.volumeMounts" . | nindent 12 }}
+          {{- end }}
           {{- if not .Values.tenantIsUnsecure }}
           {{- include "common.security.volumeMounts" . | nindent 12 }}
           {{- if .Values.nativeSSSD }}
@@ -122,6 +125,9 @@ spec:
       {{- end }}
       {{- if .Values.nativeSSSD }}
       {{- include "sssd.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ssh.enable }}
+      {{- include "ssh.volumes" . | nindent 8 }}
       {{- end }}
       {{- if not .Values.tenantIsUnsecure }}
       {{- include "common.security.volumes" . | nindent 8 }}

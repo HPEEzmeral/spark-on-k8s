@@ -59,6 +59,10 @@ rbac:
 #set this only when configuring sssd
 nativeSSSD: true
 
+#enable ssh
+ssh:
+  enable: true
+
 # Bind user to session owner
 # Use '%s' placeholder to be replaced with the session owner.
 autosetNamespace:

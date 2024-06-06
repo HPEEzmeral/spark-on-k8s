@@ -164,6 +164,9 @@ return volume mounts for containers
 {{- if .Values.nativeSSSD }}
 {{ include "sssd.volumeMounts" . }}
 {{- end }}
+{{- if .Values.ssh.enable }}
+{{ include "ssh.volumeMounts" . }}
+{{- end }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumeMounts" . }}
 {{- if .Values.nativeSSSD }}
@@ -191,6 +194,9 @@ returns volumes for StatefulSet
 {{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . ) "componentName" .Chart.Name ) }}
 {{- if .Values.nativeSSSD }}
 {{ include "sssd.volumes" . }}
+{{- end }}
+{{- if .Values.ssh.enable }}
+{{ include "ssh.volumes" . }}
 {{- end }}
 {{- if not .Values.tenantIsUnsecure }}
 {{ include "common.security.volumes" . }}

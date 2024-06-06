@@ -14,15 +14,18 @@ Returns standard volume mounts
   name: replace-cm
 - mountPath: "/opt/mapr/kubernetes/status-cm"
   name: status-cm
-- mountPath: "/opt/mapr/kubernetes/ldap-cm"
-  name: ldap-cm
-- mountPath: "/opt/mapr/kubernetes/ssh-secrets"
-  name: ssh-secrets
 {{- end }}
 
 {{- define "sssd.volumeMounts" -}}
 - mountPath: "/opt/mapr/kubernetes/sssd-secrets"
   name: sssd-secrets
+- mountPath: "/opt/mapr/kubernetes/ldap-cm"
+  name: ldap-cm
+{{- end }}
+
+{{- define "ssh.volumeMounts" -}}
+- mountPath: "/opt/mapr/kubernetes/ssh-secrets"
+  name: ssh-secrets
 {{- end }}
 
 {{- define "common.security.volumeMounts" -}}
