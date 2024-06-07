@@ -164,7 +164,7 @@ return volume mounts for containers
 {{- if .Values.nativeSSSD }}
 {{ include "sssd.volumeMounts" . }}
 {{- end }}
-{{- if .Values.ssh.enable }}
+{{- if .Values.ssh.enableMount }}
 {{ include "ssh.volumeMounts" . }}
 {{- end }}
 {{- if not .Values.tenantIsUnsecure }}
@@ -195,7 +195,7 @@ returns volumes for StatefulSet
 {{- if .Values.nativeSSSD }}
 {{ include "sssd.volumes" . }}
 {{- end }}
-{{- if .Values.ssh.enable }}
+{{- if .Values.ssh.enableMount }}
 {{ include "ssh.volumes" . }}
 {{- end }}
 {{- if not .Values.tenantIsUnsecure }}

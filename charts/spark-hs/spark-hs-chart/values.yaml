@@ -71,7 +71,7 @@ nativeSSSD: true
 
 #enable ssh
 ssh:
-  enable: true
+  enableMount: true
 
 podSecurityContext: {}
 
