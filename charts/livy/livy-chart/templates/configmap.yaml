@@ -50,6 +50,9 @@ data:
     livy.server.kubernetes.driverSaPattern = {{ .Values.autosetNamespace.driverSaPattern }}
     livy.server.kubernetes.executorSaPattern = {{ .Values.autosetNamespace.executorSaPattern }}
     {{- end }}
+    {{- if not .Values.nativeSSSD }}
+    livy.server.kubernetes.userLookupService = uaconfigmap
+    {{- end }}
 
   spark-blacklist.conf: |
     {{- if .Values.autosetNamespace.enable }}
