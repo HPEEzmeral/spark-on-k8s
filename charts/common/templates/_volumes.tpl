@@ -34,14 +34,6 @@ Params:
     path: "/var/log/mapr/podinfo"
     type: DirectoryOrCreate
   name: podinfo
-- configMap:
-    defaultMode: 420
-    name: ldapclient-cm
-  name: ldap-cm
-- name: ssh-secrets
-  secret:
-    defaultMode: 420
-    secretName: ssh
 {{- end }}
 
 {{- define "sssd.volumes" -}}
@@ -49,6 +41,17 @@ Params:
   secret:
     defaultMode: 420
     secretName: sssd
+- configMap:
+    defaultMode: 420
+    name: ldapclient-cm
+  name: ldap-cm
+{{- end }}
+
+{{- define "ssh.volumes" -}}
+- name: ssh-secrets
+  secret:
+    defaultMode: 420
+    secretName: ssh
 {{- end }}
 
 {{- define "common.security.volumes" -}}

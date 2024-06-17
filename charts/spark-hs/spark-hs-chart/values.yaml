@@ -69,6 +69,10 @@ rbac:
 #set this only when configuring sssd
 nativeSSSD: true
 
+#enable ssh
+ssh:
+  enableMount: true
+
 podSecurityContext: {}
 
 securityContext:
