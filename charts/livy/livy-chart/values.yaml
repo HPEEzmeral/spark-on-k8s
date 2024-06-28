@@ -93,12 +93,12 @@ ports:
 # resources -- Pod resource requests and limits
 resources:
   limits:
-    cpu: 8000m
-    memory: 8Gi
+    cpu: 2000m
+    memory: 2Gi
     ephemeral-storage: 30Gi
   requests:
-    cpu: 2000m
-    memory: 8Gi
+    cpu: 1000m
+    memory: 1Gi
     ephemeral-storage: 30Gi
 
 #owner Reference
