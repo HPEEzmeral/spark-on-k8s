@@ -15,7 +15,7 @@ image:
   pullPolicy: Always
   # -- Overrides the image tag whose default is the chart appVersion.
   # -- Image tag
-  tag: "202405310615R"
+  tag: "202406270245R"
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
@@ -98,12 +98,12 @@ ports:
 # resources -- Pod resource requests and limits
 resources:
    limits:
-     cpu: 8000m
-     memory: 8Gi
+     cpu: 2000m
+     memory: 2Gi
      ephemeral-storage: 30Gi
    requests:
-     cpu: 2000m
-     memory: 8Gi
+     cpu: 1000m
+     memory: 1Gi
      ephemeral-storage: 30Gi
 
 #owner Reference

@@ -12,8 +12,8 @@ image:
   # -- Image Name for 3.5.1 version
   imageName: spark-ts-3.5.1
   # -- Image tag for 3.5.1 version
-  tag: "202405310615R"
-  executorTag: 202405310615R
+  tag: "202406270245R"
+  executorTag: 202406270245R
   # -- Image pull policy
   pullPolicy: Always
 
