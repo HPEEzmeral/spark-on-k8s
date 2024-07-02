@@ -24,8 +24,8 @@ spec:
     type: Recreate
   template:
     metadata:
+    {{- if or .Values.podAnnotations .Values.metrics.enable }}
       annotations:
-        rollme: {{ randAlphaNum 7 | quote }}
       {{- if .Values.metrics.enable }}
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.metrics.port }}"
@@ -34,6 +34,7 @@ spec:
       {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       {{- end }}
+    {{- end }}
       labels:
         {{- include "spark-operator.selectorLabels" . | nindent 8 }}
         {{- with .Values.customLabels }}
@@ -68,9 +69,7 @@ spec:
         - -enable-batch-scheduler={{ .Values.batchScheduler.enable }}
         {{- if .Values.metrics.enable }}
         - -enable-metrics=true
-        {{- range .Values.metrics.labels }}
-        - -metrics-labels={{ . }}
-        {{- end }}
+        - -metrics-labels=app_type
         - -metrics-port={{ .Values.metrics.port }}
         - -metrics-endpoint={{ .Values.metrics.endpoint }}
         - -metrics-prefix={{ .Values.metrics.prefix }}

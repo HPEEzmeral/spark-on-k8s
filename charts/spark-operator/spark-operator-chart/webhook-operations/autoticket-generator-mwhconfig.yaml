@@ -1,24 +1,18 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: {{ include "autoticket-generator.webhookValidatingConfigurationName" . }}
+  name: autoticket-generator-mutating-webhook-cfg
   labels:
-  {{- include "autoticket-generator.selectorLabels" . | nindent 4 }}
-  {{- if .Values.ownerReference.overRide }}
-  {{- with .Values.ownerReference.ownerReferences }}
-  ownerReferences: {{- toYaml . | nindent 2 }}
-    {{- end }}
-    {{- end }}
-  annotations:
-    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/{{ include "autoticket-generator.certManagerCertificate" . }}
+    app: autoticket-generator-app
 webhooks:
-  - name: {{ include "autoticket-generator.webhookValidatingName" . }}.hcp.hpe.com
+  - name: autoticket-generator.hcp.hpe.com
     failurePolicy: Fail
     clientConfig:
       service:
-        name: {{ include "autoticket-generator.svcName" . }}
-        namespace: {{ .Release.Namespace }}
+        name: autoticket-generator-svc
+        namespace: {configure-namepsace}
         path: /sparkapplication/v1beta2/mutate
+      caBundle: {autoticket-servercert-encoded}
     rules:
       - operations: [ "CREATE" ]
         apiGroups: ["sparkoperator.hpe.com"]
@@ -34,13 +28,14 @@ webhooks:
     namespaceSelector:
       matchLabels:
         hpe.com/namespacetype: Tenant
-  - name: {{ include "autoticket-generator.webhookValidatingName" . }}-scheduled.hcp.hpe.com
+  - name: scheduled-autoticket-generator.hcp.hpe.com
     failurePolicy: Fail
     clientConfig:
       service:
-        name: {{ include "autoticket-generator.svcName" . }}
-        namespace: {{ .Release.Namespace }}
+        name: autoticket-generator-svc
+        namespace: {configure-namepsace}
         path: /scheduledsparkapplication/v1beta2/mutate
+      caBundle: {autoticket-servercert-encoded}
     rules:
       - operations: [ "CREATE" ]
         apiGroups: [ "sparkoperator.hpe.com" ]

@@ -24,6 +24,8 @@ spec:
       serviceAccountName: {{ include "autoticket-generator.hpePrefix" . }}
       automountServiceAccountToken: {{ .Values.autotix.automountSAToken }}
       priorityClassName: {{ .Values.autotix.priorityClassName }}
+      tolerations:
+      {{- include "autoticket-generator.tolerations" . | nindent 8 }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
