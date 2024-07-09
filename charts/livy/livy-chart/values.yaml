@@ -63,7 +63,7 @@ nativeSSSD: true
 ssh:
   enableMount: true
 
-#enable node affinity
+#enable this to include node affinity
 nodeaffinity: true
 
 # Bind user to session owner
