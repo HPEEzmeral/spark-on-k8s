@@ -30,11 +30,13 @@ spec:
     spec:
       subdomain: livy-svc
       affinity:
+        {{- if .Values.nodeaffinity }}
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{- include "common.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
           {{- include "common.nodeAffinity.required" . | nindent 12 }}
+        {{- end }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{- include "common.podAntiAffinity.preferred" (dict "componentName" ( include "livy-chart.name" . ) ) | nindent 12 }}

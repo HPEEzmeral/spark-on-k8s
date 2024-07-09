@@ -73,6 +73,9 @@ nativeSSSD: true
 ssh:
   enableMount: true
 
+#enable node affinity
+nodeaffinity: true
+
 podSecurityContext: {}
 
 securityContext:

@@ -63,6 +63,9 @@ nativeSSSD: true
 ssh:
   enableMount: true
 
+#enable node affinity
+nodeaffinity: true
+
 # Bind user to session owner
 # Use '%s' placeholder to be replaced with the session owner.
 autosetNamespace:
