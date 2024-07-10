@@ -134,11 +134,7 @@ Returns the name for livy RoleBinding
 Returns the full DeImage
 */}}
 {{- define "livy-chart.fullDeImage" -}}
-{{- if not .Values.deImage }}
-{{ .Values.image.baseRepository }}/spark-3.5.1:v3.5.1.0.0
-{{- else -}}
-{{ .Values.image.baseRepository }}/{{ .Values.deImage }}
-{{- end }}
+{{ .Values.image.baseRepository }}/{{ .Values.deImage | required ".Values.deImage is required." }}
 {{- end }}
 
 {{/*
