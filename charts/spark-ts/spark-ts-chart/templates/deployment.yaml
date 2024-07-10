@@ -28,11 +28,13 @@ spec:
     spec:
       subdomain: {{ include "spark-ts-chart.serviceName" .  }}
       affinity:
+        {{- if .Values.nodeaffinity }}
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.nodeAffinity.required" . | nindent 12 }}
+        {{- end }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.podAntiAffinity.preferred" (dict "componentName" ( include "spark-ts-chart.deploymentName" . ) ) | nindent 12 }}
