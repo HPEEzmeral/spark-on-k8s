@@ -28,7 +28,7 @@ spec:
     spec:
       subdomain: {{ include "spark-ts-chart.serviceName" .  }}
       affinity:
-        {{- if .Values.nodeaffinity }}
+        {{- if .Values.nodeAffinity }}
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
