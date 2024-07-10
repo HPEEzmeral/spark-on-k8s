@@ -64,7 +64,7 @@ ssh:
   enableMount: true
 
 #enable this to include node affinity
-nodeaffinity: true
+nodeAffinity: true
 
 # Bind user to session owner
 # Use '%s' placeholder to be replaced with the session owner.

@@ -74,7 +74,7 @@ ssh:
   enableMount: true
 
 #enable this to include node affinity
-nodeaffinity: true
+nodeAffinity: true
 
 podSecurityContext: {}
 
