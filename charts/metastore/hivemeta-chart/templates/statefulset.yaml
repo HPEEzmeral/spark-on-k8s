@@ -25,11 +25,13 @@ spec:
     spec:
       subdomain: {{ $componentName }}-svc
       affinity:
+        {{- if .Values.nodeAffinity }}
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.nodeAffinity.preferred" . | nindent 12 }}
           requiredDuringSchedulingIgnoredDuringExecution:
-        {{-  include "common.nodeAffinity.required" . | nindent 12 }}
+          {{-  include "common.nodeAffinity.required" . | nindent 12 }}
+        {{- end }}
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           {{-  include "common.podAntiAffinity.preferred" (dict "componentName" $componentName ) | nindent 12 }}
