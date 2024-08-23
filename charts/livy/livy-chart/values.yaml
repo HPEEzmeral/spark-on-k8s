@@ -165,6 +165,7 @@ istio:
     endpoint: ""
     istioGateway: ""
     prefix: /
+    customLabels: {}
   # If enabled - an authpolicy for oauth2-proxy with 'action':'CUSTOM' will be created
   authPolicy:
     create: false
