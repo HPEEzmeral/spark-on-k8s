@@ -75,7 +75,8 @@ data:
     spark.kubernetes.executor.request.cores 1
     spark.kubernetes.executor.limit.cores 1
 
-    spark.kubernetes.container.image {{ include "livy-chart.fullDeImage" . }}
+    spark.kubernetes.container.image {{ .Values.image.baseRepository }}/${SPARK_IMAGE_SHORT}
+
     {{- if .Values.sparkHistoryServer.integrate }}
     {{- if .Values.sparkHistoryServer.pvcName }}
     spark.kubernetes.driver.volumes.persistentVolumeClaim.sparkhs-eventlog-storage.options.claimName {{ .Values.sparkHistoryServer.pvcName }}

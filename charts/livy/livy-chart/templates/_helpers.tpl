@@ -134,7 +134,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
     Returns the full DeImage
   */}}
 {{- define "livy-chart.fullDeImage" -}}
-{{ .Values.image.baseRepository }}/{{ .Values.deImage | required ".Values.deImage is required." }}
+{{ .Values.image.baseRepository }}/{{ .Values.deImage }}
 {{- end }}
 
 {{/*
@@ -150,6 +150,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
   value: {{ .Release.Name }}
 - name: LIVY_PORT
   value: {{ .Values.ports.livyHttpPort | quote }}
+- name: SPARK_IMAGE_SHORT
+  valueFrom:
+    configMapKeyRef:
+      key: DEFAULT_IMAGE_SHORT
+      name: {{ include "spark-images.configmapName" . }}
 {{- end }}
 
 {{/*
@@ -229,4 +234,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
   */}}
 {{- define "livy-chart.userSecretPattern" -}}
 {{- printf "%s-user-secret-%%s" .Release.Name -}}
+{{- end }}
+
+
+{{/*
+    Spark Images ConfigMap section
+  */}}
+{{- define "spark-images.configmapName" -}}
+{{- printf "%s-spark-images-cm" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "spark-images.labels" -}}
+hpe.com/component: spark-images-cm
 {{- end }}

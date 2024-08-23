@@ -1,0 +1,230 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "spark-images.configmapName" . }}
+  {{- if .Values.ownerReference.overRide }}
+  {{- with .Values.ownerReference.ownerReferences }}
+  ownerReferences: {{- toYaml . | nindent 2 }}
+  {{- end }}
+  {{- end }}
+  labels:
+    {{- include "spark-images.labels" . | nindent 4 }}
+data:
+  DEFAULT_IMAGE:
+    {{- if .Values.deImage }}
+    {{ include "livy-chart.fullDeImage" . }}
+    {{- else }}
+    gcr.io/mapr-252711/spark-3.5.1:v3.5.1.0.1
+    {{- end }}
+  DEFAULT_IMAGE_SHORT:
+    {{- if .Values.deImage }}
+    {{ .Values.deImage }}
+    {{- else }}
+    spark-3.5.1:v3.5.1.0.1
+    {{- end }}
+  images.yaml: |
+    images:
+    - image: gcr.io/mapr-252711/spark-3.5.1:v3.5.1.0.1
+      imageShort: spark-3.5.1:v3.5.1.0.1
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/scala
+      - vendor/ezmeral
+      - version/default
+      - version/latest
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-gpu-3.5.1:v3.5.1.0.1
+      imageShort: spark-gpu-3.5.1:v3.5.1.0.1
+      sparkVersion: 3.5.1
+      labels:
+      - feature/gpu
+      - lang/java
+      - lang/scala
+      - vendor/ezmeral
+      - version/latest
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-py-3.5.1:v3.5.1.0.1
+      imageShort: spark-py-3.5.1:v3.5.1.0.1
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/python
+      - lang/scala
+      - vendor/ezmeral
+      - version/latest
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-r-3.5.1:v3.5.1.0.1
+      imageShort: spark-r-3.5.1:v3.5.1.0.1
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/r
+      - lang/scala
+      - vendor/ezmeral
+      - version/latest
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-whylogs-3.5.1:v3.5.1.0.2
+      imageShort: spark-whylogs-3.5.1:v3.5.1.0.2
+      sparkVersion: 3.5.1
+      labels:
+      - feature/whylogs
+      - lang/java
+      - lang/python
+      - lang/scala
+      - vendor/ezmeral
+      - version/latest
+      - controller/spark-operator
+      - controller/livy
+
+
+    - image: gcr.io/mapr-252711/spark-3.5.0:v3.5.0.3.5
+      imageShort: spark-3.5.0:v3.5.0.3.5
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/scala
+      - vendor/ezmeral
+      - version/legacy
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-gpu-3.5.0:v3.5.0.3.5
+      imageShort: spark-gpu-3.5.0:v3.5.0.3.5
+      sparkVersion: 3.5.0
+      labels:
+      - feature/gpu
+      - lang/java
+      - lang/scala
+      - vendor/ezmeral
+      - version/legacy
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-py-3.5.0:v3.5.0.3.5
+      imageShort: spark-py-3.5.0:v3.5.0.3.5
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/python
+      - lang/scala
+      - vendor/ezmeral
+      - version/legacy
+      - controller/spark-operator
+      - controller/livy
+
+    - image: gcr.io/mapr-252711/spark-r-3.5.0:v3.5.0.3.5
+      imageShort: spark-r-3.5.0:v3.5.0.3.5
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/r
+      - lang/scala
+      - vendor/ezmeral
+      - version/legacy
+      - controller/spark-operator
+      - controller/livy
+
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.1
+      imageShort: apache-spark:3.5.1
+      description: Open source Spark image for Java/Scala applications
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/scala
+      - vendor/apache
+      - version/latest
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.1-gpu
+      imageShort: apache-spark:3.5.1-gpu
+      sparkVersion: 3.5.1
+      labels:
+      - feature/gpu
+      - lang/java
+      - lang/py
+      - lang/scala
+      - vendor/apache
+      - version/latest
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.1-py
+      imageShort: apache-spark:3.5.1-py
+      description: Open source Spark image for Python applications
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/py
+      - lang/scala
+      - vendor/apache
+      - version/latest
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.1-r
+      imageShort: apache-spark:3.5.1-r
+      description: Open source Spark image for R applications
+      sparkVersion: 3.5.1
+      labels:
+      - lang/java
+      - lang/r
+      - lang/scala
+      - vendor/apache
+      - version/latest
+      - controller/spark-operator
+
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.0
+      imageShort: apache-spark:3.5.0
+      description: Open source Spark image for Java/Scala applications
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/scala
+      - vendor/apache
+      - version/legacy
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.0-gpu
+      imageShort: apache-spark:3.5.0-gpu
+      sparkVersion: 3.5.0
+      labels:
+      - feature/gpu
+      - lang/java
+      - lang/py
+      - lang/scala
+      - vendor/apache
+      - version/legacy
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.0-py
+      imageShort: apache-spark:3.5.0-py
+      description: Open source Spark image for Python applications
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/py
+      - lang/scala
+      - vendor/apache
+      - version/legacy
+      - controller/spark-operator
+
+    - image: gcr.io/mapr-252711/apache-spark:3.5.0-r
+      imageShort: apache-spark:3.5.0-r
+      description: Open source Spark image for R applications
+      sparkVersion: 3.5.0
+      labels:
+      - lang/java
+      - lang/r
+      - lang/scala
+      - vendor/apache
+      - version/legacy
+      - controller/spark-operator
