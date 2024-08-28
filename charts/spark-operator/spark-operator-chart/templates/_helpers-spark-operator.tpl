@@ -90,3 +90,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "spark-operator.webhookCleanUpName" -}}
     {{- printf "%s-webhook-cleanup" .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+    Spark Images ConfigMap section
+  */}}
+{{- define "spark-images.configmapName" -}}
+{{- printf "spark-images-cm" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "spark-images.labels" -}}
+{{ include "spark-operator.labels" . }}
+{{- end }}
