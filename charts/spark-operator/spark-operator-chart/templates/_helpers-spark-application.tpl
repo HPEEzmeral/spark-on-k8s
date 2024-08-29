@@ -1,8 +1,8 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create the name of the service account to be used by spark apps
-*/}}
+    Create the name of the service account to be used by spark apps
+  */}}
 {{- define "spark.serviceAccountName" -}}
 {{- if .Values.serviceAccounts.spark.create -}}
 {{- $sparkServiceaccount := printf "%s-%s" .Release.Name "spark" -}}
