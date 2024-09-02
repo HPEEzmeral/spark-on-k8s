@@ -14,8 +14,9 @@ image:
   # -- Image pull policy
   pullPolicy: Always
 
-#default spark image for spark applications created with livy
-deImage: spark-3.5.1:v3.5.1.0.1
+# -- OBSOLETE: Use this field to override a default value of the DEFAULT_IMAGE field in the spark-images-cm ConfigMap.
+# -- Used as an image for Spark Workloads created with a Livy Server.
+# deImage: <imageName>:<imageTag>
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false
@@ -37,10 +38,10 @@ restartPolicy: "Always"
 
 automountServiceAccountToken: true
 
-#HPE tenant namespace info
+# HPE tenant namespace info
 tenantIsUnsecure: false
 
-#HPE tenant namespace service account
+# HPE tenant namespace service account
 serviceAccount:
   # Specifies whether a service account should be created
   # Default Service account is hpe-{{ ReleaseNamespace }}, which is created by Tenant operator.
@@ -51,19 +52,19 @@ serviceAccount:
   # This name is used only when create ServiceAccount option is set to true.
   name: "livy-server-sa"
 
-#Create RBAC for the Service Account
+# Create RBAC for the Service Account
 rbac:
-  #RBAC is created only when this flag is true and ServiceAccount.create is also true
+  # RBAC is created only when this flag is true and ServiceAccount.create is also true
   create: true
 
-#set this only when configuring sssd
+# Set this only when configuring SSSD
 nativeSSSD: true
 
-#enable ssh
+# Enable SSH
 ssh:
   enableMount: true
 
-#enable this to include node affinity
+# Enable this to include node affinity
 nodeAffinity: true
 
 # Bind user to session owner
@@ -86,7 +87,7 @@ securityContext:
   # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
   privileged: true
 
-#container ports
+# Container ports
 ports:
   sshPort: 22
   livyHttpPort: 8998
@@ -104,15 +105,15 @@ resources:
     memory: 1Gi
     ephemeral-storage: 30Gi
 
-#owner Reference
+# Owner Reference
 ownerReference:
   overRide: false
   ownerReferences: {}
 
 sessionRecovery:
-  ##supported sessionRecovery Kind: disabled, pvc
+  # Supported sessionRecovery Kind: disabled, pvc
   kind: disabled
-  ##use this option to configure volumeClaimTemplate for kind pvc
+  # Use this option to configure volumeClaimTemplate for kind pvc
   pvcTemplate:
     metadata:
       name: livy-sessionstore
@@ -165,6 +166,7 @@ istio:
     endpoint: ""
     istioGateway: ""
     prefix: /
+    customLabels: {}
   # If enabled - an authpolicy for oauth2-proxy with 'action':'CUSTOM' will be created
   authPolicy:
     create: false

@@ -1,15 +1,15 @@
 {{/*
-Expand the name of the chart.
-*/}}
+    Expand the name of the chart.
+  */}}
 {{- define "livy-chart.name" -}}
 {{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
+     Create a default fully qualified app name.
+     We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+     If release name contains chart name it will be used as a full name.
+  */}}
 {{- define "livy-chart.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
@@ -24,22 +24,22 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
-Define Livy version
-*/}}
+    Define Livy version
+  */}}
 {{- define "livy-chart.livyVersion" -}}
 0.8.0
 {{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
+    Create chart name and version as used by the chart label.
+  */}}
 {{- define "livy-chart.chart" -}}
 {{- printf "%s-%s" .Release.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-All livy labels
-*/}}
+    All livy labels
+  */}}
 {{- define "livy-chart.labels" -}}
 {{ include "common.labels" (dict "componentName" ( printf "%s-svc" (include "livy-chart.componentName" .) ) "namespace" .Release.Namespace) }}
 helm.sh/chart: {{ include "livy-chart.chart" . }}
@@ -49,8 +49,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Evaluates component name based on component type
-*/}}
+    Evaluates component name based on component type
+  */}}
 {{- define "livy-chart.componentName" -}}
 {{ if eq .Values.image.imageName "livy-0.8.0" }}
 {{- print "livy-080" -}}
@@ -60,23 +60,23 @@ Evaluates component name based on component type
 {{- end }}
 
 {{/*
-Livy chart secret name
-*/}}
+    Livy chart secret name
+  */}}
 {{- define "livy-chart.secretName" -}}
 {{- printf "%s" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Selector labels
-*/}}
+    Selector labels
+  */}}
 {{- define "livy-chart.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "livy-chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Return ports
-*/}}
+    Return ports
+  */}}
 {{- define "livy-chart.ports" -}}
 - containerPort: {{ .Values.ports.livyHttpPort }}
   name: http
@@ -92,8 +92,8 @@ Return ports
 {{- end }}
 
 {{/*
-Create the name of the service account to use
-*/}}
+    Create the name of the service account to use
+  */}}
 {{- define "livy-chart.serviceAccountName" -}}
 {{- if ( and ( .Values.serviceAccount.create ) ( not ( empty .Values.serviceAccount.name)) ) -}}
     {{- .Values.serviceAccount.name }}
@@ -103,43 +103,43 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Create the name of the configmap
-*/}}
+    Create the name of the configmap
+  */}}
 {{- define "livy-chart.configmapName" -}}
 {{- printf "%s-cm" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Returns the name for livy service
-*/}}
+    Returns the name for livy service
+  */}}
 {{- define "livy-chart.serviceName" -}}
 {{- printf "%s-svc" .Release.Name | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Returns the name for livy Role
-*/}}
+    Returns the name for livy Role
+  */}}
 {{- define "livy-chart.roleName" -}}
 {{ printf "%s-role" .Release.Name }}
 {{- end }}
 
 {{/*
-Returns the name for livy RoleBinding
-*/}}
+    Returns the name for livy RoleBinding
+  */}}
 {{- define "livy-chart.roleBindingName" -}}
 {{ printf "%s-role-binding" .Release.Name }}
 {{- end }}
 
 {{/*
-Returns the full DeImage
-*/}}
+    Returns the full DeImage
+  */}}
 {{- define "livy-chart.fullDeImage" -}}
-{{ .Values.image.baseRepository }}/{{ .Values.deImage | required ".Values.deImage is required." }}
+{{ .Values.image.baseRepository }}/{{ .Values.deImage }}
 {{- end }}
 
 {{/*
-return env for containers
-*/}}
+    return env for containers
+  */}}
 {{- define "livy-chart.env" -}}
 {{ include "common.defaultEnv" (dict "containerName" .Chart.Name) }}
 {{- if .Values.hiveSiteSource }}
@@ -150,11 +150,20 @@ return env for containers
   value: {{ .Release.Name }}
 - name: LIVY_PORT
   value: {{ .Values.ports.livyHttpPort | quote }}
+{{- if not .Values.deImage }}
+- name: BASE_REPOSITORY
+  value: {{ .Values.image.baseRepository }}
+- name: SPARK_IMAGE_SHORT
+  valueFrom:
+    configMapKeyRef:
+      name: spark-images-cm
+      key: DEFAULT_IMAGE_SHORT
+{{- end }}
 {{- end }}
 
 {{/*
-return volume mounts for containers
-*/}}
+    return volume mounts for containers
+  */}}
 {{- define "livy-chart.volumeMounts" -}}
 {{ include "common.volumeMounts" . }}
 {{- if .Values.nativeSSSD }}
@@ -184,8 +193,8 @@ return volume mounts for containers
 {{- end }}
 
 {{/*
-returns volumes for StatefulSet
-*/}}
+    returns volumes for StatefulSet
+  */}}
 {{- define "livy-chart.volumes" -}}
 {{ include "common.volumes" (dict "configmapName" ( include "livy-chart.configmapName" . ) "componentName" .Chart.Name ) }}
 {{- if .Values.nativeSSSD }}
@@ -215,8 +224,8 @@ returns volumes for StatefulSet
 {{- end }}
 
 {{/*
-returns volumeClaimTemplates for StatefulSet
-*/}}
+    returns volumeClaimTemplates for StatefulSet
+  */}}
 {{- define "livy-chart.volumeClaimTemplates" -}}
 {{- if and ( eq .Values.sessionRecovery.kind "pvc" ) ( .Values.sessionRecovery.pvcTemplate ) -}}
 - {{- toYaml .Values.sessionRecovery.pvcTemplate | nindent 2 }}
@@ -224,9 +233,9 @@ returns volumeClaimTemplates for StatefulSet
 {{- end }}
 
 {{/*
-Returns the pattern of user secret to generate by Livy server.
-Used as value of "livy.server.kubernetes.userSecretPattern" option of livy.conf.
-*/}}
+    Returns the pattern of user secret to generate by Livy server.
+    Used as value of "livy.server.kubernetes.userSecretPattern" option of livy.conf.
+  */}}
 {{- define "livy-chart.userSecretPattern" -}}
 {{- printf "%s-user-secret-%%s" .Release.Name -}}
 {{- end }}
