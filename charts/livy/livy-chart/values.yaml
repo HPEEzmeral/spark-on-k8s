@@ -37,10 +37,10 @@ restartPolicy: "Always"
 
 automountServiceAccountToken: true
 
-#HPE tenant namespace info
+# HPE tenant namespace info
 tenantIsUnsecure: false
 
-#HPE tenant namespace service account
+# HPE tenant namespace service account
 serviceAccount:
   # Specifies whether a service account should be created
   # Default Service account is hpe-{{ ReleaseNamespace }}, which is created by Tenant operator.
@@ -51,19 +51,19 @@ serviceAccount:
   # This name is used only when create ServiceAccount option is set to true.
   name: "livy-server-sa"
 
-#Create RBAC for the Service Account
+# Create RBAC for the Service Account
 rbac:
-  #RBAC is created only when this flag is true and ServiceAccount.create is also true
+  # RBAC is created only when this flag is true and ServiceAccount.create is also true
   create: true
 
-#set this only when configuring sssd
+# Set this only when configuring SSSD
 nativeSSSD: true
 
-#enable ssh
+# Enable SSH
 ssh:
   enableMount: true
 
-#enable this to include node affinity
+# Enable this to include node affinity
 nodeAffinity: true
 
 # Bind user to session owner
@@ -86,7 +86,7 @@ securityContext:
   # Pod needs to run as privileged on OpenShift environment to use hostPath mounts
   privileged: true
 
-#container ports
+# Container ports
 ports:
   sshPort: 22
   livyHttpPort: 8998
@@ -104,15 +104,15 @@ resources:
     memory: 1Gi
     ephemeral-storage: 30Gi
 
-#owner Reference
+# Owner Reference
 ownerReference:
   overRide: false
   ownerReferences: {}
 
 sessionRecovery:
-  ##supported sessionRecovery Kind: disabled, pvc
+  # Supported sessionRecovery Kind: disabled, pvc
   kind: disabled
-  ##use this option to configure volumeClaimTemplate for kind pvc
+  # Use this option to configure volumeClaimTemplate for kind pvc
   pvcTemplate:
     metadata:
       name: livy-sessionstore
