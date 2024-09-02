@@ -14,8 +14,9 @@ image:
   # -- Image pull policy
   pullPolicy: Always
 
-#default spark image for spark applications created with livy
-deImage: spark-3.5.1:v3.5.1.0.1
+# -- OBSOLETE: Use this field to override a default value of the DEFAULT_IMAGE field in the spark-images-cm ConfigMap.
+# -- Used as an image for Spark Workloads created with a Livy Server.
+# deImage: <imageName>:<imageTag>
 
 # -- Whether to create a default pull secret
 createDefaultPullSecret: false

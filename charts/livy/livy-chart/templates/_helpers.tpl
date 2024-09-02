@@ -134,7 +134,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
     Returns the full DeImage
   */}}
 {{- define "livy-chart.fullDeImage" -}}
-{{ .Values.image.baseRepository }}/{{ .Values.deImage | required ".Values.deImage is required." }}
+{{ .Values.image.baseRepository }}/{{ .Values.deImage }}
 {{- end }}
 
 {{/*
@@ -150,6 +150,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
   value: {{ .Release.Name }}
 - name: LIVY_PORT
   value: {{ .Values.ports.livyHttpPort | quote }}
+{{- if not .Values.deImage }}
+- name: BASE_REPOSITORY
+  value: {{ .Values.image.baseRepository }}
+- name: SPARK_IMAGE_SHORT
+  valueFrom:
+    configMapKeyRef:
+      name: spark-images-cm
+      key: DEFAULT_IMAGE_SHORT
+{{- end }}
 {{- end }}
 
 {{/*
