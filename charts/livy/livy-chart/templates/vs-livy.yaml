@@ -3,6 +3,8 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: {{ .Release.Name }}-vs
+  labels:
+    hpe-ezua/created-by: ezua
 spec:
   hosts:
     - {{ .Values.istio.virtualService.endpoint | required "\nValid .Values.istio.virtualService.endpoint is required !" }}
