@@ -45,10 +45,10 @@ data:
       - controller/livy
 
 
-    - image: gcr.io/mapr-252711/apache-spark:3.5.1-en
-      imageShort: apache-spark:3.5.1-en
+    - image: gcr.io/mapr-252711/apache-spark:3.5.2-en
+      imageShort: apache-spark:3.5.2-en
       description: Open source Spark image for Java/Scala applications
-      sparkVersion: 3.5.1
+      sparkVersion: 3.5.2
       labels:
       - feature/gpu
       - lang/java
@@ -59,47 +59,14 @@ data:
       - version/latest
       - controller/spark-operator
 
-    - image: gcr.io/mapr-252711/apache-spark:3.5.0
-      imageShort: apache-spark:3.5.0
+    - image: gcr.io/mapr-252711/apache-spark:3.5.1-en
+      imageShort: apache-spark:3.5.1-en
       description: Open source Spark image for Java/Scala applications
-      sparkVersion: 3.5.0
-      labels:
-      - lang/java
-      - lang/scala
-      - vendor/apache
-      - version/legacy
-      - controller/spark-operator
-
-    - image: gcr.io/mapr-252711/apache-spark:3.5.0-gpu
-      imageShort: apache-spark:3.5.0-gpu
-      sparkVersion: 3.5.0
+      sparkVersion: 3.5.1
       labels:
       - feature/gpu
       - lang/java
       - lang/py
-      - lang/scala
-      - vendor/apache
-      - version/legacy
-      - controller/spark-operator
-
-    - image: gcr.io/mapr-252711/apache-spark:3.5.0-py
-      imageShort: apache-spark:3.5.0-py
-      description: Open source Spark image for Python applications
-      sparkVersion: 3.5.0
-      labels:
-      - lang/java
-      - lang/py
-      - lang/scala
-      - vendor/apache
-      - version/legacy
-      - controller/spark-operator
-
-    - image: gcr.io/mapr-252711/apache-spark:3.5.0-r
-      imageShort: apache-spark:3.5.0-r
-      description: Open source Spark image for R applications
-      sparkVersion: 3.5.0
-      labels:
-      - lang/java
       - lang/r
       - lang/scala
       - vendor/apache
