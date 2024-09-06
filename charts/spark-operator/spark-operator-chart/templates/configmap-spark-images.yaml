@@ -57,6 +57,7 @@ data:
       - version/latest
       - controller/spark-operator
 
+
     - image: gcr.io/mapr-252711/apache-spark:3.5.1-en
       imageShort: apache-spark:3.5.1-en
       description: Open source Spark image for Java/Scala applications
