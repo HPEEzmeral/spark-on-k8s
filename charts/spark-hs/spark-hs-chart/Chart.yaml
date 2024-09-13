@@ -2,8 +2,8 @@ apiVersion: v2
 name: sparkhs
 description: A Helm chart for Spark History Server
 type: application
-version: 0.6.6
-appVersion: "3.5.1.0"
+version: 0.6.8
+appVersion: "3.5.2.0"
 dependencies:
   - name: common
     repository: "file://../../common/"

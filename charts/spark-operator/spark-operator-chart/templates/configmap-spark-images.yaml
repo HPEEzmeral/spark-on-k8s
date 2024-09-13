@@ -10,12 +10,12 @@ metadata:
   labels:
     {{- include "spark-images.labels" . | nindent 4 }}
 data:
-  DEFAULT_IMAGE: gcr.io/mapr-252711/spark-3.5.2:v3.5.2.0.1
-  DEFAULT_IMAGE_SHORT: spark-3.5.2:v3.5.2.0.1
+  DEFAULT_IMAGE: gcr.io/mapr-252711/spark-3.5.2:v3.5.2.0.2
+  DEFAULT_IMAGE_SHORT: spark-3.5.2:v3.5.2.0.2
   images.yaml: |
     images:
-    - image: gcr.io/mapr-252711/spark-3.5.2:v3.5.2.0.1
-      imageShort: spark-3.5.2:v3.5.2.0.1
+    - image: gcr.io/mapr-252711/spark-3.5.2:v3.5.2.0.2
+      imageShort: spark-3.5.2:v3.5.2.0.2
       sparkVersion: 3.5.2
       labels:
       - lang/java
